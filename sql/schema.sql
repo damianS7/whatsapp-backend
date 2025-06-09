@@ -77,9 +77,10 @@ CREATE TABLE public.customer_auth (
 
 CREATE TABLE public.rooms (
     id int4 GENERATED ALWAYS AS IDENTITY NOT NULL,
-    name varchar(20) NOT NULL,
+    name varchar(30) NOT NULL,
     description varchar(220) NOT NULL,
     created_at timestamp DEFAULT CURRENT_TIMESTAMP NULL,
     updated_at timestamp DEFAULT CURRENT_TIMESTAMP NULL,
     CONSTRAINT rooms_name_unique UNIQUE (name)
 );
+

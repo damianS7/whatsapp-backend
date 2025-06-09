@@ -1,4 +1,4 @@
-# 🏦 xBank-spring-backend
+# 🏦 Words
 
 **xBank** es un proyecto de demostración de una aplicación bancaria.  
 Está construido con **Spring Boot (Java 21)** en el backend y **Vue.js** en el frontend.
