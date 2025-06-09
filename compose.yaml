@@ -1,11 +1,10 @@
 name: 'words'
 services:
-  db:
+  database:
     container_name: words-database
     build:
       context: .
       dockerfile: Dockerfile.db
-    image: postgres:17.4
     restart: always
     environment:
       POSTGRES_DB: postgres
@@ -23,7 +22,7 @@ services:
       dockerfile: Dockerfile.backend
     env_file: .env
     depends_on:
-      - db
+      - database
     environment:
       SPRING_PROFILES_ACTIVE: prod
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
