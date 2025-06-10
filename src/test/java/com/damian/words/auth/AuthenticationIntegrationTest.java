@@ -65,16 +65,12 @@ public class AuthenticationIntegrationTest {
         customer.setRole(CustomerRole.ADMIN);
         customer.setEmail(this.email);
         customer.setPassword(bCryptPasswordEncoder.encode(this.rawPassword));
-        customer.getProfile().setNationalId("123456789Z");
         customer.getProfile().setFirstName("John");
         customer.getProfile().setLastName("Wick");
         customer.getProfile().setPhone("123 123 123");
         customer.getProfile().setGender(CustomerGender.MALE);
         customer.getProfile().setBirthdate(LocalDate.of(1989, 1, 1));
-        customer.getProfile().setCountry("USA");
-        customer.getProfile().setAddress("fake ave");
-        customer.getProfile().setPostalCode("050012");
-        customer.getProfile().setPhotoPath("no photoPath");
+        customer.getProfile().setAvatarFilename("no photoPath");
 
         customerRepository.save(customer);
     }
@@ -238,12 +234,7 @@ public class AuthenticationIntegrationTest {
                 "white",
                 "123 123 123",
                 LocalDate.of(1989, 1, 1),
-                CustomerGender.MALE,
-                "",
-                "Fake AV",
-                "50120",
-                "USA",
-                "123123123Z"
+                CustomerGender.MALE
         );
 
         // request to json
@@ -262,10 +253,6 @@ public class AuthenticationIntegrationTest {
                .andExpect(jsonPath("$.profile.phone").value(request.phone()))
                .andExpect(jsonPath("$.profile.birthdate").value(request.birthdate().toString()))
                .andExpect(jsonPath("$.profile.gender").value(request.gender().toString()))
-               .andExpect(jsonPath("$.profile.address").value(request.address()))
-               .andExpect(jsonPath("$.profile.postalCode").value(request.postalCode()))
-               .andExpect(jsonPath("$.profile.country").value(request.country()))
-               .andExpect(jsonPath("$.profile.nationalId").value(request.nationalId()))
                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));
     }
 
@@ -280,12 +267,7 @@ public class AuthenticationIntegrationTest {
                 "white",
                 "123 123 123",
                 null,
-                CustomerGender.MALE,
-                "",
-                "",
-                null,
-                "USA",
-                "123123123Z"
+                CustomerGender.MALE
         );
 
         // request to json
@@ -312,12 +294,7 @@ public class AuthenticationIntegrationTest {
                 "white",
                 "123 123 123",
                 LocalDate.of(1989, 1, 1),
-                CustomerGender.MALE,
-                "",
-                "fake ave",
-                "55555",
-                "USA",
-                "123123123Z"
+                CustomerGender.MALE
         );
 
         // request to json
@@ -344,12 +321,7 @@ public class AuthenticationIntegrationTest {
                 "white",
                 "123 123 123",
                 LocalDate.of(1989, 1, 1),
-                CustomerGender.MALE,
-                "",
-                "Fake AV",
-                "50120",
-                "USA",
-                "123123123Z"
+                CustomerGender.MALE
         );
 
         // request to json
@@ -376,12 +348,7 @@ public class AuthenticationIntegrationTest {
                 "white",
                 "123 123 123",
                 LocalDate.of(1989, 1, 1),
-                CustomerGender.MALE,
-                "",
-                "Fake AV",
-                "50120",
-                "USA",
-                "123123123Z"
+                CustomerGender.MALE
         );
 
         // request to json

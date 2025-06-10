@@ -48,16 +48,11 @@ public class CustomerService {
         Customer customer = new Customer();
         customer.setEmail(request.email());
         customer.setPassword(bCryptPasswordEncoder.encode(request.password()));
-        customer.getProfile().setNationalId(request.nationalId());
         customer.getProfile().setFirstName(request.firstName());
         customer.getProfile().setLastName(request.lastName());
         customer.getProfile().setPhone(request.phone());
         customer.getProfile().setGender(request.gender());
         customer.getProfile().setBirthdate(request.birthdate());
-        customer.getProfile().setCountry(request.country());
-        customer.getProfile().setAddress(request.address());
-        customer.getProfile().setPostalCode(request.postalCode());
-        customer.getProfile().setPhotoPath(request.photo());
 
         return customerRepository.save(customer);
     }

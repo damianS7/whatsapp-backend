@@ -37,20 +37,6 @@ public record CustomerRegistrationRequest(
         LocalDate birthdate,
 
         @NotNull(message = "Gender must not be null")
-        CustomerGender gender,
-
-        String photo,
-
-        @NotBlank(message = "Address must not be blank.")
-        String address,
-
-        @NotBlank(message = "Postal code must not be blank.")
-        String postalCode,
-
-        @NotBlank(message = "Country must not be blank.")
-        String country,
-
-        @NotBlank(message = "National ID must not be blank.")
-        String nationalId
+        CustomerGender gender
 ) {
 }

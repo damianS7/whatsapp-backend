@@ -66,15 +66,11 @@ public class ProfileIntegrationTest {
         customerA.setEmail("customerA@test.com");
         customerA.setRole(CustomerRole.CUSTOMER);
         customerA.setPassword(bCryptPasswordEncoder.encode(this.rawPassword));
-        customerA.getProfile().setNationalId("123456789Z");
         customerA.getProfile().setFirstName("John");
         customerA.getProfile().setLastName("Wick");
         customerA.getProfile().setGender(CustomerGender.MALE);
         customerA.getProfile().setBirthdate(LocalDate.of(1989, 1, 1));
-        customerA.getProfile().setCountry("USA");
-        customerA.getProfile().setAddress("fake ave");
-        customerA.getProfile().setPostalCode("050012");
-        customerA.getProfile().setPhotoPath("image.jpg");
+        customerA.getProfile().setAvatarFilename("image.jpg");
         customerRepository.save(customerA);
 
         customerB = new Customer();
@@ -226,7 +222,7 @@ public class ProfileIntegrationTest {
 
         MockMultipartFile file = new MockMultipartFile(
                 "file",
-                customerA.getProfile().getPhotoPath(),
+                customerA.getProfile().getAvatarFilename(),
                 "image/jpeg",
                 new byte[5]
         );
@@ -249,20 +245,6 @@ public class ProfileIntegrationTest {
 
         byte[] content = result.getResponse().getContentAsByteArray();
         Resource resource = new ByteArrayResource(content);
-        System.out.println("//////");
-        System.out.println("//////");
-        System.out.println("//////");
-        System.out.println("//////");
-        System.out.println("//////");
-        System.out.println("//////");
-        System.out.println(resource.getFilename());
-        System.out.println("//////");
-        System.out.println("//////");
-        System.out.println("//////");
-        System.out.println("//////");
-        System.out.println("//////");
-        System.out.println("//////");
-
 
         // then
         assertThat(resource).isNotNull();

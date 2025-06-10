@@ -9,11 +9,7 @@ public class ProfileDTOMapper {
                 profile.getPhone(),
                 profile.getBirthdate(),
                 profile.getGender(),
-                profile.getPhotoPath(),
-                profile.getAddress(),
-                profile.getPostalCode(),
-                profile.getCountry(),
-                profile.getNationalId(),
+                profile.getAvatarFilename(),
                 profile.getUpdatedAt()
         );
     }

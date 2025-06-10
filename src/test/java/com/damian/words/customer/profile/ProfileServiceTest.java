@@ -58,15 +58,10 @@ public class ProfileServiceTest {
         customer.setEmail("customer@test.com");
         customer.setPassword(passwordEncoder.encode(RAW_PASSWORD));
         customer.getProfile().setId(5L);
-        customer.getProfile().setNationalId("123456789Z");
         customer.getProfile().setFirstName("John");
         customer.getProfile().setLastName("Wick");
         customer.getProfile().setGender(CustomerGender.MALE);
         customer.getProfile().setBirthdate(LocalDate.of(1989, 1, 1));
-        customer.getProfile().setCountry("USA");
-        customer.getProfile().setAddress("fake ave");
-        customer.getProfile().setPostalCode("050012");
-        customer.getProfile().setPhotoPath("no photoPath");
     }
 
     @AfterEach
@@ -94,9 +89,7 @@ public class ProfileServiceTest {
         fields.put("birthdate", "1904-01-02");
         fields.put("gender", "MALE");
         fields.put("phone", "9199191919");
-        fields.put("country", "Spain");
-        fields.put("photoPath", "image.jpg");
-        fields.put("nationalId", "234234234");
+        fields.put("avatarFilename", "image.jpg");
         ProfileUpdateRequest givenRequest = new ProfileUpdateRequest(
                 RAW_PASSWORD,
                 fields
@@ -113,11 +106,8 @@ public class ProfileServiceTest {
         assertThat(result.getFirstName()).isEqualTo(givenRequest.fieldsToUpdate().get("firstName"));
         assertThat(result.getLastName()).isEqualTo(givenRequest.fieldsToUpdate().get("lastName"));
         assertThat(result.getPhone()).isEqualTo(givenRequest.fieldsToUpdate().get("phone"));
-        assertThat(result.getCountry()).isEqualTo(givenRequest.fieldsToUpdate().get("country"));
         assertThat(result.getBirthdate().toString()).isEqualTo(givenRequest.fieldsToUpdate().get("birthdate"));
         assertThat(result.getGender().toString()).isEqualTo(givenRequest.fieldsToUpdate().get("gender"));
-        assertThat(result.getPhotoPath()).isEqualTo(givenRequest.fieldsToUpdate().get("photoPath"));
-        assertThat(result.getNationalId()).isEqualTo(givenRequest.fieldsToUpdate().get("nationalId"));
         verify(profileRepository, times(1)).save(customer.getProfile());
     }
 

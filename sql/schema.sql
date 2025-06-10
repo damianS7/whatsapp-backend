@@ -37,14 +37,9 @@ CREATE TABLE public.customer_profiles (
 	phone varchar(14) NOT NULL,
 	birthdate date NOT NULL,
 	gender public."customer_gender_type" NOT NULL,
-	photo_path varchar(100) NULL, -- path to image
-	address varchar(50) NOT NULL,
-	postal_code varchar(8) NOT NULL,
-	country varchar(12) NOT NULL,
-	national_id varchar(12) NOT NULL,
+	avatar_filename varchar(100) NULL,
 	updated_at timestamp DEFAULT CURRENT_TIMESTAMP NULL,
 	CONSTRAINT profiles_customer_id_key UNIQUE (customer_id),
-	CONSTRAINT profiles_national_id_key UNIQUE (national_id),
 	CONSTRAINT profiles_pkey PRIMARY KEY (id),
 	CONSTRAINT profiles_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.customers(id) ON DELETE CASCADE
 );
@@ -82,5 +77,14 @@ CREATE TABLE public.rooms (
     created_at timestamp DEFAULT CURRENT_TIMESTAMP NULL,
     updated_at timestamp DEFAULT CURRENT_TIMESTAMP NULL,
     CONSTRAINT rooms_name_unique UNIQUE (name)
+);
+
+CREATE TABLE public.customer_contacts (
+    id int4 GENERATED ALWAYS AS IDENTITY NOT NULL,
+    customer_id int4 NOT NULL,
+    contact_customer_id int4 NOT NULL,
+    created_at timestamp DEFAULT CURRENT_TIMESTAMP NULL,
+    updated_at timestamp DEFAULT CURRENT_TIMESTAMP NULL,
+    CONSTRAINT unique_customer_contact UNIQUE (customer_id, contact_customer_id)
 );
 

@@ -34,20 +34,8 @@ public class Profile {
     @Enumerated(EnumType.STRING)
     private CustomerGender gender;
 
-    @Column(name = "photo_path")
-    private String photoPath;
-
-    @Column
-    private String address;
-
-    @Column
-    private String postalCode;
-
-    @Column
-    private String country;
-
-    @Column
-    private String nationalId;
+    @Column(name = "avatar_filename")
+    private String avatarFilename;
 
     @Column
     private Instant updatedAt;
@@ -119,51 +107,19 @@ public class Profile {
         this.birthdate = birthdate;
     }
 
-    public String getPhotoPath() {
-        return photoPath;
-    }
-
-    public void setPhotoPath(String photoPath) {
-        this.photoPath = photoPath;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getNationalId() {
-        return nationalId;
-    }
-
-    public void setNationalId(String nationalId) {
-        this.nationalId = nationalId;
-    }
-
     public Instant getUpdatedAt() {
         return updatedAt;
     }
 
     public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getAvatarFilename() {
+        return avatarFilename;
+    }
+
+    public void setAvatarFilename(String avatarFilename) {
+        this.avatarFilename = avatarFilename;
     }
 }

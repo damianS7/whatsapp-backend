@@ -131,7 +131,7 @@ public class ProfileImageUploaderService {
         this.storeFile(file, filename);
 
         Map<String, Object> fieldsToUpdate = new HashMap<>();
-        fieldsToUpdate.put("photoPath", filename);
+        fieldsToUpdate.put("avatarFilename", filename);
         ProfileUpdateRequest patchRequest = new ProfileUpdateRequest(
                 currentPassword,
                 fieldsToUpdate

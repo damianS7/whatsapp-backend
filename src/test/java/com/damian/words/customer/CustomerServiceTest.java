@@ -136,12 +136,7 @@ public class CustomerServiceTest {
                 "white",
                 "123 123 123",
                 LocalDate.of(1989, 1, 1),
-                CustomerGender.MALE,
-                "",
-                "Fake AV",
-                "50120",
-                "USA",
-                "123123123Z"
+                CustomerGender.MALE
         );
 
         // when
@@ -171,12 +166,7 @@ public class CustomerServiceTest {
                 "white",
                 "123 123 123",
                 LocalDate.of(1989, 1, 1),
-                CustomerGender.MALE,
-                "",
-                "Fake AV",
-                "50120",
-                "USA",
-                "123123123Z"
+                CustomerGender.MALE
         );
 
         // when

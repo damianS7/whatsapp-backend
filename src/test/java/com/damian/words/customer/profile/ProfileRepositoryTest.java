@@ -34,16 +34,12 @@ public class ProfileRepositoryTest {
         customer = new Customer();
         customer.setEmail("david@gmail.com");
         customer.setPassword("123456");
-        customer.getProfile().setNationalId("123456789Z");
         customer.getProfile().setFirstName("david");
         customer.getProfile().setLastName("white");
         customer.getProfile().setPhone("123 123 123");
         customer.getProfile().setGender(CustomerGender.MALE);
         customer.getProfile().setBirthdate(LocalDate.of(1989, 1, 1));
-        customer.getProfile().setCountry("USA");
-        customer.getProfile().setAddress("fake av");
-        customer.getProfile().setPostalCode("501200");
-        customer.getProfile().setPhotoPath("/images/photoPath.jpg");
+        customer.getProfile().setAvatarFilename("/images/photoPath.jpg");
 
         customerRepository.save(customer);
     }

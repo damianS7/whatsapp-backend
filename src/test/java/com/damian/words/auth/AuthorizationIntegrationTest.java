@@ -62,16 +62,12 @@ public class AuthorizationIntegrationTest {
         customer = new Customer();
         customer.setEmail("customer@test.com");
         customer.setPassword(bCryptPasswordEncoder.encode(rawPassword));
-        customer.getProfile().setNationalId("123456789Z");
         customer.getProfile().setFirstName("John");
         customer.getProfile().setLastName("Wick");
         customer.getProfile().setPhone("123 123 123");
         customer.getProfile().setGender(CustomerGender.MALE);
         customer.getProfile().setBirthdate(LocalDate.of(1989, 1, 1));
-        customer.getProfile().setCountry("USA");
-        customer.getProfile().setAddress("fake ave");
-        customer.getProfile().setPostalCode("050012");
-        customer.getProfile().setPhotoPath("no photoPath");
+        customer.getProfile().setAvatarFilename("no photoPath");
 
         customerRepository.save(customer);
 
@@ -150,7 +146,7 @@ public class AuthorizationIntegrationTest {
         fields.put("phone", "999 999 999");
         fields.put("birthdate", LocalDate.of(1989, 1, 1));
         fields.put("gender", CustomerGender.FEMALE);
-        
+
         ProfileUpdateRequest request = new ProfileUpdateRequest(
                 this.rawPassword,
                 fields

@@ -69,11 +69,7 @@ public class ProfileService {
                 case "firstName" -> profile.setFirstName((String) value);
                 case "lastName" -> profile.setLastName((String) value);
                 case "phone" -> profile.setPhone((String) value);
-                case "address" -> profile.setAddress((String) value);
-                case "country" -> profile.setCountry((String) value);
-                case "postalCode" -> profile.setPostalCode((String) value);
-                case "photoPath" -> profile.setPhotoPath((String) value);
-                case "nationalId" -> profile.setNationalId((String) value);
+                case "avatarFilename" -> profile.setAvatarFilename((String) value);
                 case "gender" -> profile.setGender(CustomerGender.valueOf((String) value));
                 case "birthdate" -> profile.setBirthdate(LocalDate.parse((String) value));
                 default -> throw new ProfileAuthorizationException(

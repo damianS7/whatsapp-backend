@@ -60,15 +60,10 @@ public class CustomerAdminIntegrationTest {
         customer.setEmail("customer@test.com");
         customer.setPassword(bCryptPasswordEncoder.encode("123456"));
 
-        customer.getProfile().setNationalId("123456789Z");
         customer.getProfile().setFirstName("John");
         customer.getProfile().setLastName("Wick");
         customer.getProfile().setGender(CustomerGender.MALE);
         customer.getProfile().setBirthdate(LocalDate.of(1989, 1, 1));
-        customer.getProfile().setCountry("USA");
-        customer.getProfile().setAddress("fake ave");
-        customer.getProfile().setPostalCode("050012");
-        customer.getProfile().setPhotoPath("no photoPath");
 
         customerRepository.save(customer);
 

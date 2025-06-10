@@ -91,16 +91,12 @@ public class AuthenticationServiceTest {
         Customer givenCustomer = new Customer();
         givenCustomer.setEmail("customer@test.com");
         givenCustomer.setPassword("123456");
-        givenCustomer.getProfile().setNationalId("123456789Z");
         givenCustomer.getProfile().setFirstName("John");
         givenCustomer.getProfile().setLastName("Wick");
         givenCustomer.getProfile().setPhone("123 123 123");
         givenCustomer.getProfile().setGender(CustomerGender.MALE);
         givenCustomer.getProfile().setBirthdate(LocalDate.of(1989, 1, 1));
-        givenCustomer.getProfile().setCountry("USA");
-        givenCustomer.getProfile().setAddress("fake ave");
-        givenCustomer.getProfile().setPostalCode("050012");
-        givenCustomer.getProfile().setPhotoPath("no photoPath");
+        givenCustomer.getProfile().setAvatarFilename("no photoPath");
 
         CustomerRegistrationRequest registrationRequest = new CustomerRegistrationRequest(
                 givenCustomer.getEmail(),
@@ -109,12 +105,7 @@ public class AuthenticationServiceTest {
                 givenCustomer.getProfile().getLastName(),
                 givenCustomer.getProfile().getPhone(),
                 givenCustomer.getProfile().getBirthdate(),
-                givenCustomer.getProfile().getGender(),
-                givenCustomer.getProfile().getPhotoPath(),
-                givenCustomer.getProfile().getAddress(),
-                givenCustomer.getProfile().getPostalCode(),
-                givenCustomer.getProfile().getCountry(),
-                givenCustomer.getProfile().getNationalId()
+                givenCustomer.getProfile().getGender()
         );
 
         // when
@@ -130,14 +121,6 @@ public class AuthenticationServiceTest {
         assertThat(registeredCustomer.getProfile().getPhone()).isEqualTo(givenCustomer.getProfile().getPhone());
         assertThat(registeredCustomer.getProfile().getGender()).isEqualTo(givenCustomer.getProfile().getGender());
         assertThat(registeredCustomer.getProfile().getBirthdate()).isEqualTo(givenCustomer.getProfile().getBirthdate());
-        assertThat(registeredCustomer.getProfile().getCountry()).isEqualTo(givenCustomer.getProfile().getCountry());
-        assertThat(registeredCustomer.getProfile().getAddress()).isEqualTo(givenCustomer.getProfile().getAddress());
-        assertThat(registeredCustomer.getProfile().getPostalCode()).isEqualTo(givenCustomer
-                .getProfile()
-                .getPostalCode());
-        assertThat(registeredCustomer.getProfile().getNationalId()).isEqualTo(givenCustomer
-                .getProfile()
-                .getNationalId());
     }
 
     @Test

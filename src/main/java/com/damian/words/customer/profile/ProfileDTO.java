@@ -12,11 +12,7 @@ public record ProfileDTO(
         String phone,
         LocalDate birthdate,
         CustomerGender gender,
-        String photoPath,
-        String address,
-        String postalCode,
-        String country,
-        String nationalId,
+        String avatarFilename,
         Instant updatedAt
 ) {
 }

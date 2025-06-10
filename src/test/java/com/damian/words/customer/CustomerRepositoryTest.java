@@ -115,11 +115,6 @@ public class CustomerRepositoryTest {
         givenCustomer.getProfile().setPhone(customerPhone);
         givenCustomer.getProfile().setGender(customerGender);
         givenCustomer.getProfile().setBirthdate(customerBirthdate);
-        givenCustomer.getProfile().setCountry(customerCountry);
-        givenCustomer.getProfile().setAddress(customerAddress);
-        givenCustomer.getProfile().setPostalCode(customerPostal);
-        givenCustomer.getProfile().setNationalId(customerNationalId);
-        givenCustomer.getProfile().setPhotoPath(customerPhotoPath);
 
         // when
         final Customer savedCustomer = customerRepository.save(givenCustomer);
@@ -132,11 +127,6 @@ public class CustomerRepositoryTest {
         assertThat(savedCustomer.getProfile().getPhone()).isEqualTo(customerPhone);
         assertThat(savedCustomer.getProfile().getGender()).isEqualTo(customerGender);
         assertThat(savedCustomer.getProfile().getBirthdate()).isEqualTo(customerBirthdate);
-        assertThat(savedCustomer.getProfile().getCountry()).isEqualTo(customerCountry);
-        assertThat(savedCustomer.getProfile().getAddress()).isEqualTo(customerAddress);
-        assertThat(savedCustomer.getProfile().getPostalCode()).isEqualTo(customerPostal);
-        assertThat(savedCustomer.getProfile().getNationalId()).isEqualTo(customerNationalId);
-        assertThat(savedCustomer.getProfile().getPhotoPath()).isEqualTo(customerPhotoPath);
     }
 
     @Test
