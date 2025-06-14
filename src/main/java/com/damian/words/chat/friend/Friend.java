@@ -12,12 +12,10 @@ public class Friend {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     @OneToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
-    //    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     @OneToOne
     @JoinColumn(name = "friend_id", referencedColumnName = "id")
     private Customer friend;
@@ -34,6 +32,8 @@ public class Friend {
     public Friend(Customer customer, Customer friend) {
         this.customer = customer;
         this.friend = friend;
+        this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
     }
 
     public Long getId() {

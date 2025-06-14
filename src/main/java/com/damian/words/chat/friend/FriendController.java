@@ -22,7 +22,7 @@ public class FriendController {
     // endpoint to receive logged customer
     @GetMapping("/friends")
     public ResponseEntity<?> getContacts() {
-        Set<Friend> friends = friendService.getContacts();
+        Set<Friend> friends = friendService.getFriends();
         Set<FriendDTO> contactsDTO = FriendDTOMapper.toCustomerContactDTOList(friends);
 
         return ResponseEntity
@@ -35,7 +35,7 @@ public class FriendController {
             @PathVariable @NotBlank @Positive
             Long id
     ) {
-        Friend contact = friendService.addContact(id);
+        Friend contact = friendService.addFriend(id);
         FriendDTO contactDTO = FriendDTOMapper.toCustomerContactDTO(contact);
 
         return ResponseEntity
@@ -48,7 +48,7 @@ public class FriendController {
             @PathVariable @NotBlank @Positive
             Long id
     ) {
-        friendService.deleteContact(id);
+        friendService.deleteFriend(id);
 
         return ResponseEntity
                 .noContent()
