@@ -1,15 +1,19 @@
 package com.damian.words.chat.friend;
 
+import com.damian.words.chat.friend.exception.FriendAuthorizationException;
+import com.damian.words.chat.friend.exception.MaxFriendsLimitReachedException;
 import com.damian.words.common.exception.Exceptions;
 import com.damian.words.common.utils.AuthHelper;
 import com.damian.words.customer.Customer;
 import com.damian.words.customer.CustomerRepository;
+import com.damian.words.customer.exception.CustomerNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
 @Service
 public class FriendService {
+    private final short MAX_FRIENDS = 10;
     private final FriendRepository friendRepository;
     private final CustomerRepository customerRepository;
 
@@ -21,31 +25,43 @@ public class FriendService {
         this.customerRepository = customerRepository;
     }
 
-    public Set<Friend> getContacts() {
+    // get all the friends for the logged customer
+    public Set<Friend> getFriends() {
         Customer loggedCustomer = AuthHelper.getLoggedCustomer();
         return friendRepository.findAllByCustomerId(loggedCustomer.getId());
     }
 
-    public Friend addContact(Long customerContactId) {
+    // add a new friend for the logged customer
+    public Friend addFriend(Long friendCustomerId) {
         Customer loggedCustomer = AuthHelper.getLoggedCustomer();
 
-        Customer contact = customerRepository.findById(customerContactId).orElseThrow(
-                () -> new RuntimeException(Exceptions.CUSTOMER.NOT_FOUND)
+        // check friendlist size limit
+        if (this.getFriends().size() >= MAX_FRIENDS) {
+            throw new MaxFriendsLimitReachedException(Exceptions.FRIENDLIST.MAX_FRIENDS);
+        }
+
+        // check if the customer we are trying to add as a friend exists
+        Customer friend = customerRepository.findById(friendCustomerId).orElseThrow(
+                () -> new CustomerNotFoundException(Exceptions.CUSTOMER.NOT_FOUND)
         );
 
-        Friend friend = new Friend(loggedCustomer, contact);
-        return friendRepository.save(friend);
+        return friendRepository.save(
+                new Friend(loggedCustomer, friend)
+        );
     }
 
-    public void deleteContact(Long id) {
+    // delete a friend from the friendlist of the logged customer
+    public void deleteFriend(Long id) {
         Customer loggedCustomer = AuthHelper.getLoggedCustomer();
 
+        // check if the friendship exists
         Friend friend = friendRepository.findById(id).orElseThrow(
-                () -> new RuntimeException(Exceptions.CONTACT.NOT_FOUND)
+                () -> new CustomerNotFoundException(Exceptions.CUSTOMER.NOT_FOUND)
         );
 
+        // check if the logged customer is the owner of the friendship
         if (!loggedCustomer.getId().equals(friend.getCustomer().getId())) {
-            throw new RuntimeException(Exceptions.CONTACT.ACCESS_FORBIDDEN);
+            throw new FriendAuthorizationException(Exceptions.FRIENDLIST.ACCESS_FORBIDDEN);
         }
 
         friendRepository.deleteById(id);
