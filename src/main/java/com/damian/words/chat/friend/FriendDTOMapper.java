@@ -7,6 +7,7 @@ public class FriendDTOMapper {
     public static FriendDTO toCustomerContactDTO(Friend friend) {
         return new FriendDTO(
                 friend.getId(),
+                friend.getFriend().getId(),
                 friend.getFriend().getFullName(),
                 friend.getFriend().getProfile().getAvatarFilename()
         );
