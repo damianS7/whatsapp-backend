@@ -79,12 +79,12 @@ CREATE TABLE public.rooms (
     CONSTRAINT rooms_name_unique UNIQUE (name)
 );
 
-CREATE TABLE public.customer_contacts (
+CREATE TABLE public.customer_friends (
     id int4 GENERATED ALWAYS AS IDENTITY NOT NULL,
     customer_id int4 NOT NULL,
-    contact_customer_id int4 NOT NULL,
+    friend_id int4 NOT NULL,
     created_at timestamp DEFAULT CURRENT_TIMESTAMP NULL,
     updated_at timestamp DEFAULT CURRENT_TIMESTAMP NULL,
-    CONSTRAINT unique_customer_contact UNIQUE (customer_id, contact_customer_id)
+    CONSTRAINT unique_customer_friend UNIQUE (customer_id, friend_id)
 );
 
