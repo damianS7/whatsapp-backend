@@ -14,3 +14,6 @@ INSERT INTO public.rooms (name, description,created_at,updated_at) VALUES
 	 ('Friends', 'Friendly chat room','2025-04-14 00:24:39.778237','2025-04-14 00:24:39.778237'),
 	 ('Music', 'Talk about music','2025-04-14 00:24:39.778237','2025-04-14 00:24:39.778237'),
 	 ('Movies', 'Movies talk','2025-04-14 00:24:39.778237','2025-04-14 00:24:39.778237');
+INSERT INTO public.customer_friends (customer_id,friend_id,created_at,updated_at) VALUES
+	 (1, 2,'2025-04-14 00:24:39.778237','2025-04-14 00:24:39.778237'),
+	 (1, 3,'2025-04-14 00:24:39.778237','2025-04-14 00:24:39.778237');
