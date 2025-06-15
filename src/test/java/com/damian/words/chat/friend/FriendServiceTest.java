@@ -150,7 +150,7 @@ public class FriendServiceTest {
         );
 
         // then
-        assertEquals(Exceptions.FRIENDLIST.MAX_FRIENDS, exception.getMessage());
+        assertEquals(Exceptions.FRIEND_LIST.MAX_FRIENDS, exception.getMessage());
     }
 
     @Test
@@ -238,7 +238,7 @@ public class FriendServiceTest {
         );
 
         // then
-        assertEquals(Exceptions.FRIENDLIST.ACCESS_FORBIDDEN, exception.getMessage());
+        assertEquals(Exceptions.FRIEND_LIST.ACCESS_FORBIDDEN, exception.getMessage());
     }
 
 }
