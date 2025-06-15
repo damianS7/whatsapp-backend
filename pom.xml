@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.damian</groupId>
-    <artifactId>Words</artifactId>
+    <artifactId>WhatsApp</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Words</name>
-    <description>Demo project for Spring Boot</description>
+    <name>WhatsApp</name>
+    <description>Just a simplified WhatsApp clone</description>
     <url/>
     <licenses>
         <license/>

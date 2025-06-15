@@ -1,31 +1,29 @@
-# 🏦 Words
+# 💬 WhatsApp
 
-**xBank** es un proyecto de demostración de una aplicación bancaria.  
-Está construido con **Spring Boot (Java 21)** en el backend y **Vue.js** en el frontend.
-
-Ofrece una API REST segura (JWT) para gestionar usuarios, cuentas y operaciones bancarias.
+Just a simplified WhatsApp clone using Spring Boot and Vue.js
 
 ---
 
-## 🚀 Tecnologías
+## 🚀 Technologies
 
 - **Java 21**
 - **Spring Boot**
-- **JWT (JSON Web Tokens)** para autenticación
-- **JUnit + Maven** para testing
-- **Docker** para ejecutar la aplicación
+- **JWT (JSON Web Tokens)** for authentication
+- **JUnit + Maven** for testing
+- **Docker** to deploy
+- **Vue 3** for frontend
 
 ---
 
-## 📦 Instalación y ejecución
+## 📦 Install and deployment
 
-Asegurate de tener [Docker](https://www.docker.com/) instalado.
+Make sure you have [Docker](https://www.docker.com/) installed.
 
 ```bash
 docker-compose up --build
 ```
 
-También puedes usar Makefile para desplegar la aplicación con el comando
+You can also deploy it with Makefile using the following commands:
 
 ```bash
 make deploy

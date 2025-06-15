@@ -15,7 +15,7 @@ spring:
           descriptor:
             sql:
               BasicBinder: TRACE
-        format_sql: true  # Formatea las consultas para que se vean más legibles
+        format_sql: true
   output:
     ansi:
       enabled: ALWAYS
