@@ -2,7 +2,6 @@ package com.damian.words.chat.room;
 
 import com.damian.words.auth.http.AuthenticationRequest;
 import com.damian.words.auth.http.AuthenticationResponse;
-import com.damian.words.chat.friend.FriendRepository;
 import com.damian.words.customer.Customer;
 import com.damian.words.customer.CustomerGender;
 import com.damian.words.customer.CustomerRepository;
@@ -39,9 +38,6 @@ public class RoomIntegrationTest {
 
     @Autowired
     private CustomerRepository customerRepository;
-
-    @Autowired
-    private FriendRepository friendRepository;
 
     @Autowired
     private RoomRepository roomRepository;
@@ -124,4 +120,9 @@ public class RoomIntegrationTest {
 
     // TODO: shouldGetRoom
     // TODO: shouldCreateRoom (admin)
+    // TODO: shouldSubscribeToRoom
+    // TODO: shouldUnsubscribeFromRoom
+    // TODO: shouldReceiveMessage
+    // TODO: shouldJoinRoom
+    // TODO: shouldLeaveRoom
 }
