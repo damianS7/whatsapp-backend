@@ -23,8 +23,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @SpringBootTest
@@ -124,6 +124,65 @@ public class FriendIntegrationTest {
         assertThat(friendDTO[0].friendCustomerId()).isEqualTo(friend.getId());
     }
 
-    // TODO: should delete frind
-    // TODO: should add friend
+    @Test
+    @DisplayName("Should add a friend")
+    void shouldAddFriend() throws Exception {
+        // given
+        loginWithCustomer(customer);
+
+        Customer friend = new Customer(
+                "contact@test.com",
+                bCryptPasswordEncoder.encode("123456")
+        );
+        customerRepository.save(friend);
+
+
+        // when
+        MvcResult result = mockMvc
+                .perform(
+                        post("/api/v1/friends/{id}", friend.getId())
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().is(201))
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        // then
+        FriendDTO friendDTO = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                FriendDTO.class
+        );
+
+        // then
+        assertThat(friendDTO).isNotNull();
+        assertEquals(friendDTO.friendCustomerId(), friend.getId());
+    }
+
+    @Test
+    @DisplayName("Should delete a friend")
+    void shouldDeleteFriend() throws Exception {
+        // given
+        loginWithCustomer(customer);
+
+        Customer friend = new Customer(
+                "contact@test.com",
+                bCryptPasswordEncoder.encode("123456")
+        );
+        customerRepository.save(friend);
+
+        Friend givenFriendship = new Friend(customer, friend);
+        friendRepository.save(givenFriendship);
+
+        // when
+        MvcResult result = mockMvc
+                .perform(
+                        delete("/api/v1/friends/{id}", givenFriendship.getId())
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().is(204))
+                .andReturn();
+
+        // then
+    }
+
 }

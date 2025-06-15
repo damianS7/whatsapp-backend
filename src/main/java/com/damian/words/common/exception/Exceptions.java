@@ -6,6 +6,12 @@ public class Exceptions {
         public static final String BAD_CREDENTIALS = "Bad credentials.";
     }
 
+    public static class FRIENDLIST {
+        public static final String ACCESS_FORBIDDEN = "You cannot access this friendlist.";
+        public static final String NOT_FOUND = "Friend not found.";
+        public static final String MAX_FRIENDS = "You have reached the maximum number of friends.";
+    }
+
 
     public static class CUSTOMER {
         public static final String DISABLED = "Customer is disabled.";

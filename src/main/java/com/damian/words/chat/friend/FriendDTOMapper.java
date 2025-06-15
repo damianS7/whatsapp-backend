@@ -4,7 +4,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class FriendDTOMapper {
-    public static FriendDTO toCustomerContactDTO(Friend friend) {
+    public static FriendDTO toCustomerFriendDTO(Friend friend) {
         return new FriendDTO(
                 friend.getId(),
                 friend.getFriend().getId(),
@@ -13,11 +13,11 @@ public class FriendDTOMapper {
         );
     }
 
-    public static Set<FriendDTO> toCustomerContactDTOList(Set<Friend> customers) {
+    public static Set<FriendDTO> toCustomerFriendDTOList(Set<Friend> customers) {
         return customers
                 .stream()
                 .map(
-                        FriendDTOMapper::toCustomerContactDTO
+                        FriendDTOMapper::toCustomerFriendDTO
                 ).collect(Collectors.toSet());
     }
 }

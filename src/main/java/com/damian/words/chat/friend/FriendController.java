@@ -1,6 +1,6 @@
 package com.damian.words.chat.friend;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,29 +23,29 @@ public class FriendController {
     @GetMapping("/friends")
     public ResponseEntity<?> getContacts() {
         Set<Friend> friends = friendService.getFriends();
-        Set<FriendDTO> contactsDTO = FriendDTOMapper.toCustomerContactDTOList(friends);
+        Set<FriendDTO> friendsDTO = FriendDTOMapper.toCustomerFriendDTOList(friends);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(contactsDTO);
+                .body(friendsDTO);
     }
 
     @PostMapping("/friends/{id}")
-    public ResponseEntity<?> addContact(
-            @PathVariable @NotBlank @Positive
+    public ResponseEntity<?> addFriend(
+            @PathVariable @NotNull @Positive
             Long id
     ) {
-        Friend contact = friendService.addFriend(id);
-        FriendDTO contactDTO = FriendDTOMapper.toCustomerContactDTO(contact);
+        Friend friend = friendService.addFriend(id);
+        FriendDTO friendDTO = FriendDTOMapper.toCustomerFriendDTO(friend);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(contactDTO);
+                .body(friendDTO);
     }
 
     @DeleteMapping("/friends/{id}")
-    public ResponseEntity<?> deleteContact(
-            @PathVariable @NotBlank @Positive
+    public ResponseEntity<?> deleteFriend(
+            @PathVariable @NotNull @Positive
             Long id
     ) {
         friendService.deleteFriend(id);
