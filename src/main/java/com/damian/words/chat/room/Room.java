@@ -26,6 +26,11 @@ public class Room {
     public Room() {
     }
 
+    public Room(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     public Long getId() {
         return id;
     }
