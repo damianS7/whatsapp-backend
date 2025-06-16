@@ -2,6 +2,7 @@ package com.damian.whatsapp.customer;
 
 import com.damian.whatsapp.auth.Auth;
 import com.damian.whatsapp.customer.profile.Profile;
+import com.damian.whatsapp.group.member.GroupMember;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,6 +10,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "customers")
@@ -25,6 +28,9 @@ public class Customer implements CustomerDetails {
 
     @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL) // FetchType EAGER por defecto
     private Profile profile;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<GroupMember> groupMemberships = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     private CustomerRole role;

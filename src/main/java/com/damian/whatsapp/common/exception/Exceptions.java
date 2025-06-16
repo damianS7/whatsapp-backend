@@ -19,8 +19,8 @@ public class Exceptions {
         public static final String NOT_FOUND = "Customer not found.";
     }
 
-    public static class ROOM {
-        public static final String NOT_FOUND = "Room not found.";
+    public static class GROUP {
+        public static final String NOT_FOUND = "Group not found.";
     }
 
     public static class PROFILE {

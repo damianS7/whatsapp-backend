@@ -1,4 +1,4 @@
-package com.damian.whatsapp.chat.room;
+package com.damian.whatsapp.group;
 
 import com.damian.whatsapp.auth.http.AuthenticationRequest;
 import com.damian.whatsapp.auth.http.AuthenticationResponse;
@@ -6,6 +6,8 @@ import com.damian.whatsapp.customer.Customer;
 import com.damian.whatsapp.customer.CustomerGender;
 import com.damian.whatsapp.customer.CustomerRepository;
 import com.damian.whatsapp.customer.CustomerRole;
+import com.damian.whatsapp.group.member.GroupMember;
+import com.damian.whatsapp.group.member.GroupMemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class RoomIntegrationTest {
+public class GroupIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
@@ -40,7 +42,10 @@ public class RoomIntegrationTest {
     private CustomerRepository customerRepository;
 
     @Autowired
-    private RoomRepository roomRepository;
+    private GroupRepository groupRepository;
+
+    @Autowired
+    private GroupMemberRepository groupMemberRepository;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -50,6 +55,8 @@ public class RoomIntegrationTest {
 
     @BeforeEach
     void setUp() {
+        groupMemberRepository.deleteAll();
+        groupRepository.deleteAll();
         customerRepository.deleteAll();
 
         customer = new Customer();
@@ -88,18 +95,24 @@ public class RoomIntegrationTest {
     }
 
     @Test
-    @DisplayName("Should get friends")
-    void shouldGetRooms() throws Exception {
+    @DisplayName("Should get groups that customer belongs to")
+    void shouldGetGroups() throws Exception {
         // given
         loginWithCustomer(customer);
 
-        Room room = new Room("gaming", "gaming room");
-        roomRepository.save(room);
+        Group group1 = new Group("gaming", "gaming group");
+        Group group2 = new Group("music", "music group");
+        groupRepository.save(group1);
+        groupRepository.save(group2);
+
+        groupMemberRepository.save(
+                new GroupMember(customer, group1)
+        );
 
         // when
         MvcResult result = mockMvc
                 .perform(
-                        get("/api/v1/rooms")
+                        get("/api/v1/groups")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -107,15 +120,15 @@ public class RoomIntegrationTest {
                 .andReturn();
 
         // then
-        RoomDTO[] rooms = objectMapper.readValue(
+        GroupDTO[] rooms = objectMapper.readValue(
                 result.getResponse().getContentAsString(),
-                RoomDTO[].class
+                GroupDTO[].class
         );
 
         // then
         assertThat(rooms).isNotNull();
-        assertThat(rooms.length).isGreaterThanOrEqualTo(1);
-        assertThat(rooms[0].name()).isEqualTo(room.getName());
+        assertThat(rooms.length).isEqualTo(1);
+        assertThat(rooms[0].name()).isEqualTo(group1.getName());
     }
 
     // TODO: shouldGetRoom

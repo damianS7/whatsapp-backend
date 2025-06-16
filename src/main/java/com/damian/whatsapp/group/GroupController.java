@@ -1,4 +1,4 @@
-package com.damian.whatsapp.chat.room;
+package com.damian.whatsapp.group;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,19 +11,19 @@ import java.util.List;
 
 @RequestMapping("/api/v1")
 @RestController
-public class RoomController {
-    private final RoomService roomService;
+public class GroupController {
+    private final GroupService groupService;
 
     @Autowired
-    public RoomController(RoomService roomService) {
-        this.roomService = roomService;
+    public GroupController(GroupService groupService) {
+        this.groupService = groupService;
     }
 
-    // endpoint to fetch all rooms
-    @GetMapping("/rooms")
+    // endpoint to fetch all groups customer belongs
+    @GetMapping("/groups")
     public ResponseEntity<?> getRooms() {
-        List<Room> rooms = roomService.getRooms();
-        List<RoomDTO> roomsDTO = rooms.stream().map(RoomDTOMapper::toRoomDTO).toList();
+        List<Group> groups = groupService.getRooms();
+        List<GroupDTO> roomsDTO = groups.stream().map(GroupDTOMapper::toGroupDTO).toList();
 
         return ResponseEntity
                 .status(HttpStatus.OK)

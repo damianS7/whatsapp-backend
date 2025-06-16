@@ -1,8 +1,8 @@
-package com.damian.whatsapp.chat.room.http;
+package com.damian.whatsapp.group.http;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record RoomCreateRequest(
+public record GroupCreateRequest(
         @NotBlank
         String name,
 

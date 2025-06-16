@@ -1,12 +1,15 @@
-package com.damian.whatsapp.chat.room;
+package com.damian.whatsapp.group;
 
+import com.damian.whatsapp.group.member.GroupMember;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "rooms")
-public class Room {
+@Table(name = "groups")
+public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,10 +26,13 @@ public class Room {
     @Column
     private Instant updatedAt;
 
-    public Room() {
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<GroupMember> members = new HashSet<>();
+
+    public Group() {
     }
 
-    public Room(String name, String description) {
+    public Group(String name, String description) {
         this.name = name;
         this.description = description;
     }
@@ -81,5 +87,13 @@ public class Room {
 
     public String getDescription() {
         return this.description;
+    }
+
+    public Set<GroupMember> getMembers() {
+        return members;
+    }
+
+    public void setMembers(Set<GroupMember> members) {
+        this.members = members;
     }
 }

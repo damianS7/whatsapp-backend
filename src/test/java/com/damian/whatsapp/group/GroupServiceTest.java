@@ -1,10 +1,10 @@
-package com.damian.whatsapp.chat.room;
+package com.damian.whatsapp.group;
 
-import com.damian.whatsapp.chat.room.exception.RoomNotFoundException;
-import com.damian.whatsapp.chat.room.http.RoomCreateRequest;
 import com.damian.whatsapp.common.exception.Exceptions;
 import com.damian.whatsapp.customer.Customer;
 import com.damian.whatsapp.customer.CustomerRepository;
+import com.damian.whatsapp.group.exception.GroupNotFoundException;
+import com.damian.whatsapp.group.http.GroupCreateRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,20 +26,20 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class RoomServiceTest {
+public class GroupServiceTest {
 
     @Mock
     private CustomerRepository customerRepository;
 
     @Mock
-    private RoomRepository roomRepository;
+    private GroupRepository groupRepository;
 
     @Mock
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private BCryptPasswordEncoder passwordEncoder;
 
     @InjectMocks
-    private RoomService roomService;
+    private GroupService groupService;
 
     @BeforeEach
     void setUp() {
@@ -61,78 +61,81 @@ public class RoomServiceTest {
     }
 
     @Test
-    @DisplayName("Should get all rooms")
-    void shouldGetAllRooms() {
+    @DisplayName("Should get all groups that customer belongs to")
+    void shouldGetAllGroups() {
         // given
-        Room room1 = new Room("gaming", "room1");
-        Room room2 = new Room("music", "room2");
+        Customer customer = new Customer(1L, "customer@test.com", passwordEncoder.encode("123456"));
+        setUpContext(customer);
 
-        List<Room> roomList = List.of(
-                room1, room2
+        Group group1 = new Group("gaming", "room1");
+        Group group2 = new Group("music", "room2");
+
+        List<Group> groupList = List.of(
+                group1, group2
         );
 
         // when
-        when(roomRepository.findAll()).thenReturn(roomList);
-        List<Room> result = roomService.getRooms();
+        when(groupRepository.findGroupsByCustomerId(customer.getId())).thenReturn(groupList);
+        List<Group> result = groupService.getRooms();
 
         // then
         assertNotNull(result);
         assertEquals(2, result.size());
-        verify(roomRepository, times(1)).findAll();
+        verify(groupRepository, times(1)).findGroupsByCustomerId(customer.getId());
     }
 
     @Test
-    @DisplayName("Should get room")
-    void shouldGetRoom() {
+    @DisplayName("Should get group")
+    void shouldGetGroup() {
         // given
-        Room room1 = new Room("gaming", "room1");
-        room1.setId(1L);
+        Group group1 = new Group("gaming", "group1");
+        group1.setId(1L);
 
         // when
-        when(roomRepository.findById(room1.getId())).thenReturn(Optional.of(room1));
-        Room result = roomService.getRoom(room1.getId());
+        when(groupRepository.findById(group1.getId())).thenReturn(Optional.of(group1));
+        Group result = groupService.getGroup(group1.getId());
 
         // then
         assertNotNull(result);
-        verify(roomRepository, times(1)).findById(room1.getId());
+        verify(groupRepository, times(1)).findById(group1.getId());
     }
 
     @Test
-    @DisplayName("Should not get room")
-    void shouldNotGetRoomWhenNotFound() {
+    @DisplayName("Should not get group")
+    void shouldNotGetGroupWhenNotFound() {
         // given
-        Room room1 = new Room("gaming", "room1");
-        room1.setId(1L);
+        Group group1 = new Group("gaming", "group1");
+        group1.setId(1L);
 
         // when
-        when(roomRepository.findById(room1.getId())).thenReturn(Optional.empty());
-        RoomNotFoundException exception = assertThrows(
-                RoomNotFoundException.class,
-                () -> roomService.getRoom(room1.getId())
+        when(groupRepository.findById(group1.getId())).thenReturn(Optional.empty());
+        GroupNotFoundException exception = assertThrows(
+                GroupNotFoundException.class,
+                () -> groupService.getGroup(group1.getId())
         );
 
         // then
-        assertEquals(Exceptions.ROOM.NOT_FOUND, exception.getMessage());
+        assertEquals(Exceptions.GROUP.NOT_FOUND, exception.getMessage());
     }
 
     @Test
-    @DisplayName("Should create room")
-    void shouldCreateRoom() {
+    @DisplayName("Should create group")
+    void shouldCreateGroup() {
         // given
-        RoomCreateRequest request = new RoomCreateRequest(
+        GroupCreateRequest request = new GroupCreateRequest(
                 "Gaming",
-                "Gaming room"
+                "Gaming group"
         );
 
         // when
-        when(roomRepository.save(any(Room.class))).thenReturn(
-                new Room(request.name(), request.description())
+        when(groupRepository.save(any(Group.class))).thenReturn(
+                new Group(request.name(), request.description())
         );
-        Room result = roomService.createRoom(request);
+        Group result = groupService.createGroup(request);
 
         // then
         assertNotNull(result);
-        verify(roomRepository, times(1)).save(any(Room.class));
+        verify(groupRepository, times(1)).save(any(Group.class));
     }
 
     // TODO: shouldDeleteRoom

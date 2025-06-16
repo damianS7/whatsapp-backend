@@ -1,4 +1,4 @@
-package com.damian.whatsapp.chat.room.http;
+package com.damian.whatsapp.group.http;
 
 public class RoomMessage {
     public Long roomId;
