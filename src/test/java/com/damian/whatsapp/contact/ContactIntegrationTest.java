@@ -1,4 +1,4 @@
-package com.damian.whatsapp.chat.friend;
+package com.damian.whatsapp.contact;
 
 import com.damian.whatsapp.auth.http.AuthenticationRequest;
 import com.damian.whatsapp.auth.http.AuthenticationResponse;
@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class FriendIntegrationTest {
+public class ContactIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
@@ -40,7 +40,7 @@ public class FriendIntegrationTest {
     private CustomerRepository customerRepository;
 
     @Autowired
-    private FriendRepository friendRepository;
+    private ContactRepository contactRepository;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -50,6 +50,7 @@ public class FriendIntegrationTest {
 
     @BeforeEach
     void setUp() {
+        contactRepository.deleteAll();
         customerRepository.deleteAll();
 
         customer = new Customer();
@@ -88,24 +89,24 @@ public class FriendIntegrationTest {
     }
 
     @Test
-    @DisplayName("Should get friends")
-    void shouldGetFriends() throws Exception {
+    @DisplayName("Should get contacts")
+    void shouldGetContacts() throws Exception {
         // given
         loginWithCustomer(customer);
 
-        Customer friend = new Customer(
+        Customer customerContact = new Customer(
                 "contact@test.com",
                 bCryptPasswordEncoder.encode("123456")
         );
-        customerRepository.save(friend);
-
-        Friend givenFriend = new Friend(customer, friend);
-        friendRepository.save(givenFriend);
+        customerRepository.save(customerContact);
+        contactRepository.save(
+                new Contact(customer, customerContact)
+        );
 
         // when
         MvcResult result = mockMvc
                 .perform(
-                        get("/api/v1/friends")
+                        get("/api/v1/contacts")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -113,34 +114,34 @@ public class FriendIntegrationTest {
                 .andReturn();
 
         // then
-        FriendDTO[] friendDTO = objectMapper.readValue(
+        ContactDTO[] contactDTO = objectMapper.readValue(
                 result.getResponse().getContentAsString(),
-                FriendDTO[].class
+                ContactDTO[].class
         );
 
         // then
-        assertThat(friendDTO).isNotNull();
-        assertThat(friendDTO.length).isGreaterThanOrEqualTo(1);
-        assertThat(friendDTO[0].friendCustomerId()).isEqualTo(friend.getId());
+        assertThat(contactDTO).isNotNull();
+        assertThat(contactDTO.length).isGreaterThanOrEqualTo(1);
+        assertThat(contactDTO[0].contactCustomerId()).isEqualTo(customerContact.getId());
     }
 
     @Test
-    @DisplayName("Should add a friend")
-    void shouldAddFriend() throws Exception {
+    @DisplayName("Should add a contact")
+    void shouldAddContact() throws Exception {
         // given
         loginWithCustomer(customer);
 
-        Customer friend = new Customer(
+        Customer contact = new Customer(
                 "contact@test.com",
                 bCryptPasswordEncoder.encode("123456")
         );
-        customerRepository.save(friend);
+        customerRepository.save(contact);
 
 
         // when
         MvcResult result = mockMvc
                 .perform(
-                        post("/api/v1/friends/{id}", friend.getId())
+                        post("/api/v1/contacts/{id}", contact.getId())
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().is(201))
@@ -148,35 +149,35 @@ public class FriendIntegrationTest {
                 .andReturn();
 
         // then
-        FriendDTO friendDTO = objectMapper.readValue(
+        ContactDTO contactDTO = objectMapper.readValue(
                 result.getResponse().getContentAsString(),
-                FriendDTO.class
+                ContactDTO.class
         );
 
         // then
-        assertThat(friendDTO).isNotNull();
-        assertEquals(friendDTO.friendCustomerId(), friend.getId());
+        assertThat(contactDTO).isNotNull();
+        assertEquals(contactDTO.contactCustomerId(), contact.getId());
     }
 
     @Test
-    @DisplayName("Should delete a friend")
+    @DisplayName("Should delete a contact")
     void shouldDeleteFriend() throws Exception {
         // given
         loginWithCustomer(customer);
 
-        Customer friend = new Customer(
+        Customer customerContact = new Customer(
                 "contact@test.com",
                 bCryptPasswordEncoder.encode("123456")
         );
-        customerRepository.save(friend);
+        customerRepository.save(customerContact);
 
-        Friend givenFriendship = new Friend(customer, friend);
-        friendRepository.save(givenFriendship);
+        Contact givenContact = new Contact(customer, customerContact);
+        contactRepository.save(givenContact);
 
         // when
         MvcResult result = mockMvc
                 .perform(
-                        delete("/api/v1/friends/{id}", givenFriendship.getId())
+                        delete("/api/v1/contacts/{id}", givenContact.getId())
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().is(204))

@@ -1,4 +1,4 @@
-package com.damian.whatsapp.chat.friend;
+package com.damian.whatsapp.contact;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -11,44 +11,44 @@ import java.util.Set;
 
 @RequestMapping("/api/v1")
 @RestController
-public class FriendController {
-    private final FriendService friendService;
+public class ContactController {
+    private final ContactService contactService;
 
     @Autowired
-    public FriendController(FriendService friendService) {
-        this.friendService = friendService;
+    public ContactController(ContactService contactService) {
+        this.contactService = contactService;
     }
 
     // endpoint to receive logged customer
-    @GetMapping("/friends")
+    @GetMapping("/contacts")
     public ResponseEntity<?> getContacts() {
-        Set<Friend> friends = friendService.getFriends();
-        Set<FriendDTO> friendsDTO = FriendDTOMapper.toCustomerFriendDTOList(friends);
+        Set<Contact> contacts = contactService.getContacts();
+        Set<ContactDTO> contactsDTO = ContactDTOMapper.toContactDTOList(contacts);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(friendsDTO);
+                .body(contactsDTO);
     }
 
-    @PostMapping("/friends/{id}")
-    public ResponseEntity<?> addFriend(
+    @PostMapping("/contacts/{id}")
+    public ResponseEntity<?> addContact(
             @PathVariable @NotNull @Positive
             Long id
     ) {
-        Friend friend = friendService.addFriend(id);
-        FriendDTO friendDTO = FriendDTOMapper.toCustomerFriendDTO(friend);
+        Contact contact = contactService.addContact(id);
+        ContactDTO contactDTO = ContactDTOMapper.toCustomerFriendDTO(contact);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(friendDTO);
+                .body(contactDTO);
     }
 
-    @DeleteMapping("/friends/{id}")
-    public ResponseEntity<?> deleteFriend(
+    @DeleteMapping("/contacts/{id}")
+    public ResponseEntity<?> deleteContact(
             @PathVariable @NotNull @Positive
             Long id
     ) {
-        friendService.deleteFriend(id);
+        contactService.deleteContact(id);
 
         return ResponseEntity
                 .noContent()

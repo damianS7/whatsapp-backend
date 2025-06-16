@@ -53,8 +53,8 @@ public class WebSecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("http://localhost:8081");
-        config.addAllowedOrigin("http://dev.words.local:8081");
-        config.addAllowedOrigin("http://words.local:8081");
+        config.addAllowedOrigin("http://dev.whatsapp.local:8081");
+        config.addAllowedOrigin("http://whatsapp.local:8081");
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
         config.setAllowCredentials(true);

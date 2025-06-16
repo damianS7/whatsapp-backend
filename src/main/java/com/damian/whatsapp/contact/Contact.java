@@ -1,4 +1,4 @@
-package com.damian.whatsapp.chat.friend;
+package com.damian.whatsapp.contact;
 
 import com.damian.whatsapp.customer.Customer;
 import jakarta.persistence.*;
@@ -6,8 +6,8 @@ import jakarta.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "customer_friends")
-public class Friend {
+@Table(name = "customer_contacts")
+public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,8 +17,8 @@ public class Friend {
     private Customer customer;
 
     @OneToOne
-    @JoinColumn(name = "friend_id", referencedColumnName = "id")
-    private Customer friend;
+    @JoinColumn(name = "contact_customer_id", referencedColumnName = "id")
+    private Customer contact;
 
     @Column
     private Instant createdAt;
@@ -26,12 +26,12 @@ public class Friend {
     @Column
     private Instant updatedAt;
 
-    public Friend() {
+    public Contact() {
     }
 
-    public Friend(Customer customer, Customer friend) {
+    public Contact(Customer customer, Customer contact) {
         this.customer = customer;
-        this.friend = friend;
+        this.contact = contact;
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
     }
@@ -62,7 +62,7 @@ public class Friend {
 
     @Override
     public String toString() {
-        return "Friend {" +
+        return "Contact {" +
                "id=" + id +
                ", createdAt=" + createdAt +
                ", updatedAt=" + updatedAt +
@@ -77,11 +77,11 @@ public class Friend {
         this.customer = customer;
     }
 
-    public Customer getFriend() {
-        return friend;
+    public Customer getContact() {
+        return contact;
     }
 
-    public void setFriend(Customer friend) {
-        this.friend = friend;
+    public void setContact(Customer contact) {
+        this.contact = contact;
     }
 }

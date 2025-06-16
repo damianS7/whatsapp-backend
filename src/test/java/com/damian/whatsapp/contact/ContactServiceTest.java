@@ -1,8 +1,8 @@
-package com.damian.whatsapp.chat.friend;
+package com.damian.whatsapp.contact;
 
-import com.damian.whatsapp.chat.friend.exception.FriendAuthorizationException;
-import com.damian.whatsapp.chat.friend.exception.MaxFriendsLimitReachedException;
 import com.damian.whatsapp.common.exception.Exceptions;
+import com.damian.whatsapp.contact.exception.ContactAuthorizationException;
+import com.damian.whatsapp.contact.exception.MaxContactsLimitReachedException;
 import com.damian.whatsapp.customer.Customer;
 import com.damian.whatsapp.customer.CustomerRepository;
 import com.damian.whatsapp.customer.exception.CustomerNotFoundException;
@@ -29,20 +29,20 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class FriendServiceTest {
+public class ContactServiceTest {
 
     @Mock
     private CustomerRepository customerRepository;
 
     @Mock
-    private FriendRepository friendRepository;
+    private ContactRepository contactRepository;
 
     @Mock
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private BCryptPasswordEncoder passwordEncoder;
 
     @InjectMocks
-    private FriendService friendService;
+    private ContactService contactService;
 
     @BeforeEach
     void setUp() {
@@ -78,25 +78,25 @@ public class FriendServiceTest {
                 3L, "customer2@test.com", passwordEncoder.encode("password")
         );
 
-        Set<Friend> contactList = Set.of(
-                new Friend(loggedCustomer, contact1),
-                new Friend(loggedCustomer, contact2)
+        Set<Contact> contactList = Set.of(
+                new Contact(loggedCustomer, contact1),
+                new Contact(loggedCustomer, contact2)
         );
 
         // when
-        when(friendRepository.findAllByCustomerId(loggedCustomer.getId()))
+        when(contactRepository.findAllByCustomerId(loggedCustomer.getId()))
                 .thenReturn(contactList);
-        Set<Friend> result = friendService.getFriends();
+        Set<Contact> result = contactService.getContacts();
 
         // then
         assertNotNull(result);
         assertEquals(2, result.size());
-        verify(friendRepository, times(1)).findAllByCustomerId(loggedCustomer.getId());
+        verify(contactRepository, times(1)).findAllByCustomerId(loggedCustomer.getId());
     }
 
     @Test
     @DisplayName("Should add a friend")
-    void shouldAddFriend() {
+    void shouldAddContact() {
         // given
         Customer loggedCustomer = new Customer(1L, "customer@test.com", passwordEncoder.encode("password"));
         setUpContext(loggedCustomer);
@@ -105,79 +105,57 @@ public class FriendServiceTest {
                 2L, "customer1@test.com", passwordEncoder.encode("password")
         );
 
-        Friend givenCC = new Friend(loggedCustomer, friend1);
+        Contact givenCC = new Contact(loggedCustomer, friend1);
 
         // when
         when(customerRepository.findById(friend1.getId())).thenReturn(Optional.of(friend1));
-        when(friendRepository.save(any(Friend.class)))
+        when(contactRepository.save(any(Contact.class)))
                 .thenReturn(givenCC);
 
-        Friend result = friendService.addFriend(friend1.getId());
+        Contact result = contactService.addContact(friend1.getId());
 
         // then
         assertNotNull(result);
-        verify(friendRepository, times(1)).save(any(Friend.class));
+        verify(contactRepository, times(1)).save(any(Contact.class));
     }
 
     @Test
-    @DisplayName("Should not add a friend when limit reached")
-    void shouldNotAddFriendWhenLimitReached() {
+    @DisplayName("Should not add a contact when limit reached")
+    void shouldNotAddContactWhenLimitReached() {
         // given
         Customer loggedCustomer = new Customer(1L, "customer@test.com", passwordEncoder.encode("password"));
         setUpContext(loggedCustomer);
-        short MAX_FRIENDS = 3;
+        short MAX_CONTACTS = 3;
 
         Field field = null;
         try {
-            field = FriendService.class.getDeclaredField("MAX_FRIENDS");
+            field = ContactService.class.getDeclaredField("MAX_CONTACTS");
             field.setAccessible(true);
-            MAX_FRIENDS = (short) field.get(friendService); // null porque es static
+            MAX_CONTACTS = (short) field.get(contactService); // null porque es static
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
 
 
-        Set<Friend> friendList = new HashSet<>();
-        for (int i = 0; i <= MAX_FRIENDS; i++) {
-            friendList.add(new Friend());
+        Set<Contact> contactList = new HashSet<>();
+        for (int i = 0; i <= MAX_CONTACTS; i++) {
+            contactList.add(new Contact());
         }
 
         // when
-        when(friendRepository.findAllByCustomerId(loggedCustomer.getId())).thenReturn(friendList);
-        MaxFriendsLimitReachedException exception = assertThrows(
-                MaxFriendsLimitReachedException.class,
-                () -> friendService.addFriend(0L)
+        when(contactRepository.findAllByCustomerId(loggedCustomer.getId())).thenReturn(contactList);
+        MaxContactsLimitReachedException exception = assertThrows(
+                MaxContactsLimitReachedException.class,
+                () -> contactService.addContact(0L)
         );
 
         // then
-        assertEquals(Exceptions.FRIEND_LIST.MAX_FRIENDS, exception.getMessage());
+        assertEquals(Exceptions.CONTACT_LIST.MAX_CONTACTS, exception.getMessage());
     }
 
     @Test
-    @DisplayName("Should not add a friend when customer not found")
-    void shouldNotAddFriendWhenCustomerNotFound() {
-        // given
-        Customer loggedCustomer = new Customer(1L, "customer@test.com", passwordEncoder.encode("password"));
-        setUpContext(loggedCustomer);
-
-        Customer friend1 = new Customer(
-                2L, "customer1@test.com", passwordEncoder.encode("password")
-        );
-
-        // when
-        when(customerRepository.findById(friend1.getId())).thenReturn(Optional.empty());
-        CustomerNotFoundException exception = assertThrows(
-                CustomerNotFoundException.class,
-                () -> friendService.addFriend(friend1.getId())
-        );
-
-        // then
-        assertEquals(Exceptions.CUSTOMER.NOT_FOUND, exception.getMessage());
-    }
-
-    @Test
-    @DisplayName("Should delete a friend")
-    void shouldDeleteFriend() {
+    @DisplayName("Should not add a contact when customer not found")
+    void shouldNotAddContactWhenCustomerNotFound() {
         // given
         Customer loggedCustomer = new Customer(1L, "customer@test.com", passwordEncoder.encode("password"));
         setUpContext(loggedCustomer);
@@ -186,31 +164,11 @@ public class FriendServiceTest {
                 2L, "customer1@test.com", passwordEncoder.encode("password")
         );
 
-        Friend givenCC = new Friend(loggedCustomer, contact1);
-        givenCC.setId(1L);
-
         // when
-        when(friendRepository.findById(givenCC.getId())).thenReturn(Optional.of(givenCC));
-        doNothing().when(friendRepository).deleteById(givenCC.getId());
-
-        friendService.deleteFriend(givenCC.getId());
-
-        // then
-        verify(friendRepository, times(1)).deleteById(givenCC.getId());
-    }
-
-    @Test
-    @DisplayName("Should not delete a friend when customer not found")
-    void shouldNotDeleteFriendWhenCustomerNotFound() {
-        // given
-        Customer loggedCustomer = new Customer(1L, "customer@test.com", passwordEncoder.encode("password"));
-        setUpContext(loggedCustomer);
-
-        // when
-        when(friendRepository.findById(anyLong())).thenReturn(Optional.empty());
+        when(customerRepository.findById(contact1.getId())).thenReturn(Optional.empty());
         CustomerNotFoundException exception = assertThrows(
                 CustomerNotFoundException.class,
-                () -> friendService.deleteFriend(0L)
+                () -> contactService.addContact(contact1.getId())
         );
 
         // then
@@ -218,27 +176,69 @@ public class FriendServiceTest {
     }
 
     @Test
-    @DisplayName("Should not delete a friend when not authorized")
-    void shouldNotDeleteFriendWhenNotAuthorized() {
+    @DisplayName("Should delete a contact")
+    void shouldDeleteContact() {
         // given
         Customer loggedCustomer = new Customer(1L, "customer@test.com", passwordEncoder.encode("password"));
         setUpContext(loggedCustomer);
 
-        Friend givenCC = new Friend(
+        Customer contact1 = new Customer(
+                2L, "customer1@test.com", passwordEncoder.encode("password")
+        );
+
+        Contact givenCC = new Contact(loggedCustomer, contact1);
+        givenCC.setId(1L);
+
+        // when
+        when(contactRepository.findById(givenCC.getId())).thenReturn(Optional.of(givenCC));
+        doNothing().when(contactRepository).deleteById(givenCC.getId());
+
+        contactService.deleteContact(givenCC.getId());
+
+        // then
+        verify(contactRepository, times(1)).deleteById(givenCC.getId());
+    }
+
+    @Test
+    @DisplayName("Should not delete a contact when customer not found")
+    void shouldNotDeleteContactWhenCustomerNotFound() {
+        // given
+        Customer loggedCustomer = new Customer(1L, "customer@test.com", passwordEncoder.encode("password"));
+        setUpContext(loggedCustomer);
+
+        // when
+        when(contactRepository.findById(anyLong())).thenReturn(Optional.empty());
+        CustomerNotFoundException exception = assertThrows(
+                CustomerNotFoundException.class,
+                () -> contactService.deleteContact(0L)
+        );
+
+        // then
+        assertEquals(Exceptions.CUSTOMER.NOT_FOUND, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should not delete a contact when not authorized")
+    void shouldNotDeleteContactWhenNotAuthorized() {
+        // given
+        Customer loggedCustomer = new Customer(1L, "customer@test.com", passwordEncoder.encode("password"));
+        setUpContext(loggedCustomer);
+
+        Contact givenCC = new Contact(
                 new Customer(5L, "customer1@test.com", passwordEncoder.encode("password")),
                 new Customer(8L, "customer2@test.com", passwordEncoder.encode("password"))
         );
         givenCC.setId(1L);
 
         // when
-        when(friendRepository.findById(givenCC.getId())).thenReturn(Optional.of(givenCC));
-        FriendAuthorizationException exception = assertThrows(
-                FriendAuthorizationException.class,
-                () -> friendService.deleteFriend(givenCC.getId())
+        when(contactRepository.findById(givenCC.getId())).thenReturn(Optional.of(givenCC));
+        ContactAuthorizationException exception = assertThrows(
+                ContactAuthorizationException.class,
+                () -> contactService.deleteContact(givenCC.getId())
         );
 
         // then
-        assertEquals(Exceptions.FRIEND_LIST.ACCESS_FORBIDDEN, exception.getMessage());
+        assertEquals(Exceptions.CONTACT_LIST.ACCESS_FORBIDDEN, exception.getMessage());
     }
 
 }
