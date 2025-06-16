@@ -70,21 +70,49 @@ CREATE TABLE public.customer_auth (
 	CONSTRAINT auth_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.customers(id) ON DELETE CASCADE
 );
 
-CREATE TABLE public.rooms (
+CREATE TABLE public.customer_contacts (
     id int4 GENERATED ALWAYS AS IDENTITY NOT NULL,
+    customer_id int4 NOT NULL,
+    contact_customer_id int4 NOT NULL,
+    created_at timestamp DEFAULT CURRENT_TIMESTAMP NULL,
+    updated_at timestamp DEFAULT CURRENT_TIMESTAMP NULL,
+    CONSTRAINT unique_customer_contact UNIQUE (customer_id, contact_customer_id),
+    CONSTRAINT customer_contacts_pkey PRIMARY KEY (id),
+    CONSTRAINT customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.customers(id) ON DELETE CASCADE,
+    CONSTRAINT contact_customer_id_fkey FOREIGN KEY (contact_customer_id) REFERENCES public.customers(id) ON DELETE CASCADE
+);
+
+CREATE TABLE public.groups (
+    id int4 GENERATED ALWAYS AS IDENTITY NOT NULL,
+    owner_customer_id int4 NOT NULL,
     name varchar(30) NOT NULL,
     description varchar(220) NOT NULL,
     created_at timestamp DEFAULT CURRENT_TIMESTAMP NULL,
     updated_at timestamp DEFAULT CURRENT_TIMESTAMP NULL,
-    CONSTRAINT rooms_name_unique UNIQUE (name)
+    CONSTRAINT group_name_unique UNIQUE (name),
+    CONSTRAINT groups_pkey PRIMARY KEY (id),
+    CONSTRAINT owner_customer_id_fkey FOREIGN KEY (owner_customer_id) REFERENCES public.customers(id) ON DELETE CASCADE
 );
 
-CREATE TABLE public.customer_friends (
+CREATE TYPE public."group_member_role_type" AS ENUM (
+	'OWNER',
+	'ADMIN',
+	'MEMBER'
+);
+
+CREATE CAST (varchar as group_member_role_type) WITH INOUT AS IMPLICIT;
+
+CREATE TABLE public.group_members (
     id int4 GENERATED ALWAYS AS IDENTITY NOT NULL,
-    customer_id int4 NOT NULL,
-    friend_id int4 NOT NULL,
+    group_id int4 NOT NULL,
+    member_customer_id int4 NOT NULL,
+    member_role public."group_member_role_type" DEFAULT 'MEMBER'::group_member_role_type NOT NULL,
     created_at timestamp DEFAULT CURRENT_TIMESTAMP NULL,
     updated_at timestamp DEFAULT CURRENT_TIMESTAMP NULL,
-    CONSTRAINT unique_customer_friend UNIQUE (customer_id, friend_id)
+    CONSTRAINT group_member_unique UNIQUE (group_id, member_customer_id),
+    CONSTRAINT group_members_pkey PRIMARY KEY (id),
+    CONSTRAINT group_id_fkey FOREIGN KEY (group_id) REFERENCES public.groups(id) ON DELETE CASCADE,
+    CONSTRAINT member_customer_id_fkey FOREIGN KEY (member_customer_id) REFERENCES public.customers(id) ON DELETE CASCADE
 );
+
 
