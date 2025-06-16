@@ -1,4 +1,4 @@
-package com.damian.whatsapp.chat.room;
+package com.damian.whatsapp.chat;
 
 import com.damian.whatsapp.common.utils.AuthHelper;
 import com.damian.whatsapp.customer.Customer;
@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
-public class RoomManagement {
+public class ChatManagement {
     //    private Socket roomChannel;
     //    private Set<String> bannedUsers = new HashSet<>();
     //    private Set<String> mutedUsers = new HashSet<>();

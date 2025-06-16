@@ -1,4 +1,4 @@
-package com.damian.whatsapp.chat.room;
+package com.damian.whatsapp.chat;
 
 import com.damian.whatsapp.common.utils.AuthHelper;
 import com.damian.whatsapp.common.utils.JWTUtil;
@@ -11,14 +11,14 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 
 @Component
-public class RoomEventListener {
+public class ChatEventListener {
 
     private final JWTUtil jwtUtil;
-    private final RoomManagement roomManagement;
+    private final ChatManagement chatManagement;
 
-    public RoomEventListener(JWTUtil jwtUtil, RoomManagement roomManagement) {
+    public ChatEventListener(JWTUtil jwtUtil, ChatManagement chatManagement) {
         this.jwtUtil = jwtUtil;
-        this.roomManagement = roomManagement;
+        this.chatManagement = chatManagement;
     }
 
     @EventListener
@@ -39,7 +39,7 @@ public class RoomEventListener {
     @EventListener
     public void handleDisconnect(SessionDisconnectEvent event) {
         String sessionId = StompHeaderAccessor.wrap(event.getMessage()).getSessionId();
-        roomManagement.removeSession(sessionId);
+        chatManagement.removeSession(sessionId);
         System.out.println("Sesión desconectada: " + sessionId);
     }
 
@@ -51,7 +51,7 @@ public class RoomEventListener {
         String roomId = accessor.getFirstNativeHeader("roomId");
 
         if (roomId != null) {
-            roomManagement.addSessionToRoom(roomId, sessionId);
+            chatManagement.addSessionToRoom(roomId, sessionId);
             System.out.println("Conectado a sala: " + roomId + " | Sesión: " + sessionId);
         }
 

@@ -1,4 +1,4 @@
-package com.damian.whatsapp.chat.room;
+package com.damian.whatsapp.chat;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class RoomWebsocketIntegrationTest {
+public class ChatWebsocketIntegrationTest {
 
     @LocalServerPort
     private int port;
@@ -24,7 +24,7 @@ public class RoomWebsocketIntegrationTest {
     private WebSocketStompClient stompClient;
 
     @MockitoBean
-    private RoomManagement roomManagement; // Simulado
+    private ChatManagement chatManagement; // Simulado
 
     private static final String WS_URI = "ws://localhost:%d/ws";
 
