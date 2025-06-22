@@ -1,5 +1,6 @@
 package com.damian.whatsapp.group;
 
+import com.damian.whatsapp.customer.Customer;
 import com.damian.whatsapp.group.member.GroupMember;
 import jakarta.persistence.*;
 
@@ -13,6 +14,10 @@ public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_customer_id", referencedColumnName = "id")
+    private Customer owner;
 
     @Column
     private String name;
@@ -63,10 +68,8 @@ public class Group {
 
     @Override
     public String toString() {
-        return "Room {" +
+        return "Group {" +
                "id=" + id +
-               ", email='" + name + '\'' +
-               ", auth_id=" + description +
                ", createdAt=" + createdAt +
                ", updatedAt=" + updatedAt +
                '}';
@@ -95,5 +98,13 @@ public class Group {
 
     public void setMembers(Set<GroupMember> members) {
         this.members = members;
+    }
+
+    public Customer getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Customer owner) {
+        this.owner = owner;
     }
 }

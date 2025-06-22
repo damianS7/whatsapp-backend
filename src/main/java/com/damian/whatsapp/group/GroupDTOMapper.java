@@ -1,5 +1,7 @@
 package com.damian.whatsapp.group;
 
+import com.damian.whatsapp.group.dto.GroupCustomerOwnerDTO;
+import com.damian.whatsapp.group.dto.GroupDTO;
 import com.damian.whatsapp.group.member.GroupMemberDTOMapper;
 
 import java.util.Set;
@@ -11,6 +13,11 @@ public class GroupDTOMapper {
                 group.getId(),
                 group.getName(),
                 group.getDescription(),
+                new GroupCustomerOwnerDTO(
+                        group.getOwner().getId(),
+                        group.getOwner().getProfile().getFirstName(),
+                        group.getOwner().getProfile().getAvatarFilename()
+                ),
                 GroupMemberDTOMapper.toGroupMemberDTOList(group.getMembers())
         );
     }

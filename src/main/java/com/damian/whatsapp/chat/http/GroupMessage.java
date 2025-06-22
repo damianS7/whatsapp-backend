@@ -1,10 +1,13 @@
-package com.damian.whatsapp.group.http;
+package com.damian.whatsapp.chat.http;
 
-public class RoomMessage {
+import java.time.LocalDate;
+
+public class GroupMessage {
     public Long roomId;
     public Long senderId;
     public String sender;
     public String message;
+    public LocalDate timestamp;
     public RoomMessageType type;
 
     public enum RoomMessageType {

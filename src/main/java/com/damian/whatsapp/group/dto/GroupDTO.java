@@ -1,4 +1,4 @@
-package com.damian.whatsapp.group;
+package com.damian.whatsapp.group.dto;
 
 import com.damian.whatsapp.group.member.GroupMemberDTO;
 
@@ -8,6 +8,7 @@ public record GroupDTO(
         Long id,
         String name,
         String description,
+        GroupCustomerOwnerDTO owner,
         Set<GroupMemberDTO> members
 ) {
 }

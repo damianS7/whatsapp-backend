@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 
 import java.util.Set;
 
-public record GroupCreateRequest(
+public record GroupUpdateRequest(
         @NotBlank(message = "Name must not be blank")
         String name,
 

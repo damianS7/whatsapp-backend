@@ -21,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -76,7 +77,7 @@ public class GroupServiceTest {
 
         // when
         when(groupRepository.findGroupsByCustomerId(customer.getId())).thenReturn(groupList);
-        List<Group> result = groupService.getRooms();
+        List<Group> result = groupService.getGroups();
 
         // then
         assertNotNull(result);
@@ -122,9 +123,13 @@ public class GroupServiceTest {
     @DisplayName("Should create group")
     void shouldCreateGroup() {
         // given
+        Customer customer = new Customer(1L, "customer@test.com", passwordEncoder.encode("123456"));
+        setUpContext(customer);
+
         GroupCreateRequest request = new GroupCreateRequest(
                 "Gaming",
-                "Gaming group"
+                "Gaming group",
+                Set.of()
         );
 
         // when

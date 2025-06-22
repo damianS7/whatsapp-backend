@@ -6,6 +6,7 @@ import com.damian.whatsapp.customer.Customer;
 import com.damian.whatsapp.customer.CustomerGender;
 import com.damian.whatsapp.customer.CustomerRepository;
 import com.damian.whatsapp.customer.CustomerRole;
+import com.damian.whatsapp.group.dto.GroupDTO;
 import com.damian.whatsapp.group.member.GroupMember;
 import com.damian.whatsapp.group.member.GroupMemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -101,8 +102,11 @@ public class GroupIntegrationTest {
         loginWithCustomer(customer);
 
         Group group1 = new Group("gaming", "gaming group");
-        Group group2 = new Group("music", "music group");
+        group1.setOwner(customer);
         groupRepository.save(group1);
+
+        Group group2 = new Group("music", "music group");
+        group2.setOwner(customer);
         groupRepository.save(group2);
 
         groupMemberRepository.save(
@@ -120,22 +124,23 @@ public class GroupIntegrationTest {
                 .andReturn();
 
         // then
-        GroupDTO[] rooms = objectMapper.readValue(
+        GroupDTO[] groupsDTO = objectMapper.readValue(
                 result.getResponse().getContentAsString(),
                 GroupDTO[].class
         );
 
         // then
-        assertThat(rooms).isNotNull();
-        assertThat(rooms.length).isEqualTo(1);
-        assertThat(rooms[0].name()).isEqualTo(group1.getName());
+        assertThat(groupsDTO).isNotNull();
+        assertThat(groupsDTO.length).isEqualTo(1);
+        assertThat(groupsDTO[0].name()).isEqualTo(group1.getName());
     }
 
-    // TODO: shouldGetRoom
-    // TODO: shouldCreateRoom (admin)
-    // TODO: shouldSubscribeToRoom
-    // TODO: shouldUnsubscribeFromRoom
+    // TODO: shouldGetGroup
+    // TODO: shouldCreateGroup
+    // TODO: shouldDeleteGroup
+    // TODO: shouldSubscribeToGroup
+    // TODO: shouldUnsubscribeFromGroup
     // TODO: shouldReceiveMessage
-    // TODO: shouldJoinRoom
-    // TODO: shouldLeaveRoom
+    // TODO: shouldJoinGroup
+    // TODO: shouldLeaveGroup
 }
