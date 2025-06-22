@@ -1,26 +1,44 @@
 package com.damian.whatsapp.chat;
 
+import com.damian.whatsapp.chat.http.ChatMessage;
+import com.damian.whatsapp.group.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Controller;
 
-@RequestMapping("/api/v1")
-@RestController
+import java.time.Instant;
+
+@Controller
 public class ChatController {
+    private final GroupService groupService;
+    private final SimpMessagingTemplate messagingTemplate;
+
 
     @Autowired
-    public ChatController() {
+    public ChatController(
+            GroupService groupService,
+            SimpMessagingTemplate messagingTemplate
+    ) {
+        this.groupService = groupService;
+        this.messagingTemplate = messagingTemplate;
+    }
+
+    // endpoint to receive and broadcast messages
+    @MessageMapping("/chat.send.{chatId}")
+    public void broadcastMessage(
+            @DestinationVariable String chatId,
+            ChatMessage message
+    ) {
+        message.timestamp = Instant.now();
+
+        String destination = "/topic/chat." + chatId;
+
+        // Send to all users in the channel
+        messagingTemplate.convertAndSend(destination, message);
     }
 
 
-    // Endpoint al cual enviar los mensajes
-    //    @MessageMapping("/chat")
-    // Canal de susbscripcion, todos aquellos suscritos a /room/message
-    // recibiran los mensajes por medio de broadcast
-    //    @SendTo("/room/message")
-    //    public ConversationMessage send(@RequestBody RoomMessageRequest request) {
-    //        return new RoomMessageResponse(request.roomId, request.senderId, request.sender, request.message);
-    //        return null;
-    //    }
 }
 

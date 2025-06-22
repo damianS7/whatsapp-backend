@@ -24,7 +24,7 @@ public class WebSecurityConfig {
         this.jwtAuthFilter = jwtAuthFilter;
         this.authenticationProvider = authenticationProvider;
     }
-
+    
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
@@ -36,7 +36,8 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/v1/auth/login",
-                                "/api/v1/auth/register"
+                                "/api/v1/auth/register",
+                                "/ws/**"
                         ).permitAll()
                         .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
