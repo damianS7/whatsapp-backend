@@ -21,6 +21,7 @@ public class Exceptions {
 
     public static class GROUP {
         public static final String NOT_FOUND = "Group not found.";
+        public static final String ACCESS_FORBIDDEN = "You are not authorized to access this group.";
     }
 
     public static class PROFILE {
