@@ -122,7 +122,7 @@ public class ContactIntegrationTest {
         // then
         assertThat(contactDTO).isNotNull();
         assertThat(contactDTO.length).isGreaterThanOrEqualTo(1);
-        assertThat(contactDTO[0].contactCustomerId()).isEqualTo(customerContact.getId());
+        assertThat(contactDTO[0].customerId()).isEqualTo(customerContact.getId());
     }
 
     @Test
@@ -156,7 +156,7 @@ public class ContactIntegrationTest {
 
         // then
         assertThat(contactDTO).isNotNull();
-        assertEquals(contactDTO.contactCustomerId(), contact.getId());
+        assertEquals(contactDTO.customerId(), contact.getId());
     }
 
     @Test
