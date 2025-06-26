@@ -7,6 +7,7 @@ public class Exceptions {
     }
 
     public static class CONTACT_LIST {
+        public static final String ALREADY_EXISTS = "Contact already exists.";
         public static final String ACCESS_FORBIDDEN = "You cannot access this contact.";
         public static final String NOT_FOUND = "Contact not found.";
         public static final String MAX_CONTACTS = "You have reached the maximum number of contacts.";

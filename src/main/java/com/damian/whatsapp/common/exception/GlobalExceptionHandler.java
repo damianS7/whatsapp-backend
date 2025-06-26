@@ -2,18 +2,25 @@ package com.damian.whatsapp.common.exception;
 
 import com.damian.whatsapp.auth.exception.*;
 import com.damian.whatsapp.common.utils.ApiResponse;
+import com.damian.whatsapp.contact.exception.ContactAlreadyExistException;
+import com.damian.whatsapp.contact.exception.ContactAuthorizationException;
+import com.damian.whatsapp.contact.exception.ContactNotFoundException;
+import com.damian.whatsapp.contact.exception.MaxContactsLimitReachedException;
 import com.damian.whatsapp.customer.exception.CustomerEmailTakenException;
 import com.damian.whatsapp.customer.exception.CustomerException;
 import com.damian.whatsapp.customer.exception.CustomerNotFoundException;
 import com.damian.whatsapp.customer.profile.exception.ProfileAuthorizationException;
 import com.damian.whatsapp.customer.profile.exception.ProfileException;
 import com.damian.whatsapp.customer.profile.exception.ProfileNotFoundException;
+import com.damian.whatsapp.group.exception.GroupAuthorizationException;
+import com.damian.whatsapp.group.exception.GroupNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,6 +59,8 @@ public class GlobalExceptionHandler {
                     EntityNotFoundException.class,
                     CustomerNotFoundException.class,
                     ProfileNotFoundException.class,
+                    ContactNotFoundException.class,
+                    GroupNotFoundException.class
             }
     )
     public ResponseEntity<ApiResponse<String>> handleNotFoundException(ApplicationException ex) {
@@ -62,6 +71,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(
             {
                     CustomerEmailTakenException.class,
+                    MaxContactsLimitReachedException.class,
+                    MaxUploadSizeExceededException.class,
+                    ContactAlreadyExistException.class
+
             }
     )
     public ResponseEntity<ApiResponse<String>> handleConflitException(ApplicationException ex) {
@@ -95,6 +108,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(
             {
                     AuthorizationException.class,
+                    ContactAuthorizationException.class,
+                    GroupAuthorizationException.class,
                     ProfileAuthorizationException.class,
                     PasswordMismatchException.class
             }
