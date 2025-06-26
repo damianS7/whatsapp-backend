@@ -31,12 +31,22 @@ public class ChatController {
             @DestinationVariable String chatId,
             ChatMessage message
     ) {
-        message.timestamp = Instant.now();
+
+        ChatMessage newMessage = new ChatMessage(
+                message.chatId(),
+                message.groupId(),
+                message.fromCustomerId(),
+                message.toCustomerId(),
+                message.fromCustomerName(),
+                message.chatType(),
+                message.message(),
+                Instant.now()
+        );
 
         String destination = "/topic/chat." + chatId;
 
         // Send to all users in the channel
-        messagingTemplate.convertAndSend(destination, message);
+        messagingTemplate.convertAndSend(destination, newMessage);
     }
 
 
