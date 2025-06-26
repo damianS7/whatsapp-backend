@@ -32,25 +32,25 @@ public class ContactService {
     }
 
     // add a new friend for the logged customer
-    public Contact addContact(Long friendCustomerId) {
+    public Contact addContact(Long customerId) {
         Customer loggedCustomer = AuthHelper.getLoggedCustomer();
 
-        // check friendlist size limit
+        // check contact list size limit
         if (this.getContacts().size() >= MAX_CONTACTS) {
             throw new MaxContactsLimitReachedException(Exceptions.CONTACT_LIST.MAX_CONTACTS);
         }
 
-        // check if the customer we are trying to add as a friend exists
-        Customer friend = customerRepository.findById(friendCustomerId).orElseThrow(
+        // check if the customer we are trying to add as a contact exists
+        Customer contact = customerRepository.findById(customerId).orElseThrow(
                 () -> new CustomerNotFoundException(Exceptions.CUSTOMER.NOT_FOUND)
         );
 
         return contactRepository.save(
-                new Contact(loggedCustomer, friend)
+                new Contact(loggedCustomer, contact)
         );
     }
 
-    // delete a friend from the friendlist of the logged customer
+    // delete a contact from the friendlist of the logged customer
     public void deleteContact(Long id) {
         Customer loggedCustomer = AuthHelper.getLoggedCustomer();
 
