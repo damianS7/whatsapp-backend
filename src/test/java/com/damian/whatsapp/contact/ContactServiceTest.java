@@ -1,7 +1,9 @@
 package com.damian.whatsapp.contact;
 
 import com.damian.whatsapp.common.exception.Exceptions;
+import com.damian.whatsapp.contact.exception.ContactAlreadyExistException;
 import com.damian.whatsapp.contact.exception.ContactAuthorizationException;
+import com.damian.whatsapp.contact.exception.ContactNotFoundException;
 import com.damian.whatsapp.contact.exception.MaxContactsLimitReachedException;
 import com.damian.whatsapp.customer.Customer;
 import com.damian.whatsapp.customer.CustomerRepository;
@@ -67,7 +69,10 @@ public class ContactServiceTest {
     @DisplayName("Should get all friends")
     void shouldGetAllFriends() {
         // given
-        Customer loggedCustomer = new Customer(1L, "customer@test.com", passwordEncoder.encode("password"));
+        Customer loggedCustomer = new Customer(
+                1L, "customer@test.com",
+                passwordEncoder.encode("password")
+        );
         setUpContext(loggedCustomer);
 
         Customer contact1 = new Customer(
@@ -95,24 +100,28 @@ public class ContactServiceTest {
     }
 
     @Test
-    @DisplayName("Should add a friend")
+    @DisplayName("Should add a contact")
     void shouldAddContact() {
         // given
-        Customer loggedCustomer = new Customer(1L, "customer@test.com", passwordEncoder.encode("password"));
+        Customer loggedCustomer = new Customer(
+                1L,
+                "customer@test.com",
+                passwordEncoder.encode("password")
+        );
         setUpContext(loggedCustomer);
 
-        Customer friend1 = new Customer(
+        Customer contactCustomer = new Customer(
                 2L, "customer1@test.com", passwordEncoder.encode("password")
         );
 
-        Contact givenCC = new Contact(loggedCustomer, friend1);
+        Contact givenContact = new Contact(loggedCustomer, contactCustomer);
 
         // when
-        when(customerRepository.findById(friend1.getId())).thenReturn(Optional.of(friend1));
+        when(customerRepository.findById(contactCustomer.getId())).thenReturn(Optional.of(contactCustomer));
         when(contactRepository.save(any(Contact.class)))
-                .thenReturn(givenCC);
+                .thenReturn(givenContact);
 
-        Contact result = contactService.addContact(friend1.getId());
+        Contact result = contactService.addContact(contactCustomer.getId());
 
         // then
         assertNotNull(result);
@@ -123,7 +132,11 @@ public class ContactServiceTest {
     @DisplayName("Should not add a contact when limit reached")
     void shouldNotAddContactWhenLimitReached() {
         // given
-        Customer loggedCustomer = new Customer(1L, "customer@test.com", passwordEncoder.encode("password"));
+        Customer loggedCustomer = new Customer(
+                1L, "customer@test.com",
+                passwordEncoder.encode("password")
+        );
+
         setUpContext(loggedCustomer);
         short MAX_CONTACTS = 3;
 
@@ -154,10 +167,41 @@ public class ContactServiceTest {
     }
 
     @Test
+    @DisplayName("Should not add a contact when already exists")
+    void shouldNotAddContactWhenAlreadyExists() {
+        // given
+        Customer loggedCustomer = new Customer(
+                1L,
+                "customer@test.com",
+                passwordEncoder.encode("password")
+        );
+        setUpContext(loggedCustomer);
+
+        Customer contact1 = new Customer(
+                2L, "customer1@test.com", passwordEncoder.encode("password")
+        );
+
+        // when
+        when(customerRepository.findById(contact1.getId())).thenReturn(Optional.of(contact1));
+        when(contactRepository.contactExists(loggedCustomer.getId(), contact1.getId())).thenReturn(true);
+        ContactAlreadyExistException exception = assertThrows(
+                ContactAlreadyExistException.class,
+                () -> contactService.addContact(contact1.getId())
+        );
+
+        // then
+        assertEquals(Exceptions.CONTACT_LIST.ALREADY_EXISTS, exception.getMessage());
+    }
+
+    @Test
     @DisplayName("Should not add a contact when customer not found")
     void shouldNotAddContactWhenCustomerNotFound() {
         // given
-        Customer loggedCustomer = new Customer(1L, "customer@test.com", passwordEncoder.encode("password"));
+        Customer loggedCustomer = new Customer(
+                1L,
+                "customer@test.com",
+                passwordEncoder.encode("password")
+        );
         setUpContext(loggedCustomer);
 
         Customer contact1 = new Customer(
@@ -179,7 +223,10 @@ public class ContactServiceTest {
     @DisplayName("Should delete a contact")
     void shouldDeleteContact() {
         // given
-        Customer loggedCustomer = new Customer(1L, "customer@test.com", passwordEncoder.encode("password"));
+        Customer loggedCustomer = new Customer(
+                1L, "customer@test.com",
+                passwordEncoder.encode("password")
+        );
         setUpContext(loggedCustomer);
 
         Customer contact1 = new Customer(
@@ -200,21 +247,21 @@ public class ContactServiceTest {
     }
 
     @Test
-    @DisplayName("Should not delete a contact when customer not found")
-    void shouldNotDeleteContactWhenCustomerNotFound() {
+    @DisplayName("Should not delete a contact when not found")
+    void shouldNotDeleteContactWhenNotFound() {
         // given
         Customer loggedCustomer = new Customer(1L, "customer@test.com", passwordEncoder.encode("password"));
         setUpContext(loggedCustomer);
 
         // when
         when(contactRepository.findById(anyLong())).thenReturn(Optional.empty());
-        CustomerNotFoundException exception = assertThrows(
-                CustomerNotFoundException.class,
+        ContactNotFoundException exception = assertThrows(
+                ContactNotFoundException.class,
                 () -> contactService.deleteContact(0L)
         );
 
         // then
-        assertEquals(Exceptions.CUSTOMER.NOT_FOUND, exception.getMessage());
+        assertEquals(Exceptions.CONTACT_LIST.NOT_FOUND, exception.getMessage());
     }
 
     @Test

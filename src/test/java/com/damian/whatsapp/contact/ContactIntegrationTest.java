@@ -2,6 +2,7 @@ package com.damian.whatsapp.contact;
 
 import com.damian.whatsapp.auth.http.AuthenticationRequest;
 import com.damian.whatsapp.auth.http.AuthenticationResponse;
+import com.damian.whatsapp.contact.http.ContactCreateRequest;
 import com.damian.whatsapp.customer.Customer;
 import com.damian.whatsapp.customer.CustomerGender;
 import com.damian.whatsapp.customer.CustomerRepository;
@@ -137,12 +138,17 @@ public class ContactIntegrationTest {
         );
         customerRepository.save(contact);
 
+        ContactCreateRequest contactCreateRequest = new ContactCreateRequest(
+                contact.getId()
+        );
 
         // when
         MvcResult result = mockMvc
                 .perform(
-                        post("/api/v1/contacts/{id}", contact.getId())
-                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                        post("/api/v1/contacts")
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(contactCreateRequest)))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().is(201))
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
@@ -160,8 +166,69 @@ public class ContactIntegrationTest {
     }
 
     @Test
+    @DisplayName("Should not add a contact when already exists")
+    void shouldNotAddContactWhenAlreadyExists() throws Exception {
+        // given
+        loginWithCustomer(customer);
+
+        Customer customerContact = new Customer(
+                "contact@test.com",
+                bCryptPasswordEncoder.encode("123456")
+        );
+        customerRepository.save(customerContact);
+
+        Contact contact = new Contact(customer, customerContact);
+        contactRepository.save(contact);
+
+        ContactCreateRequest contactCreateRequest = new ContactCreateRequest(
+                customerContact.getId()
+        );
+
+        // when
+        mockMvc
+                .perform(
+                        post("/api/v1/contacts")
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(contactCreateRequest)))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().is(409))
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+    }
+
+    @Test
+    @DisplayName("Should not add a contact when customer not found")
+    void shouldNotAddContactWhenCustomerNotFount() throws Exception {
+        // given
+        loginWithCustomer(customer);
+
+        Customer customerContact = new Customer(
+                "contact@test.com",
+                bCryptPasswordEncoder.encode("123456")
+        );
+        customerRepository.save(customerContact);
+
+        ContactCreateRequest contactCreateRequest = new ContactCreateRequest(
+                5L
+        );
+
+        // when
+        mockMvc
+                .perform(
+                        post("/api/v1/contacts")
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(contactCreateRequest)))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().is(404))
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+    }
+
+    @Test
     @DisplayName("Should delete a contact")
-    void shouldDeleteFriend() throws Exception {
+    void shouldDeleteContact() throws Exception {
         // given
         loginWithCustomer(customer);
 
@@ -185,5 +252,63 @@ public class ContactIntegrationTest {
 
         // then
     }
+
+    @Test
+    @DisplayName("Should not delete contact when not found")
+    void shouldNotDeleteContactWhenNotFound() throws Exception {
+        // given
+        loginWithCustomer(customer);
+
+        Customer customerContact = new Customer(
+                "contact@test.com",
+                bCryptPasswordEncoder.encode("123456")
+        );
+        customerRepository.save(customerContact);
+
+        // when
+        mockMvc
+                .perform(
+                        delete("/api/v1/contacts/{id}", 25L)
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().is(404))
+                .andReturn();
+
+        // then
+    }
+
+    @Test
+    @DisplayName("Should not delete contact when not your contact")
+    void shouldNotDeleteContactWhenNotYourContact() throws Exception {
+        // given
+        loginWithCustomer(customer);
+
+        Customer customerA = new Customer(
+                "customerA@test.com",
+                bCryptPasswordEncoder.encode("123456")
+        );
+        customerRepository.save(customerA);
+
+        Customer customerContact = new Customer(
+                "contact@test.com",
+                bCryptPasswordEncoder.encode("123456")
+        );
+        customerRepository.save(customerContact);
+
+        Contact givenContact = new Contact(customerA, customerContact);
+        contactRepository.save(givenContact);
+
+        // when
+        mockMvc
+                .perform(
+                        delete("/api/v1/contacts/{id}", givenContact.getId())
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().is(403))
+                .andReturn();
+
+        // then
+    }
+
 
 }
