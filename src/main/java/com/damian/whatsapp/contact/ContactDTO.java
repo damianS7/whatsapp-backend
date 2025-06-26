@@ -2,7 +2,7 @@ package com.damian.whatsapp.contact;
 
 public record ContactDTO(
         Long id,
-        Long contactCustomerId,
+        Long customerId,
         String name,
         String avatarFilename
 ) {
