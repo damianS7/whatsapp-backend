@@ -35,6 +35,20 @@ public class GroupController {
     }
 
     // endpoint to create groups
+    @GetMapping("/groups/{id}")
+    public ResponseEntity<?> getGroup(
+            @PathVariable @NotNull @Positive
+            Long id
+    ) {
+        Group group = groupService.getGroup(id);
+        GroupDTO groupDTO = GroupDTOMapper.toGroupDTO(group);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(groupDTO);
+    }
+
+    // endpoint to create groups
     @PostMapping("/groups")
     public ResponseEntity<?> createGroup(
             @Validated @RequestBody
