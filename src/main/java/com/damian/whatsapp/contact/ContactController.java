@@ -21,7 +21,7 @@ public class ContactController {
         this.contactService = contactService;
     }
 
-    // endpoint to receive logged customer
+    // endpoint to receive contacts from logged customer
     @GetMapping("/contacts")
     public ResponseEntity<?> getContacts() {
         Set<Contact> contacts = contactService.getContacts();
@@ -32,6 +32,7 @@ public class ContactController {
                 .body(contactsDTO);
     }
 
+    // endpoint to add a new contact for the logged customer
     @PostMapping("/contacts")
     public ResponseEntity<?> addContact(
             @Validated @RequestBody
@@ -45,6 +46,7 @@ public class ContactController {
                 .body(contactDTO);
     }
 
+    // endpoint to delete a contact from the logged customer contact list
     @DeleteMapping("/contacts/{id}")
     public ResponseEntity<?> deleteContact(
             @PathVariable @NotNull @Positive
