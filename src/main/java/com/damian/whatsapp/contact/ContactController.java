@@ -1,10 +1,12 @@
 package com.damian.whatsapp.contact;
 
+import com.damian.whatsapp.contact.http.ContactCreateRequest;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -30,12 +32,12 @@ public class ContactController {
                 .body(contactsDTO);
     }
 
-    @PostMapping("/contacts/{id}")
+    @PostMapping("/contacts")
     public ResponseEntity<?> addContact(
-            @PathVariable @NotNull @Positive
-            Long id
+            @Validated @RequestBody
+            ContactCreateRequest request
     ) {
-        Contact contact = contactService.addContact(id);
+        Contact contact = contactService.addContact(request.customerId());
         ContactDTO contactDTO = ContactDTOMapper.toCustomerFriendDTO(contact);
 
         return ResponseEntity
