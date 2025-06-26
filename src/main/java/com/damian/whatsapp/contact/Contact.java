@@ -12,11 +12,11 @@ public class Contact {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "contact_customer_id", referencedColumnName = "id")
     private Customer contact;
 
@@ -27,13 +27,14 @@ public class Contact {
     private Instant updatedAt;
 
     public Contact() {
+        this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
     }
 
     public Contact(Customer customer, Customer contact) {
+        this();
         this.customer = customer;
         this.contact = contact;
-        this.createdAt = Instant.now();
-        this.updatedAt = Instant.now();
     }
 
     public Long getId() {
@@ -64,9 +65,11 @@ public class Contact {
     public String toString() {
         return "Contact {" +
                "id=" + id +
+               "customerId=" + customer.getId() +
+               "contactCustomerId=" + contact.getId() +
                ", createdAt=" + createdAt +
                ", updatedAt=" + updatedAt +
-               '}';
+               "}";
     }
 
     public Customer getCustomer() {
