@@ -1,6 +1,6 @@
 package com.damian.whatsapp.group.member;
 
-public enum GroupMemberRoleType {
+public enum GroupMemberRole {
     OWNER,
     ADMIN,
     MEMBER

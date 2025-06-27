@@ -28,19 +28,19 @@ public class GroupMember {
     private Instant updatedAt;
 
     @Enumerated(EnumType.STRING)
-    private GroupMemberRoleType memberRole;
+    private GroupMemberRole memberRole;
 
     public GroupMember() {
-        this.memberRole = GroupMemberRoleType.MEMBER;
+        this.memberRole = GroupMemberRole.MEMBER;
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
     }
 
     public GroupMember(Customer member, Group group) {
-        this(member, group, GroupMemberRoleType.MEMBER);
+        this(member, group, GroupMemberRole.MEMBER);
     }
 
-    public GroupMember(Customer member, Group group, GroupMemberRoleType memberRole) {
+    public GroupMember(Customer member, Group group, GroupMemberRole memberRole) {
         this();
         this.member = member;
         this.group = group;
@@ -73,11 +73,13 @@ public class GroupMember {
 
     @Override
     public String toString() {
-        return "Room {" +
+        return "GroupMember {" +
                "id=" + id +
+               ", Group=" + group.toString() +
+               ", Customer=" + member.toString() +
                ", createdAt=" + createdAt +
                ", updatedAt=" + updatedAt +
-               '}';
+               "}";
 
     }
 
@@ -97,11 +99,11 @@ public class GroupMember {
         this.group = group;
     }
 
-    public GroupMemberRoleType getMemberRole() {
+    public GroupMemberRole getMemberRole() {
         return memberRole;
     }
 
-    public void setMemberRole(GroupMemberRoleType memberRole) {
+    public void setMemberRole(GroupMemberRole memberRole) {
         this.memberRole = memberRole;
     }
 }
