@@ -19,7 +19,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -71,18 +70,18 @@ public class GroupServiceTest {
         Group group1 = new Group("gaming", "room1");
         Group group2 = new Group("music", "room2");
 
-        List<Group> groupList = List.of(
+        Set<Group> groupList = Set.of(
                 group1, group2
         );
 
         // when
-        when(groupRepository.findGroupsByCustomerId(customer.getId())).thenReturn(groupList);
-        List<Group> result = groupService.getGroups();
+        when(groupRepository.findGroupsByOwnerCustomerId(customer.getId())).thenReturn(groupList);
+        Set<Group> result = groupService.getGroups();
 
         // then
         assertNotNull(result);
         assertEquals(2, result.size());
-        verify(groupRepository, times(1)).findGroupsByCustomerId(customer.getId());
+        verify(groupRepository, times(1)).findGroupsByOwnerCustomerId(customer.getId());
     }
 
     @Test

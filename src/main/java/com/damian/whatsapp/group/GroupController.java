@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Set;
 
 @RequestMapping("/api/v1")
 @RestController
@@ -26,8 +26,8 @@ public class GroupController {
     // endpoint to fetch all groups customer belongs
     @GetMapping("/groups")
     public ResponseEntity<?> getGroups() {
-        List<Group> groups = groupService.getGroups();
-        List<GroupDTO> groupsDTO = groups.stream().map(GroupDTOMapper::toGroupDTO).toList();
+        Set<Group> groups = groupService.getGroups();
+        Set<GroupDTO> groupsDTO = GroupDTOMapper.toGroupDTOList(groups);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

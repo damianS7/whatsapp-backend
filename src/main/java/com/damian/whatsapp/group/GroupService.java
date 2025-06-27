@@ -15,7 +15,6 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -36,9 +35,9 @@ public class GroupService {
         this.groupRepository = groupRepository;
     }
 
-    public List<Group> getGroups() {
+    public Set<Group> getGroups() {
         Customer loggedCustomer = AuthHelper.getLoggedCustomer();
-        return groupRepository.findGroupsByCustomerId(loggedCustomer.getId());
+        return groupRepository.findGroupsByOwnerCustomerId(loggedCustomer.getId());
     }
 
     public Group getGroup(Long id) {
