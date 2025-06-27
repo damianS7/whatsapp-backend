@@ -37,7 +37,7 @@ public class GroupService {
 
     public Set<Group> getGroups() {
         Customer loggedCustomer = AuthHelper.getLoggedCustomer();
-        return groupRepository.findGroupsByOwnerCustomerId(loggedCustomer.getId());
+        return groupRepository.findBelongingGroupsByCustomerId(loggedCustomer.getId());
     }
 
     public Group getGroup(Long id) {
