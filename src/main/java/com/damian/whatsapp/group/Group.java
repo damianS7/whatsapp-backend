@@ -70,9 +70,11 @@ public class Group {
     public String toString() {
         return "Group {" +
                "id=" + id +
+               ", name=" + name +
+               ", description=" + description +
                ", createdAt=" + createdAt +
                ", updatedAt=" + updatedAt +
-               '}';
+               "}";
 
     }
 
