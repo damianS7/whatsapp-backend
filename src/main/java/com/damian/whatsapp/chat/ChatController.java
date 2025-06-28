@@ -1,7 +1,6 @@
 package com.damian.whatsapp.chat;
 
 import com.damian.whatsapp.chat.http.ChatMessage;
-import com.damian.whatsapp.group.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -12,16 +11,13 @@ import java.time.Instant;
 
 @Controller
 public class ChatController {
-    private final GroupService groupService;
     private final SimpMessagingTemplate messagingTemplate;
 
 
     @Autowired
     public ChatController(
-            GroupService groupService,
             SimpMessagingTemplate messagingTemplate
     ) {
-        this.groupService = groupService;
         this.messagingTemplate = messagingTemplate;
     }
 
