@@ -1,10 +1,13 @@
 package com.damian.whatsapp.group;
 
+import com.damian.whatsapp.chat.ChatNotificationService;
 import com.damian.whatsapp.common.exception.Exceptions;
 import com.damian.whatsapp.customer.Customer;
 import com.damian.whatsapp.customer.CustomerRepository;
+import com.damian.whatsapp.group.exception.GroupAuthorizationException;
 import com.damian.whatsapp.group.exception.GroupNotFoundException;
 import com.damian.whatsapp.group.http.GroupCreateRequest;
+import com.damian.whatsapp.group.http.GroupUpdateRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,6 +30,9 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class GroupServiceTest {
+
+    @Mock
+    private ChatNotificationService chatNotificationService;
 
     @Mock
     private CustomerRepository customerRepository;
@@ -75,13 +81,13 @@ public class GroupServiceTest {
         );
 
         // when
-        when(groupRepository.findGroupsByOwnerCustomerId(customer.getId())).thenReturn(groupList);
+        when(groupRepository.findBelongingGroupsByCustomerId(customer.getId())).thenReturn(groupList);
         Set<Group> result = groupService.getGroups();
 
         // then
         assertNotNull(result);
         assertEquals(2, result.size());
-        verify(groupRepository, times(1)).findGroupsByOwnerCustomerId(customer.getId());
+        verify(groupRepository, times(1)).findBelongingGroupsByCustomerId(customer.getId());
     }
 
     @Test
@@ -142,5 +148,164 @@ public class GroupServiceTest {
         verify(groupRepository, times(1)).save(any(Group.class));
     }
 
-    // TODO: shouldDeleteRoom
+    @Test
+    @DisplayName("Should create group with members")
+    void shouldCreateGroupWithMembers() {
+        // given
+        Customer customer = new Customer(1L, "customer@test.com", passwordEncoder.encode("123456"));
+        setUpContext(customer);
+
+        Customer customerMember = new Customer(2L, "customerMember@test.com", passwordEncoder.encode("123456"));
+
+        GroupCreateRequest request = new GroupCreateRequest(
+                "Gaming",
+                "Gaming group",
+                Set.of(customerMember.getId())
+        );
+
+        // when
+        when(customerRepository.findById(customerMember.getId())).thenReturn(Optional.of(customerMember));
+        when(groupRepository.save(any(Group.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+        Group result = groupService.createGroup(request);
+
+        // then
+        assertNotNull(result);
+        assertEquals(2, result.getMembers().size());
+        verify(groupRepository, times(1)).save(any(Group.class));
+    }
+
+    @Test
+    @DisplayName("Should update group with members")
+    void shouldUpdateGroupWithMembers() {
+        // given
+        Customer customer = new Customer(
+                1L,
+                "customer@test.com",
+                passwordEncoder.encode("123456")
+        );
+        setUpContext(customer);
+
+        Group group = new Group(
+                "Gaming",
+                "Gaming group"
+        );
+        group.setOwner(customer);
+        group.setId(1L);
+
+        Customer customerMember = new Customer(
+                2L,
+                "customerMember@test.com",
+                passwordEncoder.encode("123456")
+        );
+
+        GroupUpdateRequest request = new GroupUpdateRequest(
+                "Gaming",
+                "Gaming group",
+                Set.of(customerMember.getId())
+        );
+
+        // when
+        when(groupRepository.findById(group.getId())).thenReturn(Optional.of(group));
+        when(customerRepository.findById(customerMember.getId())).thenReturn(Optional.of(customerMember));
+        doNothing().when(chatNotificationService).notifyGroup(any(Group.class), anyString());
+        doNothing()
+                .when(chatNotificationService)
+                .notifyCustomer(anyLong(), any(Customer.class), any(Customer.class), anyString());
+        when(groupRepository.save(group)).thenAnswer(
+                invocation -> invocation.getArgument(0)
+        );
+        Group result = groupService.updateGroup(group.getId(), request);
+
+        // then
+        assertNotNull(result);
+        assertEquals(1, result.getMembers().size());
+        verify(groupRepository, times(1)).save(any(Group.class));
+    }
+
+    @Test
+    @DisplayName("Should delete group")
+    void shouldDeleteGroup() {
+        // given
+        Customer customer = new Customer(
+                1L,
+                "customer@test.com",
+                passwordEncoder.encode("123456")
+        );
+        setUpContext(customer);
+
+        Group group = new Group(
+                "Gaming",
+                "Gaming group"
+        );
+        group.setOwner(customer);
+        group.setId(1L);
+
+        // when
+        when(groupRepository.findById(group.getId())).thenReturn(Optional.of(group));
+        groupService.deleteGroup(group.getId());
+
+        // then
+        verify(groupRepository, times(1)).deleteById(group.getId());
+    }
+
+    @Test
+    @DisplayName("Should not delete group when not found")
+    void shouldNotDeleteGroupWhenNotFound() {
+        // given
+        Customer customer = new Customer(
+                1L,
+                "customer@test.com",
+                passwordEncoder.encode("123456")
+        );
+        setUpContext(customer);
+
+        Group group = new Group(
+                "Gaming",
+                "Gaming group"
+        );
+        group.setOwner(customer);
+        group.setId(1L);
+
+        // when
+        when(groupRepository.findById(group.getId())).thenReturn(Optional.empty());
+        GroupNotFoundException exception = assertThrows(
+                GroupNotFoundException.class,
+                () -> groupService.deleteGroup(group.getId())
+        );
+
+        // then
+        assertEquals(Exceptions.GROUP.NOT_FOUND, exception.getMessage());
+        verify(groupRepository, times(0)).deleteById(anyLong());
+    }
+
+    @Test
+    @DisplayName("Should not delete group when not owner")
+    void shouldNotDeleteGroupWhenNotOwner() {
+        // given
+        Customer customer = new Customer(
+                1L,
+                "customer@test.com",
+                passwordEncoder.encode("123456")
+        );
+        setUpContext(customer);
+
+        Group group = new Group(
+                "Gaming",
+                "Gaming group"
+        );
+        group.setOwner(new Customer(2L, "customer2@test.com", passwordEncoder.encode("123456")));
+        group.setId(1L);
+
+        // when
+        when(groupRepository.findById(group.getId())).thenReturn(Optional.of(group));
+        GroupAuthorizationException exception = assertThrows(
+                GroupAuthorizationException.class,
+                () -> groupService.deleteGroup(group.getId())
+        );
+
+        // then
+        assertEquals(Exceptions.GROUP.ACCESS_FORBIDDEN, exception.getMessage());
+        verify(groupRepository, times(0)).deleteById(anyLong());
+    }
 }
