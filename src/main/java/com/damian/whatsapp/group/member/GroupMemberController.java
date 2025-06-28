@@ -23,7 +23,7 @@ public class GroupMemberController {
     }
 
     // endpoint to fetch all members from a group
-    @GetMapping("/groups/{id}")
+    @GetMapping("/groups/{id}/members")
     public ResponseEntity<?> getGroupMembers(
             @PathVariable @NotNull @Positive
             Long id
