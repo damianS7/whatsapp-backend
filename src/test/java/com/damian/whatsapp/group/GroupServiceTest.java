@@ -81,13 +81,13 @@ public class GroupServiceTest {
         );
 
         // when
-        when(groupRepository.findBelongingGroupsByCustomerId(customer.getId())).thenReturn(groupList);
+        when(groupRepository.findGroupsByOwner_Id(customer.getId())).thenReturn(groupList);
         Set<Group> result = groupService.getGroups();
 
         // then
         assertNotNull(result);
         assertEquals(2, result.size());
-        verify(groupRepository, times(1)).findBelongingGroupsByCustomerId(customer.getId());
+        verify(groupRepository, times(1)).findGroupsByOwner_Id(customer.getId());
     }
 
     @Test
@@ -133,8 +133,7 @@ public class GroupServiceTest {
 
         GroupCreateRequest request = new GroupCreateRequest(
                 "Gaming",
-                "Gaming group",
-                Set.of()
+                "Gaming group"
         );
 
         // when
@@ -147,37 +146,10 @@ public class GroupServiceTest {
         assertNotNull(result);
         verify(groupRepository, times(1)).save(any(Group.class));
     }
-
+    
     @Test
-    @DisplayName("Should create group with members")
-    void shouldCreateGroupWithMembers() {
-        // given
-        Customer customer = new Customer(1L, "customer@test.com", passwordEncoder.encode("123456"));
-        setUpContext(customer);
-
-        Customer customerMember = new Customer(2L, "customerMember@test.com", passwordEncoder.encode("123456"));
-
-        GroupCreateRequest request = new GroupCreateRequest(
-                "Gaming",
-                "Gaming group",
-                Set.of(customerMember.getId())
-        );
-
-        // when
-        when(customerRepository.findById(customerMember.getId())).thenReturn(Optional.of(customerMember));
-        when(groupRepository.save(any(Group.class)))
-                .thenAnswer(invocation -> invocation.getArgument(0));
-        Group result = groupService.createGroup(request);
-
-        // then
-        assertNotNull(result);
-        assertEquals(2, result.getMembers().size());
-        verify(groupRepository, times(1)).save(any(Group.class));
-    }
-
-    @Test
-    @DisplayName("Should update group with members")
-    void shouldUpdateGroupWithMembers() {
+    @DisplayName("Should update group")
+    void shouldUpdateGroup() {
         // given
         Customer customer = new Customer(
                 1L,
@@ -193,25 +165,13 @@ public class GroupServiceTest {
         group.setOwner(customer);
         group.setId(1L);
 
-        Customer customerMember = new Customer(
-                2L,
-                "customerMember@test.com",
-                passwordEncoder.encode("123456")
-        );
-
         GroupUpdateRequest request = new GroupUpdateRequest(
-                "Gaming",
-                "Gaming group",
-                Set.of(customerMember.getId())
+                "Gaming Streams.",
+                "Gaming streams group"
         );
 
         // when
         when(groupRepository.findById(group.getId())).thenReturn(Optional.of(group));
-        when(customerRepository.findById(customerMember.getId())).thenReturn(Optional.of(customerMember));
-        doNothing().when(chatNotificationService).notifyGroup(any(Group.class), anyString());
-        doNothing()
-                .when(chatNotificationService)
-                .notifyCustomer(anyLong(), any(Customer.class), any(Customer.class), anyString());
         when(groupRepository.save(group)).thenAnswer(
                 invocation -> invocation.getArgument(0)
         );
@@ -219,7 +179,7 @@ public class GroupServiceTest {
 
         // then
         assertNotNull(result);
-        assertEquals(1, result.getMembers().size());
+        assertEquals(request.name(), result.getName());
         verify(groupRepository, times(1)).save(any(Group.class));
     }
 
