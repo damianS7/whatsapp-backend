@@ -31,7 +31,7 @@ public class ChatNotificationService {
                 groupId,
                 -1L,
                 toCustomer.getId(),
-                fromCustomer.getFullName(),
+                "SYSTEM",
                 "GROUP",
                 message,
                 Instant.now()
@@ -43,11 +43,21 @@ public class ChatNotificationService {
     }
 
     public void notifyGroup(Group group, String message) {
-        group.getMembers().forEach(member -> {
-            messagingTemplate.convertAndSend(
-                    "/topic/chat.GROUP" + member.getGroup().getId(),
-                    message
-            );
-        });
+        // send notification to the added member
+        ChatMessage chatMessage = new ChatMessage(
+                "GROUP" + group.getId(),
+                group.getId(),
+                -1L,
+                -1L,
+                "SYSTEM",
+                "GROUP",
+                message,
+                Instant.now()
+        );
+
+        messagingTemplate.convertAndSend(
+                "/topic/chat.GROUP" + group.getId(),
+                chatMessage
+        );
     }
 }
