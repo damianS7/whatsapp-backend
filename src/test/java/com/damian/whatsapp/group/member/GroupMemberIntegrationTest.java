@@ -128,4 +128,42 @@ public class GroupMemberIntegrationTest {
         assertThat(groupMemberDTOS).isNotNull();
         assertThat(groupMemberDTOS.length).isEqualTo(1);
     }
+
+    @Test
+    @DisplayName("Should add group member")
+    void shouldAddGroupMember() throws Exception {
+        // given
+        loginWithCustomer(customer);
+
+        Group group = new Group("gaming", "gaming group");
+        group.setOwner(customer);
+        groupRepository.save(group);
+
+        GroupMemberUpdateRequest request = new GroupMemberUpdateRequest(
+                customer.getId()
+        );
+
+        // when
+        MvcResult result = mockMvc
+                .perform(
+                        post("/api/v1/groups/{id}/members", group.getId())
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().is(201))
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        // then
+        GroupMemberDTO groupMemberDTO = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                GroupMemberDTO.class
+        );
+
+        // then
+        assertThat(groupMemberDTO).isNotNull();
+    }
+
+    // TODO: should delete group member
 }
