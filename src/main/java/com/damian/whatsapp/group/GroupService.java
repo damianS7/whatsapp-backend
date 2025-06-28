@@ -5,7 +5,6 @@ import com.damian.whatsapp.common.exception.Exceptions;
 import com.damian.whatsapp.common.utils.AuthHelper;
 import com.damian.whatsapp.customer.Customer;
 import com.damian.whatsapp.customer.CustomerRepository;
-import com.damian.whatsapp.customer.exception.CustomerNotFoundException;
 import com.damian.whatsapp.group.exception.GroupAuthorizationException;
 import com.damian.whatsapp.group.exception.GroupNotFoundException;
 import com.damian.whatsapp.group.http.GroupCreateRequest;
@@ -14,7 +13,6 @@ import com.damian.whatsapp.group.member.GroupMember;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -35,7 +33,7 @@ public class GroupService {
 
     public Set<Group> getGroups() {
         Customer loggedCustomer = AuthHelper.getLoggedCustomer();
-        return groupRepository.findBelongingGroupsByCustomerId(loggedCustomer.getId());
+        return groupRepository.findGroupsByOwner_Id(loggedCustomer.getId());
     }
 
     public Group getGroup(Long id) {
@@ -59,18 +57,6 @@ public class GroupService {
         );
         group.addMember(groupMember);
 
-        // add group members by default
-        request.membersId().forEach((customerId) -> {
-            Customer customer = customerRepository.findById(customerId).orElseThrow(
-                    () -> new CustomerNotFoundException(Exceptions.CUSTOMER.NOT_FOUND)
-            );
-            group.addMember(
-                    new GroupMember(
-                            customer,
-                            group
-                    ));
-        });
-
         return groupRepository.save(group);
     }
 
@@ -87,43 +73,6 @@ public class GroupService {
 
         group.setName(request.name());
         group.setDescription(request.description());
-
-        Set<Long> existingMemberIds = group.getMembers()
-                                           .stream()
-                                           .map(member -> member.getMember().getId())
-                                           .collect(Collectors.toSet());
-
-        // add group members
-        for (Long customerId : request.membersId()) {
-            // avoid duplicates
-            if (existingMemberIds.contains(customerId)) {
-                continue;
-            }
-
-            Customer customer = customerRepository.findById(customerId).orElseThrow(
-                    () -> new CustomerNotFoundException(Exceptions.CUSTOMER.NOT_FOUND)
-            );
-
-            group.addMember(
-                    new GroupMember(
-                            customer,
-                            group
-                    ));
-
-            // send notification to the group
-            chatNotificationService.notifyGroup(
-                    group,
-                    loggedCustomer.getFullName() + " added " + customer.getFullName() + " to the group!"
-            );
-
-            // send notification to the added member
-            chatNotificationService.notifyCustomer(
-                    group.getId(),
-                    loggedCustomer,
-                    customer,
-                    loggedCustomer.getFullName() + " added you to the group!"
-            );
-        }
 
         return groupRepository.save(group);
     }
