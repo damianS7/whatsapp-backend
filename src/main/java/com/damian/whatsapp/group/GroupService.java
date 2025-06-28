@@ -1,6 +1,6 @@
 package com.damian.whatsapp.group;
 
-import com.damian.whatsapp.chat.http.ChatMessage;
+import com.damian.whatsapp.chat.ChatNotificationService;
 import com.damian.whatsapp.common.exception.Exceptions;
 import com.damian.whatsapp.common.utils.AuthHelper;
 import com.damian.whatsapp.customer.Customer;
@@ -11,26 +11,24 @@ import com.damian.whatsapp.group.exception.GroupNotFoundException;
 import com.damian.whatsapp.group.http.GroupCreateRequest;
 import com.damian.whatsapp.group.http.GroupUpdateRequest;
 import com.damian.whatsapp.group.member.GroupMember;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 
 @Service
 public class GroupService {
-    private final SimpMessagingTemplate messagingTemplate;
+    private final ChatNotificationService chatNotificationService;
     private final CustomerRepository customerRepository;
     private final GroupRepository groupRepository;
 
     public GroupService(
-            SimpMessagingTemplate messagingTemplate,
+            ChatNotificationService chatNotificationService,
             CustomerRepository customerRepository,
             GroupRepository groupRepository
     ) {
-        this.messagingTemplate = messagingTemplate;
+        this.chatNotificationService = chatNotificationService;
         this.customerRepository = customerRepository;
         this.groupRepository = groupRepository;
     }
@@ -59,14 +57,14 @@ public class GroupService {
                 loggedCustomer,
                 group
         );
-        group.getMembers().add(groupMember);
+        group.addMember(groupMember);
 
         // add group members by default
         request.membersId().forEach((customerId) -> {
             Customer customer = customerRepository.findById(customerId).orElseThrow(
                     () -> new CustomerNotFoundException(Exceptions.CUSTOMER.NOT_FOUND)
             );
-            group.getMembers().add(
+            group.addMember(
                     new GroupMember(
                             customer,
                             group
@@ -82,6 +80,7 @@ public class GroupService {
                 () -> new GroupNotFoundException(Exceptions.GROUP.NOT_FOUND)
         );
 
+        // check if the logged customer is the owner of the group.
         if (!loggedCustomer.getId().equals(group.getOwner().getId())) {
             throw new GroupAuthorizationException(Exceptions.GROUP.ACCESS_FORBIDDEN);
         }
@@ -89,7 +88,8 @@ public class GroupService {
         group.setName(request.name());
         group.setDescription(request.description());
 
-        Set<Long> existingMemberIds = group.getMembers().stream()
+        Set<Long> existingMemberIds = group.getMembers()
+                                           .stream()
                                            .map(member -> member.getMember().getId())
                                            .collect(Collectors.toSet());
 
@@ -104,30 +104,26 @@ public class GroupService {
                     () -> new CustomerNotFoundException(Exceptions.CUSTOMER.NOT_FOUND)
             );
 
-            group.getMembers().add(
+            group.addMember(
                     new GroupMember(
                             customer,
                             group
                     ));
 
-            // send notification to the added member
-            ChatMessage message = new ChatMessage(
-                    "GROUP" + group.getId(),
-                    group.getId(),
-                    loggedCustomer.getId(),
-                    customer.getId(),
-                    loggedCustomer.getFullName(),
-                    "GROUP",
-                    loggedCustomer.getFullName() + " added you to the group!",
-                    Instant.now()
+            // send notification to the group
+            chatNotificationService.notifyGroup(
+                    group,
+                    loggedCustomer.getFullName() + " added " + customer.getFullName() + " to the group!"
             );
-            messagingTemplate.convertAndSend(
-                    "/topic/chat.PRIVATE" + customer.getId(),
-                    message
+
+            // send notification to the added member
+            chatNotificationService.notifyCustomer(
+                    group.getId(),
+                    loggedCustomer,
+                    customer,
+                    loggedCustomer.getFullName() + " added you to the group!"
             );
         }
-
-        // TODO notify the group members about the added members
 
         return groupRepository.save(group);
     }
@@ -146,6 +142,5 @@ public class GroupService {
         }
 
         groupRepository.deleteById(id);
-
     }
 }
