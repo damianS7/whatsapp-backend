@@ -12,13 +12,16 @@ import java.time.Instant;
 @Controller
 public class ChatController {
     private final SimpMessagingTemplate messagingTemplate;
+    private final ChatService chatService;
 
 
     @Autowired
     public ChatController(
-            SimpMessagingTemplate messagingTemplate
+            SimpMessagingTemplate messagingTemplate,
+            ChatService chatService
     ) {
         this.messagingTemplate = messagingTemplate;
+        this.chatService = chatService;
     }
 
     // endpoint to receive and broadcast messages

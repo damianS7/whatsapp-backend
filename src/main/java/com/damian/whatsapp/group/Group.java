@@ -98,6 +98,19 @@ public class Group {
         return members;
     }
 
+    public void addMember(GroupMember groupMember) {
+        boolean alreadyExists = this.members.stream()
+                                            .anyMatch(gm -> gm
+                                                    .getMember()
+                                                    .getId()
+                                                    .equals(groupMember.getMember().getId())
+                                            );
+
+        if (!alreadyExists) {
+            this.members.add(groupMember);
+        }
+    }
+
     public void setMembers(Set<GroupMember> members) {
         this.members = members;
     }

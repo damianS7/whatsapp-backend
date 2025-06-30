@@ -13,16 +13,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
-                .setAllowedOriginPatterns("*")
-                //                .setAllowedOrigins(
-                //                        "http://localhost:8081",
-                //                        "http://dev.words.local:8081",
-                //                        "http://words.local:8081"
-                //                )
+                .setAllowedOrigins(
+                        "http://localhost:8081",
+                        "http://dev.whatsapp.local:8081",
+                        "http://whatsapp.local:8081"
+                )
                 .withSockJS();
-
-        registry.addEndpoint("/ws")
-                .setAllowedOriginPatterns("*");
     }
 
     @Override

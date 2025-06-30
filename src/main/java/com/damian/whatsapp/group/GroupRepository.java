@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Repository
 public interface GroupRepository extends JpaRepository<Group, Long> {
-    Set<Group> findGroupsByOwnerCustomerId(@Param("customerId") Long customerId);
+    Set<Group> findGroupsByOwner_Id(Long ownerId);
 
     @Query(
             """

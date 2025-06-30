@@ -128,9 +128,6 @@ public class GroupMemberServiceTest {
         when(customerRepository.findById(customerMember.getId())).thenReturn(Optional.of(customerMember));
         when(groupRepository.findById(group.getId())).thenReturn(Optional.of(group));
         doNothing().when(chatNotificationService).notifyGroup(any(Group.class), anyString());
-        doNothing()
-                .when(chatNotificationService)
-                .notifyCustomer(anyLong(), any(Customer.class), any(Customer.class), anyString());
         when(groupMemberRepository.save(any(GroupMember.class))).thenAnswer(
                 invocation -> invocation.getArgument(0)
         );

@@ -21,7 +21,6 @@ public class ChatNotificationService {
 
     public void notifyCustomer(
             Long groupId,
-            Customer fromCustomer,
             Customer toCustomer,
             String message
     ) {

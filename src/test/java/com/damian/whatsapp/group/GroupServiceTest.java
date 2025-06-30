@@ -81,13 +81,13 @@ public class GroupServiceTest {
         );
 
         // when
-        when(groupRepository.findGroupsByOwner_Id(customer.getId())).thenReturn(groupList);
+        when(groupRepository.findBelongingGroupsByCustomerId(customer.getId())).thenReturn(groupList);
         Set<Group> result = groupService.getGroups();
 
         // then
         assertNotNull(result);
         assertEquals(2, result.size());
-        verify(groupRepository, times(1)).findGroupsByOwner_Id(customer.getId());
+        verify(groupRepository, times(1)).findBelongingGroupsByCustomerId(customer.getId());
     }
 
     @Test
@@ -146,7 +146,7 @@ public class GroupServiceTest {
         assertNotNull(result);
         verify(groupRepository, times(1)).save(any(Group.class));
     }
-    
+
     @Test
     @DisplayName("Should update group")
     void shouldUpdateGroup() {

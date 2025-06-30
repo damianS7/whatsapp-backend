@@ -60,14 +60,7 @@ public class GroupMemberService {
                 group,
                 loggedCustomer.getFullName() + " added " + customer.getFullName() + " to the group!"
         );
-
-        // send notification to the added member
-        chatNotificationService.notifyCustomer(
-                group.getId(),
-                loggedCustomer,
-                customer,
-                loggedCustomer.getFullName() + " added you to the group!"
-        );
+        
         return groupMemberRepository.save(groupMember);
     }
 
@@ -88,5 +81,11 @@ public class GroupMemberService {
         }
 
         groupMemberRepository.deleteById(groupMemberId);
+
+        // send notification to the group
+        chatNotificationService.notifyGroup(
+                group,
+                loggedCustomer.getFullName() + " removed " + groupMember.getMember().getFullName() + " from the group!"
+        );
     }
 }
