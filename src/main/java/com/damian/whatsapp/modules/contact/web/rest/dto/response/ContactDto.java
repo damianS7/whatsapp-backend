@@ -1,8 +1,8 @@
-package com.damian.whatsapp.modules.contact.http.web.rest.dto.response;
+package com.damian.whatsapp.modules.contact.web.rest.dto.response;
 
 public record ContactDto(
         Long id,
-        Long customerId,
+        Long userId,
         String name,
         String avatarFilename
 ) {

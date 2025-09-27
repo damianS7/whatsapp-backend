@@ -1,13 +1,13 @@
-package com.damian.whatsapp.modules.contact.http.web.rest.dto.mapper;
+package com.damian.whatsapp.modules.contact.web.rest.dto.mapper;
 
-import com.damian.whatsapp.modules.contact.http.web.rest.dto.response.ContactDto;
+import com.damian.whatsapp.modules.contact.web.rest.dto.response.ContactDto;
 import com.damian.whatsapp.shared.domain.Contact;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ContactDtoMapper {
-    public static ContactDto toCustomerFriendDTO(Contact contact) {
+    public static ContactDto toUserContactDto(Contact contact) {
         return new ContactDto(
                 contact.getId(),
                 contact.getContact().getId(),
@@ -16,11 +16,11 @@ public class ContactDtoMapper {
         );
     }
 
-    public static Set<ContactDto> toContactDTOList(Set<Contact> customers) {
+    public static Set<ContactDto> toContactDtoList(Set<Contact> customers) {
         return customers
                 .stream()
                 .map(
-                        ContactDtoMapper::toCustomerFriendDTO
+                        ContactDtoMapper::toUserContactDto
                 ).collect(Collectors.toSet());
     }
 }

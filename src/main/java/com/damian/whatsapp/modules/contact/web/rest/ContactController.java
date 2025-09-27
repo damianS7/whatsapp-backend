@@ -1,9 +1,9 @@
-package com.damian.whatsapp.modules.contact.http.web.rest;
+package com.damian.whatsapp.modules.contact.web.rest;
 
 import com.damian.whatsapp.modules.contact.ContactService;
-import com.damian.whatsapp.modules.contact.http.web.rest.dto.mapper.ContactDtoMapper;
-import com.damian.whatsapp.modules.contact.http.web.rest.dto.request.ContactCreateRequest;
-import com.damian.whatsapp.modules.contact.http.web.rest.dto.response.ContactDto;
+import com.damian.whatsapp.modules.contact.web.rest.dto.mapper.ContactDtoMapper;
+import com.damian.whatsapp.modules.contact.web.rest.dto.request.ContactCreateRequest;
+import com.damian.whatsapp.modules.contact.web.rest.dto.response.ContactDto;
 import com.damian.whatsapp.shared.domain.Contact;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -29,11 +29,11 @@ public class ContactController {
     @GetMapping("/contacts")
     public ResponseEntity<?> getContacts() {
         Set<Contact> contacts = contactService.getContacts();
-        Set<ContactDto> contactsDTO = ContactDtoMapper.toContactDTOList(contacts);
+        Set<ContactDto> contactsDto = ContactDtoMapper.toContactDtoList(contacts);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(contactsDTO);
+                .body(contactsDto);
     }
 
     // endpoint to add a new contact for the logged customer
@@ -43,11 +43,11 @@ public class ContactController {
             ContactCreateRequest request
     ) {
         Contact contact = contactService.addContact(request.customerId());
-        ContactDto contactDTO = ContactDtoMapper.toCustomerFriendDTO(contact);
+        ContactDto contactDto = ContactDtoMapper.toUserContactDto(contact);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(contactDTO);
+                .body(contactDto);
     }
 
     // endpoint to delete a contact from the logged customer contact list
