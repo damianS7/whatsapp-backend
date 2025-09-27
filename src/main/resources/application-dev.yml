@@ -1,7 +1,7 @@
 app:
   frontend:
     host: "localhost"
-    port: 8080
+    port: 8081
 spring:
   rabbitmq:
     host: ${RABBIT_HOST:localhost}
@@ -9,7 +9,7 @@ spring:
     username: ${RABBIT_USER}
     password: ${RABBIT_PASS}
   datasource:
-    url: jdbc:postgresql://localhost:5440/postgres
+    url: jdbc:postgresql://localhost:5432/postgres
     username: ${DB_USER}
     password: ${DB_PASS}
     driver-class-name: org.postgresql.Driver
