@@ -1,11 +1,11 @@
-name: 'whatsapp'
+name: "whatsapp"
 services:
   database:
     container_name: whatsapp-database
     build:
       context: .
       dockerfile: Dockerfile.db
-    restart: always
+    restart: no
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: ${DB_USER}
@@ -23,14 +23,42 @@ services:
     env_file: .env
     depends_on:
       - database
+      - mailpit
+      - rabbitmq
     environment:
       SPRING_PROFILES_ACTIVE: prod
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/postgres
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASS}
       SPRING_JPA_HIBERNATE_DDL_AUTO: none
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
+      SPRING_MAIL_HOST: mailpit
+      SPRING_MAIL_PORT: 1025
     ports:
       - "8080:8080"
+  mailpit:
+    container_name: whatsapp-mailpit
+    image: axllent/mailpit:latest
+    ports:
+      - "1025:1025" # SMTP
+      - "8025:8025" # Web UI
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: whatsapp-rabbitmq
+    ports:
+      - "5672:5672" # app port (AMQP)
+      - "15672:15672" # UI web
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    #networks:
+    #  - app-network
 
 volumes:
   pgdata:
+  rabbitmq_data:
