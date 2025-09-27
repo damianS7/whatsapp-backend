@@ -1,10 +1,8 @@
 package com.damian.whatsapp.modules.contact.exception;
 
 
-import com.damian.whatsapp.shared.exception.ApplicationException;
-
-public class ContactAlreadyExistException extends ApplicationException {
-    public ContactAlreadyExistException(String message) {
-        super(message);
+public class ContactAlreadyExistException extends ContactException {
+    public ContactAlreadyExistException(String message, Long userId, Long contactUserId) {
+        super(message, userId, contactUserId);
     }
 }

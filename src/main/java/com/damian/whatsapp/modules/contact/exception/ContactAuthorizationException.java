@@ -1,9 +1,7 @@
 package com.damian.whatsapp.modules.contact.exception;
 
-import com.damian.whatsapp.shared.exception.ApplicationException;
-
-public class ContactAuthorizationException extends ApplicationException {
-    public ContactAuthorizationException(String message) {
-        super(message);
+public class ContactAuthorizationException extends ContactException {
+    public ContactAuthorizationException(String message, Long userId, Long contactUserId) {
+        super(message, userId, contactUserId);
     }
 }
