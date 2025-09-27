@@ -3,6 +3,9 @@ package com.damian.whatsapp.shared;
 
 import com.damian.whatsapp.modules.auth.dto.AuthenticationRequest;
 import com.damian.whatsapp.modules.auth.dto.AuthenticationResponse;
+import com.damian.whatsapp.modules.contact.ContactRepository;
+import com.damian.whatsapp.modules.group.repository.GroupMemberRepository;
+import com.damian.whatsapp.modules.group.repository.GroupRepository;
 import com.damian.whatsapp.modules.notification.NotificationRepository;
 import com.damian.whatsapp.modules.setting.SettingRepository;
 import com.damian.whatsapp.modules.user.account.UserAccountRepository;
@@ -52,6 +55,9 @@ public abstract class AbstractIntegrationTest {
     protected UserAccountTokenRepository userAccountTokenRepository;
 
     @Autowired
+    protected ContactRepository contactRepository;
+
+    @Autowired
     protected UserAccountRepository userAccountRepository;
 
     @Autowired
@@ -64,12 +70,21 @@ public abstract class AbstractIntegrationTest {
     protected NotificationRepository notificationRepository;
 
     @Autowired
+    protected GroupRepository groupRepository;
+
+    @Autowired
+    protected GroupMemberRepository groupMemberRepository;
+
+    @Autowired
     protected BCryptPasswordEncoder passwordEncoder;
 
     protected String token;
 
     @AfterAll
     void tearDown() {
+        groupMemberRepository.deleteAll();
+        groupRepository.deleteAll();
+        contactRepository.deleteAll();
         userAccountTokenRepository.deleteAll();
         notificationRepository.deleteAll();
         settingRepository.deleteAll();
