@@ -1,0 +1,153 @@
+package com.damian.whatsapp.modules.auth;
+
+import com.damian.whatsapp.modules.auth.dto.AuthenticationRequest;
+import com.damian.whatsapp.modules.auth.dto.AuthenticationResponse;
+import com.damian.whatsapp.modules.auth.exception.AccountNotVerifiedException;
+import com.damian.whatsapp.modules.auth.exception.AccountSuspendedException;
+import com.damian.whatsapp.modules.user.account.UserAccountStatus;
+import com.damian.whatsapp.shared.AbstractServiceTest;
+import com.damian.whatsapp.shared.domain.User;
+import com.damian.whatsapp.shared.domain.UserPrincipal;
+import com.damian.whatsapp.shared.exception.Exceptions;
+import com.damian.whatsapp.shared.util.JwtUtil;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+public class AuthenticationServiceTest extends AbstractServiceTest {
+
+    @InjectMocks
+    private AuthenticationService authenticationService;
+
+    @Mock
+    private AuthenticationManager authenticationManager;
+
+    @Mock
+    private JwtUtil jwtUtil;
+
+    @Test
+    @DisplayName("should login when valid credentials")
+    void shouldLoginWhenValidCredentials() {
+        // given
+        Authentication authentication = mock(Authentication.class);
+        String token = "jwt-token";
+
+        User user = User.create()
+                        .setId(1L)
+                        .setEmail("alice@demo.com")
+                        .setPassword(passwordEncoder.encode(RAW_PASSWORD));
+
+        UserPrincipal userPrincipal = new UserPrincipal(user);
+
+        user.setAccountStatus(UserAccountStatus.VERIFIED);
+
+        AuthenticationRequest request = new AuthenticationRequest(user.getEmail(), user.getPassword());
+
+        // when
+        when(authenticationManager.authenticate(any())).thenReturn(authentication);
+        when(jwtUtil.generateToken(anyMap(), anyString())).thenReturn(token);
+        when(authentication.getPrincipal()).thenReturn(userPrincipal);
+
+        AuthenticationResponse response = authenticationService.login(request);
+
+        // then
+        assertThat(response.token()).isEqualTo(token);
+    }
+
+    @Test
+    @DisplayName("should not login when invalid credentials")
+    void shouldNotLoginWhenInvalidCredentials() {
+        // given
+        User user = User.create()
+                        .setId(1L)
+                        .setEmail("alice@demo.com")
+                        .setPassword(passwordEncoder.encode(RAW_PASSWORD));
+
+        AuthenticationRequest request = new AuthenticationRequest(user.getEmail(), user.getPassword());
+
+        // when
+        when(authenticationManager.authenticate(any()))
+                .thenThrow(new BadCredentialsException(Exceptions.ACCOUNT.BAD_CREDENTIALS));
+
+        BadCredentialsException exception = assertThrows(
+                BadCredentialsException.class,
+                () -> authenticationService.login(request)
+        );
+
+        // Then
+        assertEquals(Exceptions.ACCOUNT.BAD_CREDENTIALS, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("should not login when account is suspended")
+    void shouldNotLoginWhenAccountIsSuspended() {
+        // given
+        Authentication authentication = mock(Authentication.class);
+        String token = "jwt-token";
+
+        User userAccount = User.create()
+                               .setId(1L)
+                               .setEmail("alice@demo.com")
+                               .setPassword(passwordEncoder.encode(RAW_PASSWORD));
+
+        UserPrincipal user = new UserPrincipal(userAccount);
+        userAccount.setAccountStatus(UserAccountStatus.SUSPENDED);
+
+        AuthenticationRequest request = new AuthenticationRequest(userAccount.getEmail(), userAccount.getPassword());
+
+        // when
+        when(authenticationManager.authenticate(any())).thenReturn(authentication);
+        when(jwtUtil.generateToken(anyMap(), anyString())).thenReturn(token);
+        when(authentication.getPrincipal()).thenReturn(user);
+
+        AccountSuspendedException exception = assertThrows(
+                AccountSuspendedException.class,
+                () -> authenticationService.login(request)
+        );
+
+        // Then
+        assertEquals(Exceptions.ACCOUNT.SUSPENDED, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("should not login when account is not verified")
+    void shouldNotLoginWhenAccountIsNotVerified() {
+        // given
+        Authentication authentication = mock(Authentication.class);
+        String token = "jwt-token";
+
+        User userAccount = User.create()
+                               .setId(1L)
+                               .setEmail("alice@demo.com")
+                               .setPassword(passwordEncoder.encode(RAW_PASSWORD));
+
+        UserPrincipal user = new UserPrincipal(userAccount);
+        userAccount.setAccountStatus(UserAccountStatus.PENDING_VERIFICATION);
+
+        AuthenticationRequest request = new AuthenticationRequest(userAccount.getEmail(), userAccount.getPassword());
+
+        // when
+        when(authenticationManager.authenticate(any())).thenReturn(authentication);
+        when(jwtUtil.generateToken(anyMap(), anyString())).thenReturn(token);
+        when(authentication.getPrincipal()).thenReturn(user);
+
+        AccountNotVerifiedException exception = assertThrows(
+                AccountNotVerifiedException.class,
+                () -> authenticationService.login(request)
+        );
+
+        // Then
+        assertEquals(Exceptions.ACCOUNT.NOT_VERIFIED, exception.getMessage());
+    }
+}
