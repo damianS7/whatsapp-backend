@@ -22,7 +22,7 @@ CREATE CAST (varchar as account_status_type) WITH INOUT AS IMPLICIT;
 
 CREATE TABLE public.users (
 	id int4 GENERATED ALWAYS AS IDENTITY NOT NULL,
-	username varchar(20) NOT NULL,
+	user_name varchar(20) NOT NULL,
    	first_name varchar(20) NOT NULL,
    	last_name varchar(40) NOT NULL,
    	phone varchar(14) NOT NULL,
@@ -75,13 +75,13 @@ CREATE TABLE public.user_account_tokens (
 
 CREATE TABLE public.user_contacts (
     id int4 GENERATED ALWAYS AS IDENTITY NOT NULL,
-    followed_user_id int4 NOT NULL,
-    follower_user_id int4 NOT NULL,
+    user_id int4 NOT NULL,
+    contact_user_id int4 NOT NULL,
     created_at timestamp DEFAULT CURRENT_TIMESTAMP NULL,
-    CONSTRAINT user_followers_pkey PRIMARY KEY (id),
-    CONSTRAINT unique_user_follower UNIQUE (followed_user_id, follower_user_id),
-    CONSTRAINT followed_user_id_fkey FOREIGN KEY (followed_user_id) REFERENCES public.users(id) ON DELETE CASCADE,
-    CONSTRAINT follower_user_id_fkey FOREIGN KEY (follower_user_id) REFERENCES public.users(id) ON DELETE CASCADE
+    CONSTRAINT user_contacts_id_pkey PRIMARY KEY (id),
+    CONSTRAINT unique_user_follower UNIQUE (user_id, contact_user_id),
+    CONSTRAINT user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE,
+    CONSTRAINT contact_user_id_fkey FOREIGN KEY (contact_user_id) REFERENCES public.users(id) ON DELETE CASCADE
 );
 
 CREATE TYPE public."notification_type" AS ENUM (
