@@ -40,7 +40,7 @@ public class ContactService {
 
         // check contact list size limit
         if (this.getContacts().size() >= MAX_CONTACTS) {
-            throw new MaxContactsLimitReachedException(Exceptions.CONTACT_LIST.MAX_CONTACTS);
+            throw new MaxContactsLimitReachedException(Exceptions.CONTACT_LIST.MAX_CONTACTS, loggedUser.getId(), null);
         }
 
         // check if the user we want to add as a contact exists.
@@ -50,7 +50,11 @@ public class ContactService {
 
         // check if that they are not already contact
         if (contactRepository.contactExists(loggedUser.getId(), contactUser.getId())) {
-            throw new ContactAlreadyExistException(Exceptions.CONTACT_LIST.ALREADY_EXISTS);
+            throw new ContactAlreadyExistException(
+                    Exceptions.CONTACT_LIST.ALREADY_EXISTS,
+                    loggedUser.getId(),
+                    contactUser.getId()
+            );
         }
 
         return contactRepository.save(
@@ -64,12 +68,16 @@ public class ContactService {
 
         // check if the contact exists
         Contact contact = contactRepository.findById(id).orElseThrow(
-                () -> new ContactNotFoundException(Exceptions.CONTACT_LIST.NOT_FOUND)
+                () -> new ContactNotFoundException(Exceptions.CONTACT_LIST.NOT_FOUND, loggedUser.getId(), null)
         );
 
         // check if the logged user is the owner of the contact.
-        if (!loggedUser.getId().equals(contact.getCustomer().getId())) {
-            throw new ContactAuthorizationException(Exceptions.CONTACT_LIST.ACCESS_FORBIDDEN);
+        if (!loggedUser.getId().equals(contact.getUser().getId())) {
+            throw new ContactAuthorizationException(
+                    Exceptions.CONTACT_LIST.ACCESS_FORBIDDEN,
+                    loggedUser.getId(),
+                    contact.getUser().getId()
+            );
         }
 
         contactRepository.deleteById(id);

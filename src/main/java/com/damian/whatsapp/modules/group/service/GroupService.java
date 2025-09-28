@@ -30,9 +30,9 @@ public class GroupService {
         return groupRepository.findBelongingGroupsByUserId(loggedUser.getId());
     }
 
-    public Group getGroup(Long id) {
-        return groupRepository.findById(id).orElseThrow(
-                () -> new GroupNotFoundException(Exceptions.GROUP.NOT_FOUND)
+    public Group getGroup(Long groupId) {
+        return groupRepository.findById(groupId).orElseThrow(
+                () -> new GroupNotFoundException(Exceptions.GROUP.NOT_FOUND, groupId)
         );
     }
 
@@ -54,15 +54,15 @@ public class GroupService {
         return groupRepository.save(group);
     }
 
-    public Group updateGroup(Long id, GroupUpdateRequest request) {
+    public Group updateGroup(Long groupId, GroupUpdateRequest request) {
         User loggedUser = AuthHelper.getLoggedUser();
-        Group group = groupRepository.findById(id).orElseThrow(
-                () -> new GroupNotFoundException(Exceptions.GROUP.NOT_FOUND)
+        Group group = groupRepository.findById(groupId).orElseThrow(
+                () -> new GroupNotFoundException(Exceptions.GROUP.NOT_FOUND, groupId)
         );
 
         // check if the logged customer is the owner of the group.
         if (!loggedUser.getId().equals(group.getOwner().getId())) {
-            throw new GroupAuthorizationException(Exceptions.GROUP.ACCESS_FORBIDDEN);
+            throw new GroupAuthorizationException(Exceptions.GROUP.ACCESS_FORBIDDEN, groupId);
         }
 
         group.setName(request.name());
@@ -71,19 +71,19 @@ public class GroupService {
         return groupRepository.save(group);
     }
 
-    public void deleteGroup(Long id) {
+    public void deleteGroup(Long groupId) {
         User loggedUser = AuthHelper.getLoggedUser();
 
         // check if the group exists
-        Group group = groupRepository.findById(id).orElseThrow(
-                () -> new GroupNotFoundException(Exceptions.GROUP.NOT_FOUND)
+        Group group = groupRepository.findById(groupId).orElseThrow(
+                () -> new GroupNotFoundException(Exceptions.GROUP.NOT_FOUND, groupId)
         );
 
         // check if the customer is the owner of the group
         if (!group.getOwner().getId().equals(loggedUser.getId())) {
-            throw new GroupAuthorizationException(Exceptions.GROUP.ACCESS_FORBIDDEN);
+            throw new GroupAuthorizationException(Exceptions.GROUP.ACCESS_FORBIDDEN, groupId);
         }
 
-        groupRepository.deleteById(id);
+        groupRepository.deleteById(groupId);
     }
 }

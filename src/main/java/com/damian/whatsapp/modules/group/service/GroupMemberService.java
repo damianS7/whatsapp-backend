@@ -50,7 +50,7 @@ public class GroupMemberService {
         );
 
         Group group = groupRepository.findById(groupId).orElseThrow(
-                () -> new GroupNotFoundException(Exceptions.GROUP.NOT_FOUND)
+                () -> new GroupNotFoundException(Exceptions.GROUP.NOT_FOUND, groupId)
         );
 
         GroupMember groupMember = new GroupMember(
@@ -71,16 +71,16 @@ public class GroupMemberService {
         User loggedUser = AuthHelper.getLoggedUser();
 
         GroupMember groupMember = groupMemberRepository.findById(groupMemberId).orElseThrow(
-                () -> new GroupMemberNotFoundException(Exceptions.GROUP.NOT_FOUND)
+                () -> new GroupMemberNotFoundException(Exceptions.GROUP.NOT_FOUND, null, groupMemberId)
         );
 
         Group group = groupRepository.findById(groupMember.getGroup().getId()).orElseThrow(
-                () -> new GroupNotFoundException(Exceptions.GROUP.NOT_FOUND)
+                () -> new GroupNotFoundException(Exceptions.GROUP.NOT_FOUND, groupMember.getGroup().getId())
         );
 
         // check authorization
         if (!loggedUser.getId().equals(group.getOwner().getId())) {
-            throw new GroupAuthorizationException(Exceptions.GROUP.ACCESS_FORBIDDEN);
+            throw new GroupAuthorizationException(Exceptions.GROUP.ACCESS_FORBIDDEN, group.getId());
         }
 
         groupMemberRepository.deleteById(groupMemberId);
