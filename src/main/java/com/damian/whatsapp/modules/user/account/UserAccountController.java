@@ -36,7 +36,7 @@ public class UserAccountController {
         this.userAccountService = userAccountService;
     }
 
-    // endpoint to modify current customer email
+    // endpoint to modify current user email
     @PatchMapping("/accounts/email")
     public ResponseEntity<UserDto> updateEmail(
             @Validated @RequestBody
@@ -65,7 +65,7 @@ public class UserAccountController {
                 .body(dto);
     }
 
-    // endpoint to modify current customer password
+    // endpoint to modify current user password
     @PatchMapping("/accounts/password")
     public ResponseEntity<?> updatePassword(
             @Validated @RequestBody
@@ -87,7 +87,7 @@ public class UserAccountController {
         // verification the account using the provided token
         UserAccount account = userAccountVerificationService.verifyAccount(token);
 
-        // send email to customer after account has been verificated
+        // send email to user after account has been verificated
         userAccountVerificationService.sendAccountVerifiedEmail(account);
 
         return ResponseEntity

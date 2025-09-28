@@ -57,7 +57,7 @@ public class UserAccountPasswordService {
      * @throws UserAccountInvalidPasswordConfirmationException if the password does not match
      */
     public void updatePassword(Long userId, String password) {
-        // we get the CustomerAuth entity so we can save.
+        // we get the UserAuth entity so we can save.
         User user = userRepository.findById(userId).orElseThrow(
                 () -> {
                     log.warn("Failed to update password. No user found with id: {}", userId);
@@ -88,7 +88,7 @@ public class UserAccountPasswordService {
      * @throws UserAccountInvalidPasswordConfirmationException if the password does not match
      */
     public void updatePassword(UserAccountPasswordUpdateRequest request) {
-        // we extract the email from the Customer stored in the SecurityContext
+        // we extract the email from the User stored in the SecurityContext
         final User currentUser = AuthHelper.getLoggedUser();
 
         // Before making any changes we check that the password sent by the user matches the one in the entity

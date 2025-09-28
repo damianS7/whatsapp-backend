@@ -31,8 +31,8 @@ public class UserDtoMapper {
                 ).toList();
     }
 
-    public static Page<UserDto> toUserDtoWithPagination(Page<User> customers) {
-        return customers.map(
+    public static Page<UserDto> toUserDtoWithPagination(Page<User> users) {
+        return users.map(
                 UserDtoMapper::toUserDto
         );
     }

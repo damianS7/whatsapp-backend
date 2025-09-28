@@ -1,6 +1,6 @@
 package com.damian.whatsapp.modules.chat.controller;
 
-import com.damian.whatsapp.chat.http.ChatMessage;
+import com.damian.whatsapp.modules.chat.dto.ChatMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -31,9 +31,9 @@ public class ChatController {
         ChatMessage newMessage = new ChatMessage(
                 message.chatId(),
                 message.groupId(),
-                message.fromCustomerId(),
-                message.toCustomerId(),
-                message.fromCustomerName(),
+                message.fromUserId(),
+                message.toUserId(),
+                message.fromUserName(),
                 message.chatType(),
                 message.message(),
                 Instant.now()

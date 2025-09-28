@@ -68,7 +68,7 @@ public class UserAccountToken {
         return this;
     }
 
-    //    public Long getCustomerId() {
+    //    public Long getUserId() {
     //        return this.user.getId();
     //    }
 

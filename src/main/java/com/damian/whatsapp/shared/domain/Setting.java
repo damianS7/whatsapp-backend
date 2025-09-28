@@ -50,7 +50,7 @@ public class Setting {
     public String toString() {
         return "Setting {" +
                "id=" + id +
-               "customerId=" + getCustomer().getId() +
+               "userId=" + getUser().getId() +
                "settingKey=" + getSettingKey() +
                "settingValue=" + getSettingValue() +
                "}";
@@ -74,11 +74,11 @@ public class Setting {
         return this;
     }
 
-    public User getCustomer() {
+    public User getUser() {
         return user;
     }
 
-    public Setting setCustomer(User user) {
+    public Setting setUser(User user) {
         this.user = user;
         return this;
     }

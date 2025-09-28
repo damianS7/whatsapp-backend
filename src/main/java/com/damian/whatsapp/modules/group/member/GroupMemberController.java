@@ -1,8 +1,8 @@
 package com.damian.whatsapp.modules.group.member;
 
-import com.damian.whatsapp.modules.group.group.dto.mapper.GroupMemberDtoMapper;
 import com.damian.whatsapp.modules.group.group.dto.request.GroupMemberUpdateRequest;
 import com.damian.whatsapp.modules.group.group.dto.response.GroupMemberDto;
+import com.damian.whatsapp.modules.group.member.dto.mapper.GroupMemberDtoMapper;
 import com.damian.whatsapp.shared.domain.GroupMember;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

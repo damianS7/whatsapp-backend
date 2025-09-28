@@ -40,7 +40,7 @@ public class AuthenticationService {
      * Controls the login flow.
      *
      * @param request Contains the fields needed to login into the service
-     * @return Contains the data (Customer, Profile) and the token
+     * @return Contains the data (User, Profile) and the token
      * @throws BadCredentialsException     if credentials are invalid
      * @throws AccountNotVerifiedException if the account is not verified
      */
@@ -81,7 +81,7 @@ public class AuthenticationService {
             );
         }
 
-        // Return the customer data and the token
+        // Return the user data and the token
         log.info("Login successful for user: {}", email);
         return new AuthenticationResponse(token);
     }

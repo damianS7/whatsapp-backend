@@ -44,7 +44,7 @@ public class GroupService {
         );
         group.setOwner(loggedUser);
 
-        // add the logged customer as member
+        // add the logged user as member
         GroupMember groupMember = new GroupMember(
                 loggedUser,
                 group
@@ -60,7 +60,7 @@ public class GroupService {
                 () -> new GroupNotFoundException(Exceptions.GROUP.NOT_FOUND, groupId)
         );
 
-        // check if the logged customer is the owner of the group.
+        // check if the logged user is the owner of the group.
         if (!loggedUser.getId().equals(group.getOwner().getId())) {
             throw new GroupAuthorizationException(Exceptions.GROUP.ACCESS_FORBIDDEN, groupId);
         }
@@ -79,7 +79,7 @@ public class GroupService {
                 () -> new GroupNotFoundException(Exceptions.GROUP.NOT_FOUND, groupId)
         );
 
-        // check if the customer is the owner of the group
+        // check if the user is the owner of the group
         if (!group.getOwner().getId().equals(loggedUser.getId())) {
             throw new GroupAuthorizationException(Exceptions.GROUP.ACCESS_FORBIDDEN, groupId);
         }

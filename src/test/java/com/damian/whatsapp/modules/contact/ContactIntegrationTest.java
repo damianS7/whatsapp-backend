@@ -159,7 +159,7 @@ public class ContactIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     @DisplayName("Should not add a contact when user not found")
-    void shouldNotAddContactWhenCustomerNotFount() throws Exception {
+    void shouldNotAddContactWhenUserNotFound() throws Exception {
         // given
         loginWithUser(user);
 

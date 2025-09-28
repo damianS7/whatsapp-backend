@@ -1,6 +1,6 @@
 package com.damian.whatsapp.modules.chat.service;
 
-import com.damian.whatsapp.chat.http.ChatMessage;
+import com.damian.whatsapp.modules.chat.dto.ChatMessage;
 import com.damian.whatsapp.shared.domain.Group;
 import com.damian.whatsapp.shared.domain.User;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -19,7 +19,7 @@ public class ChatNotificationService {
         this.messagingTemplate = messagingTemplate;
     }
 
-    public void notifyCustomer(
+    public void notifyUser(
             Long groupId,
             User toUser,
             String message

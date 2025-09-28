@@ -3,18 +3,18 @@ package com.damian.whatsapp.modules.setting.exception;
 import com.damian.whatsapp.shared.exception.ApplicationException;
 
 public class SettingNotOwnerException extends ApplicationException {
-    private final Long customerId;
+    private final Long userId;
 
     public SettingNotOwnerException(String message) {
         this(message, null);
     }
 
-    public SettingNotOwnerException(String message, Long customerId) {
+    public SettingNotOwnerException(String message, Long userId) {
         super(message);
-        this.customerId = customerId;
+        this.userId = userId;
     }
 
-    public Long getCustomerId() {
-        return customerId;
+    public Long getUserId() {
+        return userId;
     }
 }

@@ -18,7 +18,7 @@ import java.util.UUID;
  */
 @Service
 public class ImageUploaderService {
-    public static final String UPLOAD_PATH = "uploads/images/customers/{customerId}";
+    public static final String UPLOAD_PATH = "uploads/images/users/{userId}";
     private static final Logger log = LoggerFactory.getLogger(ImageUploaderService.class);
     private final FileStorageService fileStorageService;
 
@@ -28,8 +28,8 @@ public class ImageUploaderService {
         this.fileStorageService = fileStorageService;
     }
 
-    public static String getCustomerUploadFolder(Long customerId) {
-        return UPLOAD_PATH.replace("{customerId}", customerId.toString());
+    public static String getUserUploadFolder(Long userId) {
+        return UPLOAD_PATH.replace("{userId}", userId.toString());
     }
 
     /**
@@ -38,7 +38,7 @@ public class ImageUploaderService {
     public File uploadImage(MultipartFile file, String folder, String filename) {
         final User currentUser = AuthHelper.getLoggedUser();
         Path path = Paths.get(
-                getCustomerUploadFolder(currentUser.getId()),
+                getUserUploadFolder(currentUser.getId()),
                 folder
         );
 
@@ -47,7 +47,7 @@ public class ImageUploaderService {
             filename += "." + extension;
         }
 
-        log.debug("customer: {} uploading file: {} to: {}", currentUser.getId(), filename, path);
+        log.debug("user: {} uploading file: {} to: {}", currentUser.getId(), filename, path);
         // saving file
         return fileStorageService.storeFile(file, path.toString(), filename);
     }

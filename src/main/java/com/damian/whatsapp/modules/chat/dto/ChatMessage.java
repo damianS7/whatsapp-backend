@@ -1,13 +1,13 @@
-package com.damian.whatsapp.chat.http;
+package com.damian.whatsapp.modules.chat.dto;
 
 import java.time.Instant;
 
 public record ChatMessage(
         String chatId,
         Long groupId,
-        Long fromCustomerId,
-        Long toCustomerId,
-        String fromCustomerName,
+        Long fromUserId,
+        Long toUserId,
+        String fromUserName,
         String chatType,
         String message,
         Instant timestamp

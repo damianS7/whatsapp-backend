@@ -23,18 +23,18 @@ public class GroupMemberService {
     private final ChatNotificationService chatNotificationService;
     private final GroupMemberRepository groupMemberRepository;
     private final GroupRepository groupRepository;
-    private final UserRepository customerRepository;
+    private final UserRepository userRepository;
 
     public GroupMemberService(
             ChatNotificationService chatNotificationService,
             GroupMemberRepository groupMemberRepository,
             GroupRepository groupRepository,
-            UserRepository customerRepository
+            UserRepository userRepository
     ) {
         this.chatNotificationService = chatNotificationService;
         this.groupMemberRepository = groupMemberRepository;
         this.groupRepository = groupRepository;
-        this.customerRepository = customerRepository;
+        this.userRepository = userRepository;
     }
 
     public Set<GroupMember> getGroupMembers(Long groupId) {
@@ -44,7 +44,7 @@ public class GroupMemberService {
     public GroupMember addGroupMember(Long groupId, GroupMemberUpdateRequest request) {
         User loggedUser = AuthHelper.getLoggedUser();
 
-        User customer = customerRepository.findById(request.memberId()).orElseThrow(
+        User user = userRepository.findById(request.memberId()).orElseThrow(
                 () -> new UserNotFoundException(Exceptions.USER.NOT_FOUND, request.memberId())
         );
 
@@ -53,14 +53,14 @@ public class GroupMemberService {
         );
 
         GroupMember groupMember = new GroupMember(
-                customer,
+                user,
                 group
         );
 
         // send notification to the group
         chatNotificationService.notifyGroup(
                 group,
-                loggedUser.getFullName() + " added " + customer.getFullName() + " to the group!"
+                loggedUser.getFullName() + " added " + user.getFullName() + " to the group!"
         );
 
         return groupMemberRepository.save(groupMember);
@@ -78,7 +78,7 @@ public class GroupMemberService {
         );
 
         // check authorization
-        if (!loggedUser.getId().equals(group.getOwner().getId())) {
+        if (!group.isOwner(loggedUser)) {
             throw new GroupAuthorizationException(Exceptions.GROUP.ACCESS_FORBIDDEN, group.getId());
         }
 

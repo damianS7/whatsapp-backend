@@ -26,7 +26,7 @@ public class SettingController {
         this.settingService = settingService;
     }
 
-    // endpoint to fetch all setting from logged customer
+    // endpoint to fetch all setting from logged user
     @GetMapping("/settings")
     public ResponseEntity<?> getSettings() {
         Set<Setting> settings = settingService.getSettings();

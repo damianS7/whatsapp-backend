@@ -16,8 +16,8 @@ public class ContactDtoMapper {
         );
     }
 
-    public static Set<ContactDto> toContactDtoList(Set<Contact> customers) {
-        return customers
+    public static Set<ContactDto> toContactDtoList(Set<Contact> users) {
+        return users
                 .stream()
                 .map(
                         ContactDtoMapper::toUserContactDto

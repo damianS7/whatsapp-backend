@@ -102,7 +102,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails;
             try {
-                // Load the customer details from the database.
+                // Load the user details from the database.
                 userDetails = customUserDetailsService.loadUserByEmail(email);
             } catch (EmailNotFoundException exception) {
                 // In case no such user exists by this email, then we sent 401

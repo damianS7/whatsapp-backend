@@ -14,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -21,8 +22,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -123,5 +123,36 @@ public class GroupMemberIntegrationTest extends AbstractIntegrationTest {
         assertThat(groupMemberDTO).isNotNull();
     }
 
-    // TODO: should delete group member
+    @Test
+    @DisplayName("Should delete group member")
+    void shouldDeleteGroupMember() throws Exception {
+        // given
+        loginWithUser(user);
+
+        Group group = new Group("gaming", "gaming group");
+        group.setOwner(user);
+        groupRepository.save(group);
+
+        User groupMemberUser = User.create()
+                                   .setEmail("user-demo.com")
+                                   .setPassword(passwordEncoder.encode(RAW_PASSWORD));
+        userRepository.save(groupMemberUser);
+
+        GroupMember groupMember = new GroupMember(
+                groupMemberUser,
+                group
+        );
+
+        groupMemberRepository.save(groupMember);
+
+        // when
+        mockMvc
+                .perform(
+                        delete("/api/v1/groups/members/{id}", groupMember.getId())
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().is(HttpStatus.NO_CONTENT.value()));
+    }
+
 }

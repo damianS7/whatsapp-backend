@@ -26,7 +26,7 @@ public class SettingService {
         this.settingRepository = settingRepository;
     }
 
-    // get all the settings for the current customer
+    // get all the settings for the current user
     public Set<Setting> getSettings() {
         User currentUser = AuthHelper.getLoggedUser();
         return settingRepository.findByUser_Id(currentUser.getId());
@@ -41,7 +41,7 @@ public class SettingService {
                 () -> new SettingNotFoundException(Exceptions.SETTINGS.NOT_FOUND, settingId)
         );
 
-        // check if the logged customer is the owner of the setting.
+        // check if the logged user is the owner of the setting.
         if (!setting.isOwner(currentUser)) {
             throw new SettingNotOwnerException(Exceptions.SETTINGS.NOT_OWNER, currentUser.getId());
         }
@@ -49,7 +49,7 @@ public class SettingService {
         setting.setSettingValue(request.value());
 
         log.debug(
-                "Updated setting: {} with value: {} by customer: {}",
+                "Updated setting: {} with value: {} by user: {}",
                 setting.getSettingKey(),
                 setting.getSettingValue(),
                 currentUser.getId()

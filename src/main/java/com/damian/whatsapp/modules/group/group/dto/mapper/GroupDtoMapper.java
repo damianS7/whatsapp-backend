@@ -1,7 +1,8 @@
 package com.damian.whatsapp.modules.group.group.dto.mapper;
 
-import com.damian.whatsapp.modules.group.group.dto.response.GroupUserOwnerDto;
 import com.damian.whatsapp.modules.group.group.dto.response.GroupDto;
+import com.damian.whatsapp.modules.group.group.dto.response.GroupUserOwnerDto;
+import com.damian.whatsapp.modules.group.member.dto.mapper.GroupMemberDtoMapper;
 import com.damian.whatsapp.shared.domain.Group;
 
 import java.util.Set;

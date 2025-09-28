@@ -26,7 +26,7 @@ public class GroupController {
         this.groupService = groupService;
     }
 
-    // endpoint to fetch all groups customer belongs
+    // endpoint to fetch all groups user belongs
     @GetMapping("/groups")
     public ResponseEntity<?> getGroups() {
         Set<Group> groups = groupService.getGroups();

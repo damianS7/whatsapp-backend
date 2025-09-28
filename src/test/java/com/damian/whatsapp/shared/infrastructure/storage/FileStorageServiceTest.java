@@ -25,7 +25,7 @@ public class FileStorageServiceTest extends AbstractServiceTest {
     void shouldGetStoragePath() throws IOException {
         System.out.println(
                 fileStorageService.getStoragePath(
-                        ImageUploaderService.getCustomerUploadFolder(
+                        ImageUploaderService.getUserUploadFolder(
                                 1L)
                 )
         );
@@ -44,7 +44,7 @@ public class FileStorageServiceTest extends AbstractServiceTest {
 
         // when
         File storedFile = fileStorageService.storeFile(
-                givenFile, ImageUploaderService.getCustomerUploadFolder(1L), givenFile.getName()
+                givenFile, ImageUploaderService.getUserUploadFolder(1L), givenFile.getName()
         );
 
         // then

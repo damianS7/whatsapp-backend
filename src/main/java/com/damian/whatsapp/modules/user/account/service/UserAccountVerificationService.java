@@ -58,7 +58,7 @@ public class UserAccountVerificationService {
         // check the token is valid and not expired.
         UserAccountToken userAccountToken = this.validateToken(token);
 
-        log.debug("Verifying account from customer: {}", userAccountToken.getAccount().getId());
+        log.debug("Verifying account from user: {}", userAccountToken.getAccount().getId());
 
         UserAccount account = userAccountToken.getAccount();
 
@@ -134,9 +134,9 @@ public class UserAccountVerificationService {
     }
 
     /**
-     * It sends a welcome message to the customer email address after verification.
+     * It sends a welcome message to the user email address after verification.
      *
-     * @param user The customer to send a welcome message to.
+     * @param user The user to send a welcome message to.
      */
     public void sendAccountVerifiedEmail(User user) {
         emailSenderService.send(
@@ -151,16 +151,16 @@ public class UserAccountVerificationService {
     }
 
     /**
-     * Create a new verification token associated to the customer.
+     * Create a new verification token associated to the user.
      *
-     * @param email The email address of the customer.
+     * @param email The email address of the user.
      * @return An AccountToken object containing the verification token.
-     * @throws UserAccountNotFoundException               If the customer is not found.
+     * @throws UserAccountNotFoundException               If the user is not found.
      * @throws UserAccountVerificationNotPendingException If the account is not pending for verification.
      */
     public UserAccountToken generateVerificationToken(String email) {
         log.debug("Generating verification token for: {}", email);
-        // retrieve the customer by email
+        // retrieve the user by email
         User user = userRepository.findByUserAccount_Email(email).orElseThrow(
                 () -> {
                     log.error("Failed to generate verification token. UserAccount for: {} not found.", email);

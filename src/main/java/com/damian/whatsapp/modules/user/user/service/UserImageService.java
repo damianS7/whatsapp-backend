@@ -52,7 +52,7 @@ public class UserImageService {
 
     public String getProfileImageFolder(Long userId) {
         return Paths.get(
-                ImageUploaderService.getCustomerUploadFolder(userId),
+                ImageUploaderService.getUserUploadFolder(userId),
                 PROFILE_IMAGE_FOLDER
         ).toString();
     }

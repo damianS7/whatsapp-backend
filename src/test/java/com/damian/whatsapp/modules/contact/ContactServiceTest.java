@@ -15,7 +15,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -28,13 +27,10 @@ import static org.mockito.Mockito.*;
 public class ContactServiceTest extends AbstractServiceTest {
 
     @Mock
-    private UserRepository customerRepository;
+    private UserRepository userRepository;
 
     @Mock
     private ContactRepository contactRepository;
-
-    @Mock
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @InjectMocks
     private ContactService contactService;
@@ -44,17 +40,17 @@ public class ContactServiceTest extends AbstractServiceTest {
     void shouldGetAllFriends() {
         // given
         User loggedCustomer = new User(
-                1L, "customer@test.com",
+                1L, "user@test.com",
                 passwordEncoder.encode("password")
         );
         setUpContext(loggedCustomer);
 
         User contact1 = new User(
-                2L, "customer1@test.com", passwordEncoder.encode("password")
+                2L, "user1@test.com", passwordEncoder.encode("password")
         );
 
         User contact2 = new User(
-                3L, "customer2@test.com", passwordEncoder.encode("password")
+                3L, "user2@test.com", passwordEncoder.encode("password")
         );
 
         Set<Contact> contactList = Set.of(
@@ -79,19 +75,19 @@ public class ContactServiceTest extends AbstractServiceTest {
         // given
         User loggedCustomer = new User(
                 1L,
-                "customer@test.com",
+                "user@test.com",
                 passwordEncoder.encode("password")
         );
         setUpContext(loggedCustomer);
 
         User contactCustomer = new User(
-                2L, "customer1@test.com", passwordEncoder.encode("password")
+                2L, "user1@test.com", passwordEncoder.encode("password")
         );
 
         Contact givenContact = new Contact(loggedCustomer, contactCustomer);
 
         // when
-        when(customerRepository.findById(contactCustomer.getId())).thenReturn(Optional.of(contactCustomer));
+        when(userRepository.findById(contactCustomer.getId())).thenReturn(Optional.of(contactCustomer));
         when(contactRepository.save(any(Contact.class)))
                 .thenReturn(givenContact);
 
@@ -107,7 +103,7 @@ public class ContactServiceTest extends AbstractServiceTest {
     void shouldNotAddContactWhenLimitReached() {
         // given
         User loggedCustomer = new User(
-                1L, "customer@test.com",
+                1L, "user@test.com",
                 passwordEncoder.encode("password")
         );
 
@@ -146,17 +142,17 @@ public class ContactServiceTest extends AbstractServiceTest {
         // given
         User loggedCustomer = new User(
                 1L,
-                "customer@test.com",
+                "user@test.com",
                 passwordEncoder.encode("password")
         );
         setUpContext(loggedCustomer);
 
         User contact1 = new User(
-                2L, "customer1@test.com", passwordEncoder.encode("password")
+                2L, "user1@test.com", passwordEncoder.encode("password")
         );
 
         // when
-        when(customerRepository.findById(contact1.getId())).thenReturn(Optional.of(contact1));
+        when(userRepository.findById(contact1.getId())).thenReturn(Optional.of(contact1));
         when(contactRepository.contactExists(loggedCustomer.getId(), contact1.getId())).thenReturn(true);
         ContactAlreadyExistException exception = assertThrows(
                 ContactAlreadyExistException.class,
@@ -168,22 +164,22 @@ public class ContactServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    @DisplayName("Should not add a contact when customer not found")
-    void shouldNotAddContactWhenCustomerNotFound() {
+    @DisplayName("Should not add a contact when user not found")
+    void shouldNotAddContactWhenUserNotFound() {
         // given
         User loggedCustomer = new User(
                 1L,
-                "customer@test.com",
+                "user@test.com",
                 passwordEncoder.encode("password")
         );
         setUpContext(loggedCustomer);
 
         User contact1 = new User(
-                2L, "customer1@test.com", passwordEncoder.encode("password")
+                2L, "user1@test.com", passwordEncoder.encode("password")
         );
 
         // when
-        when(customerRepository.findById(contact1.getId())).thenReturn(Optional.empty());
+        when(userRepository.findById(contact1.getId())).thenReturn(Optional.empty());
         UserNotFoundException exception = assertThrows(
                 UserNotFoundException.class,
                 () -> contactService.addContact(contact1.getId())
@@ -198,13 +194,13 @@ public class ContactServiceTest extends AbstractServiceTest {
     void shouldDeleteContact() {
         // given
         User loggedCustomer = new User(
-                1L, "customer@test.com",
+                1L, "user@test.com",
                 passwordEncoder.encode("password")
         );
         setUpContext(loggedCustomer);
 
         User contact1 = new User(
-                2L, "customer1@test.com", passwordEncoder.encode("password")
+                2L, "user1@test.com", passwordEncoder.encode("password")
         );
 
         Contact givenCC = new Contact(loggedCustomer, contact1);
@@ -224,7 +220,7 @@ public class ContactServiceTest extends AbstractServiceTest {
     @DisplayName("Should not delete a contact when not found")
     void shouldNotDeleteContactWhenNotFound() {
         // given
-        User loggedCustomer = new User(1L, "customer@test.com", passwordEncoder.encode("password"));
+        User loggedCustomer = new User(1L, "user@test.com", passwordEncoder.encode("password"));
         setUpContext(loggedCustomer);
 
         // when
@@ -242,12 +238,12 @@ public class ContactServiceTest extends AbstractServiceTest {
     @DisplayName("Should not delete a contact when not authorized")
     void shouldNotDeleteContactWhenNotAuthorized() {
         // given
-        User loggedCustomer = new User(1L, "customer@test.com", passwordEncoder.encode("password"));
+        User loggedCustomer = new User(1L, "user@test.com", passwordEncoder.encode("password"));
         setUpContext(loggedCustomer);
 
         Contact givenCC = new Contact(
-                new User(5L, "customer1@test.com", passwordEncoder.encode("password")),
-                new User(8L, "customer2@test.com", passwordEncoder.encode("password"))
+                new User(5L, "user1@test.com", passwordEncoder.encode("password")),
+                new User(8L, "user2@test.com", passwordEncoder.encode("password"))
         );
         givenCC.setId(1L);
 

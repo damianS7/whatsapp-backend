@@ -4,15 +4,15 @@ import com.damian.whatsapp.shared.exception.ApplicationException;
 
 public class NotificationException extends ApplicationException {
     private final Long notificationId;
-    private final Long customerId;
+    private final Long userId;
 
     public NotificationException(String message) {
         this(message, null, null);
     }
 
-    public NotificationException(String message, Long notificationId, Long customerId) {
+    public NotificationException(String message, Long notificationId, Long userId) {
         super(message);
-        this.customerId = customerId;
+        this.userId = userId;
         this.notificationId = notificationId;
     }
 
@@ -20,7 +20,7 @@ public class NotificationException extends ApplicationException {
         return notificationId;
     }
 
-    public Long getCustomerId() {
-        return customerId;
+    public Long getUserId() {
+        return userId;
     }
 }

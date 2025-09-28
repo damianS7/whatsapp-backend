@@ -16,7 +16,7 @@ public class SettingExceptionHandler {
 
     @ExceptionHandler(SettingNotOwnerException.class) // 403
     public ResponseEntity<ApiResponse<String>> handleAuthorization(SettingNotOwnerException ex) {
-        log.warn("Attempt to access someone else settings. customerId: {}", ex.getCustomerId(), ex);
+        log.warn("Attempt to access someone else settings. userId: {}", ex.getUserId(), ex);
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                              .body(ApiResponse.error(ex.getMessage(), HttpStatus.FORBIDDEN));
     }

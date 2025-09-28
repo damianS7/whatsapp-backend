@@ -27,7 +27,7 @@ public class NotificationController {
         this.notificationService = notificationService;
     }
 
-    // endpoint to fetch (paginated) notifications from current customer
+    // endpoint to fetch (paginated) notifications from current user
     @GetMapping("/notifications")
     public ResponseEntity<?> getNotifications(
             @PageableDefault(size = 12, sort = "createdAt", direction = Sort.Direction.DESC)

@@ -36,30 +36,30 @@ public class NotificationService {
     }
 
     /**
-     * Get notifications for the current customer.
+     * Get notifications for the current user.
      *
      * @param pageable pagination params
      * @return Page<Notification> a page of notifications
      */
     public Page<Notification> getNotifications(Pageable pageable) {
         User currentUser = AuthHelper.getLoggedUser();
-        log.debug("Fetching notifications for customer: {}", currentUser.getId());
+        log.debug("Fetching notifications for user: {}", currentUser.getId());
         return notificationRepository.findAllByUserId(currentUser.getId(), pageable);
     }
 
     /**
-     * Delete all notifications for the current customer.
+     * Delete all notifications for the current user.
      */
     @Transactional
     public void deleteNotifications() {
         User currentUser = AuthHelper.getLoggedUser();
         // delete all notifications
         notificationRepository.deleteAllByUser_Id(currentUser.getId());
-        log.debug("Deleted all notifications from customer: {}", currentUser.getId());
+        log.debug("Deleted all notifications from user: {}", currentUser.getId());
     }
 
     /**
-     * Get notifications for the current customer as a Flux stream.
+     * Get notifications for the current user as a Flux stream.
      * The stream will be closed when the client disconnects.
      *
      * @return Flux<NotificationEvent> a stream of notifications
@@ -87,7 +87,7 @@ public class NotificationService {
     public void publishNotification(NotificationEvent notificationEvent) {
         User currentUser = AuthHelper.getLoggedUser();
         log.debug(
-                "Publishing Notification ({}) to customer: {}",
+                "Publishing Notification ({}) to user: {}",
                 notificationEvent.type(),
                 notificationEvent.recipientId()
         );
@@ -96,11 +96,11 @@ public class NotificationService {
         // this is to prevent sending notifications to oneself
         // for example when a user likes or comment their own post
         if (currentUser.getId().equals(notificationEvent.recipientId())) {
-            log.debug("Recipient is the same customer. No need to notify.");
+            log.debug("Recipient is the same user. No need to notify.");
             return;
         }
 
-        // find recipient customer who will receive the notification
+        // find recipient user who will receive the notification
         User recipient = userRepository
                 .findById(notificationEvent.recipientId())
                 .orElseThrow(() -> {
@@ -123,7 +123,7 @@ public class NotificationService {
         notificationRepository.save(notification);
 
         log.debug(
-                "Notification ({}) to customer: {} stored on db.",
+                "Notification ({}) to user: {} stored on db.",
                 notificationEvent.type(),
                 notificationEvent.recipientId()
         );

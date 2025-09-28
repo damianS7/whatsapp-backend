@@ -30,7 +30,7 @@ public class ImageUploaderServiceTest extends AbstractServiceTest {
     @DisplayName("Should get upload path")
     void shouldGetUploadPath() {
         System.out.println(
-                ImageUploaderService.getCustomerUploadFolder(1L)
+                ImageUploaderService.getUserUploadFolder(1L)
         );
     }
 

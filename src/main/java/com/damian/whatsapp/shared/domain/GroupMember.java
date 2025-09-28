@@ -75,7 +75,7 @@ public class GroupMember {
         return "GroupMember {" +
                "id=" + id +
                ", Group=" + group.toString() +
-               ", Customer=" + member.toString() +
+               ", User=" + member.toString() +
                ", createdAt=" + createdAt +
                ", updatedAt=" + updatedAt +
                "}";
