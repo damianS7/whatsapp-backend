@@ -1,7 +1,7 @@
 package com.damian.whatsapp.modules.contact;
 
-import com.damian.whatsapp.modules.contact.web.rest.dto.request.ContactCreateRequest;
-import com.damian.whatsapp.modules.contact.web.rest.dto.response.ContactDto;
+import com.damian.whatsapp.modules.contact.dto.request.ContactCreateRequest;
+import com.damian.whatsapp.modules.contact.dto.response.ContactDto;
 import com.damian.whatsapp.modules.user.account.UserAccountStatus;
 import com.damian.whatsapp.modules.user.user.enums.UserGender;
 import com.damian.whatsapp.modules.user.user.enums.UserRole;

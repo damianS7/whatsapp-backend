@@ -1,6 +1,6 @@
 package com.damian.whatsapp.shared.domain;
 
-import com.damian.whatsapp.modules.group.GroupMemberRole;
+import com.damian.whatsapp.modules.group.member.GroupMemberRole;
 import jakarta.persistence.*;
 
 import java.time.Instant;

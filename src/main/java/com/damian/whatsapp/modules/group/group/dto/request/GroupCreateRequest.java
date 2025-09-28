@@ -1,0 +1,12 @@
+package com.damian.whatsapp.modules.group.group.dto.request;
+
+import jakarta.validation.constraints.NotBlank;
+
+public record GroupCreateRequest(
+        @NotBlank(message = "Name must not be blank")
+        String name,
+
+        @NotBlank(message = "Description must not be blank")
+        String description
+) {
+}

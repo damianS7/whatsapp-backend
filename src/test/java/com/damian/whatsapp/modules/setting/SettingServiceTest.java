@@ -1,8 +1,9 @@
 package com.damian.whatsapp.modules.setting;
 
+import com.damian.whatsapp.modules.setting.dto.request.SettingUpdateRequest;
 import com.damian.whatsapp.modules.setting.exception.SettingNotFoundException;
 import com.damian.whatsapp.modules.setting.exception.SettingNotOwnerException;
-import com.damian.whatsapp.modules.setting.web.rest.dto.request.SettingUpdateRequest;
+import com.damian.whatsapp.modules.setting.service.SettingService;
 import com.damian.whatsapp.shared.AbstractServiceTest;
 import com.damian.whatsapp.shared.domain.Setting;
 import com.damian.whatsapp.shared.domain.User;

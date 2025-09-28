@@ -1,8 +1,8 @@
 package com.damian.whatsapp.config.security;
 
 
-import com.damian.whatsapp.modules.auth.CustomUserDetailsService;
 import com.damian.whatsapp.modules.auth.exception.EmailNotFoundException;
+import com.damian.whatsapp.modules.auth.service.CustomUserDetailsService;
 import com.damian.whatsapp.shared.exception.Exceptions;
 import com.damian.whatsapp.shared.exception.JwtTokenExpiredException;
 import com.damian.whatsapp.shared.exception.JwtTokenInvalidException;

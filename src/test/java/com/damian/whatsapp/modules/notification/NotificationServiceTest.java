@@ -1,6 +1,7 @@
 package com.damian.whatsapp.modules.notification;
 
-import com.damian.whatsapp.modules.notification.web.rest.dto.NotificationEvent;
+import com.damian.whatsapp.modules.notification.dto.NotificationEvent;
+import com.damian.whatsapp.modules.notification.service.NotificationService;
 import com.damian.whatsapp.modules.user.user.exception.UserNotFoundException;
 import com.damian.whatsapp.modules.user.user.repository.UserRepository;
 import com.damian.whatsapp.shared.AbstractServiceTest;

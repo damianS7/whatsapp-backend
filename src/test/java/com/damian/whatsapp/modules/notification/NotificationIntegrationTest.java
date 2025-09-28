@@ -1,7 +1,8 @@
 package com.damian.whatsapp.modules.notification;
 
-import com.damian.whatsapp.modules.notification.web.rest.dto.NotificationEvent;
-import com.damian.whatsapp.modules.notification.web.rest.dto.response.NotificationDto;
+import com.damian.whatsapp.modules.notification.dto.NotificationEvent;
+import com.damian.whatsapp.modules.notification.dto.response.NotificationDto;
+import com.damian.whatsapp.modules.notification.service.NotificationService;
 import com.damian.whatsapp.modules.user.account.UserAccountStatus;
 import com.damian.whatsapp.modules.user.user.enums.UserGender;
 import com.damian.whatsapp.modules.user.user.enums.UserRole;

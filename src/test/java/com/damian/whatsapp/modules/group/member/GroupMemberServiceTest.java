@@ -1,10 +1,8 @@
 package com.damian.whatsapp.modules.group.member;
 
-import com.damian.whatsapp.modules.chat.ChatNotificationService;
-import com.damian.whatsapp.modules.group.repository.GroupMemberRepository;
-import com.damian.whatsapp.modules.group.repository.GroupRepository;
-import com.damian.whatsapp.modules.group.service.GroupMemberService;
-import com.damian.whatsapp.modules.group.web.rest.dto.request.GroupMemberUpdateRequest;
+import com.damian.whatsapp.modules.chat.service.ChatNotificationService;
+import com.damian.whatsapp.modules.group.group.dto.request.GroupMemberUpdateRequest;
+import com.damian.whatsapp.modules.group.group.repository.GroupRepository;
 import com.damian.whatsapp.modules.user.user.repository.UserRepository;
 import com.damian.whatsapp.shared.AbstractServiceTest;
 import com.damian.whatsapp.shared.domain.Group;

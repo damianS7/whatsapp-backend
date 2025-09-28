@@ -1,12 +1,12 @@
 package com.damian.whatsapp.modules.user.account;
 
+import com.damian.whatsapp.modules.user.account.dto.request.*;
 import com.damian.whatsapp.modules.user.account.service.UserAccountPasswordService;
 import com.damian.whatsapp.modules.user.account.service.UserAccountRegistrationService;
 import com.damian.whatsapp.modules.user.account.service.UserAccountService;
 import com.damian.whatsapp.modules.user.account.service.UserAccountVerificationService;
-import com.damian.whatsapp.modules.user.user.web.rest.dto.mapper.UserDtoMapper;
-import com.damian.whatsapp.modules.user.user.web.rest.dto.request.*;
-import com.damian.whatsapp.modules.user.user.web.rest.dto.response.UserDto;
+import com.damian.whatsapp.modules.user.user.dto.mapper.UserDtoMapper;
+import com.damian.whatsapp.modules.user.user.dto.response.UserDto;
 import com.damian.whatsapp.shared.domain.User;
 import com.damian.whatsapp.shared.domain.UserAccount;
 import com.damian.whatsapp.shared.domain.UserAccountToken;

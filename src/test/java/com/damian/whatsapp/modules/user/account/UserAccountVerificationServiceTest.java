@@ -2,11 +2,11 @@ package com.damian.whatsapp.modules.user.account;
 
 import com.damian.whatsapp.modules.user.account.exception.UserAccountVerificationNotPendingException;
 import com.damian.whatsapp.modules.user.account.service.UserAccountVerificationService;
-import com.damian.whatsapp.modules.user.token.UserAccountTokenRepository;
-import com.damian.whatsapp.modules.user.token.UserAccountTokenType;
-import com.damian.whatsapp.modules.user.token.exception.UserAccountTokenExpiredException;
-import com.damian.whatsapp.modules.user.token.exception.UserAccountTokenNotFoundException;
-import com.damian.whatsapp.modules.user.token.exception.UserAccountTokenUsedException;
+import com.damian.whatsapp.modules.user.accounttoken.UserAccountTokenRepository;
+import com.damian.whatsapp.modules.user.accounttoken.UserAccountTokenType;
+import com.damian.whatsapp.modules.user.accounttoken.exception.UserAccountTokenExpiredException;
+import com.damian.whatsapp.modules.user.accounttoken.exception.UserAccountTokenNotFoundException;
+import com.damian.whatsapp.modules.user.accounttoken.exception.UserAccountTokenUsedException;
 import com.damian.whatsapp.modules.user.user.repository.UserRepository;
 import com.damian.whatsapp.shared.AbstractServiceTest;
 import com.damian.whatsapp.shared.domain.User;

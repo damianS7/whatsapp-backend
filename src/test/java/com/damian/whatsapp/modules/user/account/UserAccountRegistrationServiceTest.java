@@ -1,10 +1,10 @@
 package com.damian.whatsapp.modules.user.account;
 
+import com.damian.whatsapp.modules.user.account.dto.request.UserAccountRegistrationRequest;
 import com.damian.whatsapp.modules.user.account.service.UserAccountRegistrationService;
 import com.damian.whatsapp.modules.user.account.service.UserAccountVerificationService;
 import com.damian.whatsapp.modules.user.user.enums.UserGender;
 import com.damian.whatsapp.modules.user.user.service.UserService;
-import com.damian.whatsapp.modules.user.user.web.rest.dto.request.UserAccountRegistrationRequest;
 import com.damian.whatsapp.shared.AbstractServiceTest;
 import com.damian.whatsapp.shared.domain.User;
 import com.damian.whatsapp.shared.domain.UserAccountToken;
@@ -83,6 +83,6 @@ public class UserAccountRegistrationServiceTest extends AbstractServiceTest {
                         givenUser.getGender(),
                         givenUser.getBirthdate()
                 );
-        
+
     }
 }

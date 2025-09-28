@@ -1,7 +1,9 @@
 package com.damian.whatsapp.modules.user.user;
 
+import com.damian.whatsapp.modules.user.account.dto.request.UserAccountRegistrationRequest;
 import com.damian.whatsapp.modules.user.account.exception.UserAccountEmailTakenException;
 import com.damian.whatsapp.modules.user.account.exception.UserAccountInvalidPasswordConfirmationException;
+import com.damian.whatsapp.modules.user.user.dto.request.UserUpdateRequest;
 import com.damian.whatsapp.modules.user.user.enums.UserGender;
 import com.damian.whatsapp.modules.user.user.enums.UserRole;
 import com.damian.whatsapp.modules.user.user.exception.UserAuthorizationException;
@@ -9,8 +11,6 @@ import com.damian.whatsapp.modules.user.user.exception.UserNotFoundException;
 import com.damian.whatsapp.modules.user.user.exception.UserUpdateException;
 import com.damian.whatsapp.modules.user.user.repository.UserRepository;
 import com.damian.whatsapp.modules.user.user.service.UserService;
-import com.damian.whatsapp.modules.user.user.web.rest.dto.request.UserAccountRegistrationRequest;
-import com.damian.whatsapp.modules.user.user.web.rest.dto.request.UserUpdateRequest;
 import com.damian.whatsapp.shared.AbstractServiceTest;
 import com.damian.whatsapp.shared.domain.User;
 import com.damian.whatsapp.shared.exception.Exceptions;

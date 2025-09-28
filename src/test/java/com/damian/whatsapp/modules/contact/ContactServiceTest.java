@@ -4,6 +4,7 @@ import com.damian.whatsapp.modules.contact.exception.ContactAlreadyExistExceptio
 import com.damian.whatsapp.modules.contact.exception.ContactAuthorizationException;
 import com.damian.whatsapp.modules.contact.exception.ContactNotFoundException;
 import com.damian.whatsapp.modules.contact.exception.MaxContactsLimitReachedException;
+import com.damian.whatsapp.modules.contact.service.ContactService;
 import com.damian.whatsapp.modules.user.user.exception.UserNotFoundException;
 import com.damian.whatsapp.modules.user.user.repository.UserRepository;
 import com.damian.whatsapp.shared.AbstractServiceTest;

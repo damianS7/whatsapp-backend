@@ -1,6 +1,6 @@
 package com.damian.whatsapp.shared.domain;
 
-import com.damian.whatsapp.modules.user.token.UserAccountTokenType;
+import com.damian.whatsapp.modules.user.accounttoken.UserAccountTokenType;
 import jakarta.persistence.*;
 
 import java.time.Instant;

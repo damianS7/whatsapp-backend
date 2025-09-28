@@ -47,7 +47,8 @@ public class WebSecurityConfig {
                         .requestMatchers(
                                 "/api/v1/auth/**",
                                 "/api/v1/accounts/**",
-                                "/ws/**"
+                                // TODO exclude /api/v1/accounts/reset-password etc..
+                                "/ws/**" // TODO SECURE WS ENDPOINT
                         ).permitAll()
                         .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()

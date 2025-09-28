@@ -1,8 +1,8 @@
 package com.damian.whatsapp.modules.user.account.exception;
 
-import com.damian.whatsapp.modules.user.token.exception.UserAccountTokenExpiredException;
-import com.damian.whatsapp.modules.user.token.exception.UserAccountTokenNotFoundException;
-import com.damian.whatsapp.modules.user.token.exception.UserAccountTokenUsedException;
+import com.damian.whatsapp.modules.user.accounttoken.exception.UserAccountTokenExpiredException;
+import com.damian.whatsapp.modules.user.accounttoken.exception.UserAccountTokenNotFoundException;
+import com.damian.whatsapp.modules.user.accounttoken.exception.UserAccountTokenUsedException;
 import com.damian.whatsapp.shared.util.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
