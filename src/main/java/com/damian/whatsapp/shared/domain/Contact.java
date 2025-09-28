@@ -22,12 +22,8 @@ public class Contact {
     @Column
     private Instant createdAt;
 
-    @Column
-    private Instant updatedAt;
-
     public Contact() {
         this.createdAt = Instant.now();
-        this.updatedAt = Instant.now();
     }
 
     public Contact(User user, User contact) {
@@ -44,14 +40,6 @@ public class Contact {
         this.id = id;
     }
 
-    public Instant getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Instant updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
     public Instant getCreatedAt() {
         return createdAt;
     }
@@ -64,18 +52,17 @@ public class Contact {
     public String toString() {
         return "Contact {" +
                "id=" + id +
-               "customerId=" + user.getId() +
-               "contactCustomerId=" + contact.getId() +
+               ", userId=" + user.getId() +
+               ", contactUserId=" + contact.getId() +
                ", createdAt=" + createdAt +
-               ", updatedAt=" + updatedAt +
                "}";
     }
 
-    public User getCustomer() {
+    public User getUser() {
         return user;
     }
 
-    public void setCustomer(User user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
