@@ -1,7 +1,7 @@
 package com.damian.whatsapp.modules.group.group;
 
 import com.damian.whatsapp.modules.group.group.dto.response.GroupDto;
-import com.damian.whatsapp.modules.user.account.UserAccountStatus;
+import com.damian.whatsapp.modules.user.account.account.UserAccountStatus;
 import com.damian.whatsapp.modules.user.user.enums.UserGender;
 import com.damian.whatsapp.modules.user.user.enums.UserRole;
 import com.damian.whatsapp.shared.AbstractIntegrationTest;

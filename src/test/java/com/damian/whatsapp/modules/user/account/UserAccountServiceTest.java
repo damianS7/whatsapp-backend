@@ -1,9 +1,10 @@
 package com.damian.whatsapp.modules.user.account;
 
-import com.damian.whatsapp.modules.user.account.dto.request.UserAccountEmailUpdateRequest;
-import com.damian.whatsapp.modules.user.account.exception.UserAccountEmailTakenException;
-import com.damian.whatsapp.modules.user.account.exception.UserAccountInvalidPasswordConfirmationException;
-import com.damian.whatsapp.modules.user.account.service.UserAccountService;
+import com.damian.whatsapp.modules.user.account.account.UserAccountRepository;
+import com.damian.whatsapp.modules.user.account.account.dto.request.UserAccountEmailUpdateRequest;
+import com.damian.whatsapp.modules.user.account.account.exception.UserAccountEmailTakenException;
+import com.damian.whatsapp.modules.user.account.account.exception.UserAccountInvalidPasswordConfirmationException;
+import com.damian.whatsapp.modules.user.account.account.service.UserAccountService;
 import com.damian.whatsapp.modules.user.user.enums.UserGender;
 import com.damian.whatsapp.modules.user.user.enums.UserRole;
 import com.damian.whatsapp.modules.user.user.repository.UserRepository;
