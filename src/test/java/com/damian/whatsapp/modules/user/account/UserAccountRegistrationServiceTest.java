@@ -1,8 +1,8 @@
 package com.damian.whatsapp.modules.user.account;
 
-import com.damian.whatsapp.modules.user.account.dto.request.UserAccountRegistrationRequest;
-import com.damian.whatsapp.modules.user.account.service.UserAccountRegistrationService;
-import com.damian.whatsapp.modules.user.account.service.UserAccountVerificationService;
+import com.damian.whatsapp.modules.user.account.account.dto.request.UserAccountRegistrationRequest;
+import com.damian.whatsapp.modules.user.account.account.service.UserAccountRegistrationService;
+import com.damian.whatsapp.modules.user.account.account.service.UserAccountVerificationService;
 import com.damian.whatsapp.modules.user.user.enums.UserGender;
 import com.damian.whatsapp.modules.user.user.service.UserService;
 import com.damian.whatsapp.shared.AbstractServiceTest;

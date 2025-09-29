@@ -1,6 +1,6 @@
 package com.damian.whatsapp.shared.domain;
 
-import com.damian.whatsapp.modules.user.accounttoken.UserAccountTokenType;
+import com.damian.whatsapp.modules.user.account.token.UserAccountTokenType;
 import jakarta.persistence.*;
 
 import java.time.Instant;
@@ -37,6 +37,7 @@ public class UserAccountToken {
     public UserAccountToken() {
         this.used = false;
         this.token = generateToken();
+        this.type = UserAccountTokenType.ACCOUNT_VERIFICATION;
         this.createdAt = Instant.now();
         this.expiresAt = Instant.now().plus(1, ChronoUnit.DAYS);
     }

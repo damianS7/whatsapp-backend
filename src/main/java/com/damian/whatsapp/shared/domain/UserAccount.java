@@ -1,6 +1,6 @@
 package com.damian.whatsapp.shared.domain;
 
-import com.damian.whatsapp.modules.user.account.UserAccountStatus;
+import com.damian.whatsapp.modules.user.account.account.UserAccountStatus;
 import com.damian.whatsapp.modules.user.user.enums.UserRole;
 import jakarta.persistence.*;
 
@@ -35,6 +35,7 @@ public class UserAccount {
 
     public UserAccount() {
         this.updatedAt = Instant.now();
+        this.role = UserRole.USER;
         this.accountStatus = UserAccountStatus.PENDING_VERIFICATION;
     }
 

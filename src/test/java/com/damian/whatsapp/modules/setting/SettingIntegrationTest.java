@@ -2,7 +2,7 @@ package com.damian.whatsapp.modules.setting;
 
 import com.damian.whatsapp.modules.setting.dto.request.SettingUpdateRequest;
 import com.damian.whatsapp.modules.setting.dto.response.SettingDto;
-import com.damian.whatsapp.modules.user.account.UserAccountStatus;
+import com.damian.whatsapp.modules.user.account.account.UserAccountStatus;
 import com.damian.whatsapp.modules.user.user.enums.UserGender;
 import com.damian.whatsapp.modules.user.user.enums.UserRole;
 import com.damian.whatsapp.shared.AbstractIntegrationTest;

@@ -5,7 +5,7 @@ import com.damian.whatsapp.modules.auth.dto.AuthenticationResponse;
 import com.damian.whatsapp.modules.auth.exception.AccountNotVerifiedException;
 import com.damian.whatsapp.modules.auth.exception.AccountSuspendedException;
 import com.damian.whatsapp.modules.auth.service.AuthenticationService;
-import com.damian.whatsapp.modules.user.account.UserAccountStatus;
+import com.damian.whatsapp.modules.user.account.account.UserAccountStatus;
 import com.damian.whatsapp.shared.AbstractServiceTest;
 import com.damian.whatsapp.shared.domain.User;
 import com.damian.whatsapp.shared.domain.UserPrincipal;

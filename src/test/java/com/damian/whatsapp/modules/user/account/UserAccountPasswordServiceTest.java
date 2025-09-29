@@ -1,14 +1,14 @@
 package com.damian.whatsapp.modules.user.account;
 
-import com.damian.whatsapp.modules.user.account.dto.request.UserAccountPasswordResetRequest;
-import com.damian.whatsapp.modules.user.account.dto.request.UserAccountPasswordResetSetRequest;
-import com.damian.whatsapp.modules.user.account.dto.request.UserAccountPasswordUpdateRequest;
-import com.damian.whatsapp.modules.user.account.exception.UserAccountInvalidPasswordConfirmationException;
-import com.damian.whatsapp.modules.user.account.exception.UserAccountNotFoundException;
-import com.damian.whatsapp.modules.user.account.service.UserAccountPasswordService;
-import com.damian.whatsapp.modules.user.account.service.UserAccountVerificationService;
-import com.damian.whatsapp.modules.user.accounttoken.UserAccountTokenRepository;
-import com.damian.whatsapp.modules.user.accounttoken.UserAccountTokenType;
+import com.damian.whatsapp.modules.user.account.account.dto.request.UserAccountPasswordResetRequest;
+import com.damian.whatsapp.modules.user.account.account.dto.request.UserAccountPasswordResetSetRequest;
+import com.damian.whatsapp.modules.user.account.account.dto.request.UserAccountPasswordUpdateRequest;
+import com.damian.whatsapp.modules.user.account.account.exception.UserAccountInvalidPasswordConfirmationException;
+import com.damian.whatsapp.modules.user.account.account.exception.UserAccountNotFoundException;
+import com.damian.whatsapp.modules.user.account.account.service.UserAccountPasswordService;
+import com.damian.whatsapp.modules.user.account.account.service.UserAccountVerificationService;
+import com.damian.whatsapp.modules.user.account.token.UserAccountTokenRepository;
+import com.damian.whatsapp.modules.user.account.token.UserAccountTokenType;
 import com.damian.whatsapp.modules.user.user.exception.UserNotFoundException;
 import com.damian.whatsapp.modules.user.user.repository.UserRepository;
 import com.damian.whatsapp.shared.AbstractServiceTest;

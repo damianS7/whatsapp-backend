@@ -1,6 +1,6 @@
 package com.damian.whatsapp.modules.auth;
 
-import com.damian.whatsapp.modules.user.account.UserAccountStatus;
+import com.damian.whatsapp.modules.user.account.account.UserAccountStatus;
 import com.damian.whatsapp.modules.user.user.dto.request.UserUpdateRequest;
 import com.damian.whatsapp.modules.user.user.enums.UserGender;
 import com.damian.whatsapp.modules.user.user.enums.UserRole;

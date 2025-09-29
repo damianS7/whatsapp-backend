@@ -1,6 +1,6 @@
 package com.damian.whatsapp.shared.domain;
 
-import com.damian.whatsapp.modules.user.account.UserAccountStatus;
+import com.damian.whatsapp.modules.user.account.account.UserAccountStatus;
 import com.damian.whatsapp.modules.user.user.enums.UserRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

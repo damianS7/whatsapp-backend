@@ -1,6 +1,6 @@
 package com.damian.whatsapp.shared.util;
 
-import com.damian.whatsapp.modules.user.account.exception.UserAccountInvalidPasswordConfirmationException;
+import com.damian.whatsapp.modules.user.account.account.exception.UserAccountInvalidPasswordConfirmationException;
 import com.damian.whatsapp.modules.user.user.enums.UserRole;
 import com.damian.whatsapp.shared.domain.User;
 import com.damian.whatsapp.shared.domain.UserPrincipal;

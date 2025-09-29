@@ -3,7 +3,7 @@ package com.damian.whatsapp.modules.notification;
 import com.damian.whatsapp.modules.notification.dto.NotificationEvent;
 import com.damian.whatsapp.modules.notification.dto.response.NotificationDto;
 import com.damian.whatsapp.modules.notification.service.NotificationService;
-import com.damian.whatsapp.modules.user.account.UserAccountStatus;
+import com.damian.whatsapp.modules.user.account.account.UserAccountStatus;
 import com.damian.whatsapp.modules.user.user.enums.UserGender;
 import com.damian.whatsapp.modules.user.user.enums.UserRole;
 import com.damian.whatsapp.shared.AbstractIntegrationTest;

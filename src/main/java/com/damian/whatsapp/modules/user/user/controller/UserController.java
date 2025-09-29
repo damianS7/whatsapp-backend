@@ -1,8 +1,5 @@
 package com.damian.whatsapp.modules.user.user.controller;
 
-import com.damian.whatsapp.modules.user.account.service.UserAccountPasswordService;
-import com.damian.whatsapp.modules.user.account.service.UserAccountRegistrationService;
-import com.damian.whatsapp.modules.user.account.service.UserAccountVerificationService;
 import com.damian.whatsapp.modules.user.user.dto.mapper.UserDtoMapper;
 import com.damian.whatsapp.modules.user.user.dto.request.UserUpdateRequest;
 import com.damian.whatsapp.modules.user.user.dto.response.UserDto;
@@ -29,23 +26,14 @@ import java.util.concurrent.TimeUnit;
 @RestController
 public class UserController {
     private final UserService userService;
-    private final UserAccountRegistrationService userAccountRegistrationService;
-    private final UserAccountPasswordService userAccountPasswordService;
-    private final UserAccountVerificationService userAccountVerificationService;
     private final UserImageService userImageService;
 
     @Autowired
     public UserController(
             UserService userService,
-            UserAccountRegistrationService userAccountRegistrationService,
-            UserAccountPasswordService userAccountPasswordService,
-            UserAccountVerificationService userAccountVerificationService,
             UserImageService userImageService
     ) {
         this.userService = userService;
-        this.userAccountRegistrationService = userAccountRegistrationService;
-        this.userAccountPasswordService = userAccountPasswordService;
-        this.userAccountVerificationService = userAccountVerificationService;
         this.userImageService = userImageService;
     }
 
