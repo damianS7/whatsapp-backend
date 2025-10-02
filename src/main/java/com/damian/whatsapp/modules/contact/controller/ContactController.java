@@ -51,12 +51,12 @@ public class ContactController {
     }
 
     // endpoint to delete a contact from the logged user contact list
-    @DeleteMapping("/contacts/{id}")
+    @DeleteMapping("/contacts/{userId}")
     public ResponseEntity<?> deleteContact(
             @PathVariable @NotNull @Positive
-            Long id
+            Long userId
     ) {
-        contactService.deleteContact(id);
+        contactService.deleteContact(userId);
 
         return ResponseEntity
                 .noContent()

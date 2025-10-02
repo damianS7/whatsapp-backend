@@ -6,10 +6,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
 public interface ContactRepository extends JpaRepository<Contact, Long> {
+    Optional<Contact> findByUser_IdAndContact_Id(Long userId, Long contactUserId);
+
     Set<Contact> findAllByUserId(Long userId);
 
     @Query("SELECT COUNT(c) > 0 FROM Contact c WHERE c.user.id = :userId AND c.contact.id = :contactUserId")

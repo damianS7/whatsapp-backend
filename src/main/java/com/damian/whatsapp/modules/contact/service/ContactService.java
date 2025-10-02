@@ -64,13 +64,19 @@ public class ContactService {
     }
 
     // delete a contact from the contact list of the logged user.
-    public void deleteContact(Long id) {
+    public void deleteContact(Long contactUserId) {
         User loggedUser = AuthHelper.getLoggedUser();
 
         // check if the contact exists
-        Contact contact = contactRepository.findById(id).orElseThrow(
-                () -> new ContactNotFoundException(Exceptions.CONTACT_LIST.NOT_FOUND, loggedUser.getId(), null)
-        );
+        Contact contact = contactRepository
+                .findByUser_IdAndContact_Id(loggedUser.getId(), contactUserId)
+                .orElseThrow(
+                        () -> new ContactNotFoundException(
+                                Exceptions.CONTACT_LIST.NOT_FOUND,
+                                loggedUser.getId(),
+                                contactUserId
+                        )
+                );
 
         // check if the logged user is the owner of the contact.
         if (!loggedUser.getId().equals(contact.getUser().getId())) {
@@ -81,6 +87,6 @@ public class ContactService {
             );
         }
 
-        contactRepository.deleteById(id);
+        contactRepository.deleteById(contact.getId());
     }
 }
