@@ -135,7 +135,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     }
 
     private String extractToken(HttpServletRequest request) {
-        log.debug("Extracting jwt token from request.");
+        log.debug("Extracting jwt token from request");
         // First find the token in the header
         String header = request.getHeader("Authorization");
         if (header != null && header.startsWith("Bearer ")) {

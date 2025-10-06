@@ -13,7 +13,7 @@ public class Exceptions {
             public static final String NOT_ELIGIBLE = "Account is not eligible for activation.";
 
             public static class TOKEN {
-                public static final String NOT_FOUND = "Account token not found.";
+                public static final String NOT_FOUND = "Token not found.";
                 public static final String USED = "This token has already been used.";
                 public static final String EXPIRED = "This token has expired.";
             }

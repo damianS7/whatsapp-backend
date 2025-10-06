@@ -27,6 +27,10 @@ public class UserAccountException extends ApplicationException {
             return email;
         }
 
-        return accountId.toString();
+        if (accountId != null) {
+            return accountId.toString();
+        }
+
+        return "unknown";
     }
 }
