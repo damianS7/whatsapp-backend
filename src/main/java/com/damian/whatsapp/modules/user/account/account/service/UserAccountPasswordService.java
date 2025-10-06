@@ -159,7 +159,7 @@ public class UserAccountPasswordService {
         String host = env.getProperty("app.frontend.host");
         String port = env.getProperty("app.frontend.port");
         String url = String.format("http://%s:%s", host, port);
-        String link = url + "/accounts/reset-password/" + token;
+        String link = url + "/accounts/password/reset/" + token;
         emailSenderService.send(
                 toEmail,
                 "Photogram account: Password reset request.",
