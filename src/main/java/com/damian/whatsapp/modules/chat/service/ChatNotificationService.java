@@ -1,6 +1,7 @@
 package com.damian.whatsapp.modules.chat.service;
 
-import com.damian.whatsapp.modules.chat.dto.ChatMessage;
+import com.damian.whatsapp.modules.chat.ChatType;
+import com.damian.whatsapp.modules.chat.dto.ChatMessageResponse;
 import com.damian.whatsapp.shared.domain.Group;
 import com.damian.whatsapp.shared.domain.User;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -25,37 +26,30 @@ public class ChatNotificationService {
             String message
     ) {
         // send notification to the added member
-        ChatMessage chatMessage = new ChatMessage(
-                "GROUP" + groupId,
+        ChatMessageResponse response = new ChatMessageResponse(
+                ChatType.GROUP,
                 groupId,
-                -1L,
                 toUser.getId(),
                 "SYSTEM",
-                "GROUP",
                 message,
                 Instant.now()
         );
-        messagingTemplate.convertAndSend(
-                "/topic/chat.PRIVATE" + toUser.getId(),
-                chatMessage
-        );
+        messagingTemplate.convertAndSendToUser(toUser.getEmail(), "/queue/messages", response);
     }
 
     public void notifyGroup(Group group, String message) {
         // send notification to the added member
-        ChatMessage chatMessage = new ChatMessage(
-                "GROUP" + group.getId(),
+        ChatMessageResponse chatMessage = new ChatMessageResponse(
+                ChatType.GROUP,
                 group.getId(),
-                -1L,
-                -1L,
+                0L,
                 "SYSTEM",
-                "GROUP",
                 message,
                 Instant.now()
         );
 
         messagingTemplate.convertAndSend(
-                "/topic/chat.GROUP" + group.getId(),
+                "/topic/chat/" + ChatType.GROUP + "/" + group.getId(),
                 chatMessage
         );
     }
