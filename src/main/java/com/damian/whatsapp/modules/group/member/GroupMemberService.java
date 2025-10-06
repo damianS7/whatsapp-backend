@@ -66,27 +66,28 @@ public class GroupMemberService {
         return groupMemberRepository.save(groupMember);
     }
 
-    public void removeGroupMember(Long groupMemberId) {
+    public void removeGroupMember(Long groupId, Long userId) {
         User loggedUser = AuthHelper.getLoggedUser();
 
-        GroupMember groupMember = groupMemberRepository.findById(groupMemberId).orElseThrow(
-                () -> new GroupMemberNotFoundException(Exceptions.GROUP.NOT_FOUND, null, groupMemberId)
+        GroupMember groupMember = groupMemberRepository.findByGroupIdAndMember_Id(groupId, userId).orElseThrow(
+                () -> new GroupMemberNotFoundException(Exceptions.GROUP.NOT_FOUND, groupId, userId)
         );
 
-        Group group = groupRepository.findById(groupMember.getGroup().getId()).orElseThrow(
-                () -> new GroupNotFoundException(Exceptions.GROUP.NOT_FOUND, groupMember.getGroup().getId())
-        );
+        //        Group group = groupRepository.findById(groupId).orElseThrow(
+        //                () -> new GroupNotFoundException(Exceptions.GROUP.NOT_FOUND, groupId)
+        //        );
 
         // check authorization
-        if (!group.isOwner(loggedUser)) {
-            throw new GroupAuthorizationException(Exceptions.GROUP.ACCESS_FORBIDDEN, group.getId());
+        if (!groupMember.getGroup().isOwner(loggedUser)) {
+            throw new GroupAuthorizationException(Exceptions.GROUP.ACCESS_FORBIDDEN, groupMember.getGroup().getId());
         }
 
-        groupMemberRepository.deleteById(groupMemberId);
+
+        groupMemberRepository.deleteById(groupMember.getId());
 
         // send notification to the group
         chatNotificationService.notifyGroup(
-                group,
+                groupMember.getGroup(),
                 loggedUser.getFullName() + " removed " + groupMember.getMember().getFullName() + " from the group!"
         );
     }

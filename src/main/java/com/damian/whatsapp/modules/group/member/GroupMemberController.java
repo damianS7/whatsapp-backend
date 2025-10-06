@@ -55,12 +55,14 @@ public class GroupMemberController {
     }
 
     // endpoint to delete group members
-    @DeleteMapping("/groups/members/{id}")
+    @DeleteMapping("/groups/{groupId}/members/{userId}")
     public ResponseEntity<?> deleteMember(
             @PathVariable @NotNull @Positive
-            Long id
+            Long groupId,
+            @PathVariable @NotNull @Positive
+            Long userId
     ) {
-        groupMemberService.removeGroupMember(id);
+        groupMemberService.removeGroupMember(groupId, userId);
 
         return ResponseEntity
                 .noContent()
