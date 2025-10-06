@@ -49,7 +49,7 @@ public class WebSecurityConfig {
                                 "/api/v1/accounts/register",
                                 "/api/v1/accounts/verification/**",
                                 "/api/v1/accounts/password/reset/**",
-                                "/ws/**" // TODO SECURE WS ENDPOINT
+                                "/ws/**"
                         ).permitAll()
                         .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
