@@ -7,7 +7,6 @@ import com.damian.whatsapp.modules.group.group.exception.GroupNotFoundException;
 import com.damian.whatsapp.modules.group.group.repository.GroupRepository;
 import com.damian.whatsapp.modules.user.user.exception.UserNotFoundException;
 import com.damian.whatsapp.modules.user.user.repository.UserRepository;
-import com.damian.whatsapp.shared.domain.Group;
 import com.damian.whatsapp.shared.domain.User;
 import com.damian.whatsapp.shared.domain.UserPrincipal;
 import com.damian.whatsapp.shared.exception.Exceptions;
@@ -39,8 +38,7 @@ public class ChatService {
     }
 
     public void handle(ChatMessageRequest request, Principal principal) {
-        log.debug("request {}", request);
-
+        log.debug("ChatMessageRequest {}", request);
 
         UserPrincipal
                 userPrincipal
@@ -52,20 +50,19 @@ public class ChatService {
                 request.chatType(),
                 request.toId(),
                 currentUser.getId(),
-                currentUser.getUserName(),
+                currentUser.getFirstName(),
                 request.message(),
                 Instant.now()
         );
 
-        log.debug("response {}", response);
+        log.debug("ChatMessageResponse {}", response);
 
         if (request.chatType().equals(ChatType.GROUP)) {
-            // TODO best use existsById
-            Group group = groupRepository.findById(request.toId()).orElseThrow(
-                    () -> new GroupNotFoundException(Exceptions.GROUP.NOT_FOUND, request.toId())
-            );
+            if (!groupRepository.existsById(request.toId())) {
+                throw new GroupNotFoundException(Exceptions.GROUP.NOT_FOUND, request.toId());
+            }
+
             String destination = this.getDestination(request);
-            log.debug("destination {}", destination);
             messagingTemplate.convertAndSend(destination, response);
             return;
         }
@@ -74,18 +71,18 @@ public class ChatService {
             User toUser = userRepository.findById(request.toId()).orElseThrow(
                     () -> new UserNotFoundException(Exceptions.USER.NOT_FOUND, request.toId())
             );
-            String destination = "/queue/messages";
-            log.debug("destination {}", destination);
-            log.debug("from {} to {}", principal.getName(), toUser.getEmail());
+            String destination = this.getDestination(request);
             messagingTemplate.convertAndSendToUser(toUser.getEmail(), destination, response);
         }
     }
 
     public String getDestination(ChatMessageRequest request) {
-        if (request.chatType().equals(ChatType.GROUP)) {
-            return "/topic/chat/" + request.chatType() + "/" + request.toId();
+        String destination = "/topic/chat/" + request.chatType() + "/" + request.toId();
+        if (request.chatType().equals(ChatType.PRIVATE)) {
+            destination = "/queue/messages";
         }
 
-        return "/chat/" + request.chatType() + "/" + request.toId();
+        log.debug("destination {}", destination);
+        return destination;
     }
 }
