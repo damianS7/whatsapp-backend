@@ -1,50 +1,30 @@
 package com.damian.whatsapp.modules.chat.controller;
 
-import com.damian.whatsapp.modules.chat.dto.ChatMessage;
+import com.damian.whatsapp.modules.chat.dto.ChatMessageRequest;
+import com.damian.whatsapp.modules.chat.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
-import java.time.Instant;
+import java.security.Principal;
 
 @Controller
 public class ChatController {
-    private final SimpMessagingTemplate messagingTemplate;
-
+    private final ChatService chatService;
 
     @Autowired
     public ChatController(
-            SimpMessagingTemplate messagingTemplate
+            ChatService chatService
     ) {
-        this.messagingTemplate = messagingTemplate;
+        this.chatService = chatService;
     }
 
-    // endpoint to receive and broadcast messages
-    @MessageMapping("/chat.send.{chatId}")
-    public void broadcastMessage(
-            @DestinationVariable String chatId,
-            ChatMessage message
+    @MessageMapping("/chat")
+    public void handleChatMessages(
+            ChatMessageRequest request, Principal principal, MessageHeaders headers
     ) {
-
-        ChatMessage newMessage = new ChatMessage(
-                message.chatId(),
-                message.groupId(),
-                message.fromUserId(),
-                message.toUserId(),
-                message.fromUserName(),
-                message.chatType(),
-                message.message(),
-                Instant.now()
-        );
-
-        String destination = "/topic/chat." + chatId;
-
-        // Send to all users in the channel
-        messagingTemplate.convertAndSend(destination, newMessage);
+        chatService.handle(request, principal);
     }
-
-
 }
 
