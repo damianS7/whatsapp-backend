@@ -70,7 +70,7 @@ public class GroupMemberService {
         User loggedUser = AuthHelper.getLoggedUser();
 
         GroupMember groupMember = groupMemberRepository.findByGroupIdAndMember_Id(groupId, userId).orElseThrow(
-                () -> new GroupMemberNotFoundException(Exceptions.GROUP.NOT_FOUND, groupId, userId)
+                () -> new GroupMemberNotFoundException(Exceptions.GROUP.MEMBER_NOT_FOUND, groupId, userId)
         );
 
         //        Group group = groupRepository.findById(groupId).orElseThrow(
