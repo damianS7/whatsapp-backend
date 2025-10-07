@@ -50,7 +50,7 @@ public class ChatService {
                 request.chatType(),
                 request.toId(),
                 currentUser.getId(),
-                currentUser.getFirstName(),
+                currentUser.getFullName(),
                 request.message(),
                 Instant.now()
         );
