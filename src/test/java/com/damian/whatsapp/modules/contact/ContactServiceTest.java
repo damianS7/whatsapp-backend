@@ -1,7 +1,6 @@
 package com.damian.whatsapp.modules.contact;
 
 import com.damian.whatsapp.modules.contact.exception.ContactAlreadyExistException;
-import com.damian.whatsapp.modules.contact.exception.ContactAuthorizationException;
 import com.damian.whatsapp.modules.contact.exception.ContactNotFoundException;
 import com.damian.whatsapp.modules.contact.exception.MaxContactsLimitReachedException;
 import com.damian.whatsapp.modules.contact.service.ContactService;
@@ -193,24 +192,25 @@ public class ContactServiceTest extends AbstractServiceTest {
     @DisplayName("Should delete a contact")
     void shouldDeleteContact() {
         // given
-        User loggedCustomer = new User(
+        User currentUser = new User(
                 1L, "user@test.com",
                 passwordEncoder.encode("password")
         );
-        setUpContext(loggedCustomer);
+        setUpContext(currentUser);
 
-        User contact1 = new User(
+        User contact = new User(
                 2L, "user1@test.com", passwordEncoder.encode("password")
         );
 
-        Contact givenCC = new Contact(loggedCustomer, contact1);
+        Contact givenCC = new Contact(currentUser, contact);
         givenCC.setId(1L);
 
         // when
-        when(contactRepository.findById(givenCC.getId())).thenReturn(Optional.of(givenCC));
+        when(contactRepository.findByUser_IdAndContact_Id(currentUser.getId(), contact.getId())).thenReturn(Optional.of(
+                givenCC));
         doNothing().when(contactRepository).deleteById(givenCC.getId());
 
-        contactService.deleteContact(givenCC.getId());
+        contactService.deleteContact(givenCC.getContact().getId());
 
         // then
         verify(contactRepository, times(1)).deleteById(givenCC.getId());
@@ -224,7 +224,7 @@ public class ContactServiceTest extends AbstractServiceTest {
         setUpContext(loggedCustomer);
 
         // when
-        when(contactRepository.findById(anyLong())).thenReturn(Optional.empty());
+        when(contactRepository.findByUser_IdAndContact_Id(anyLong(), anyLong())).thenReturn(Optional.empty());
         ContactNotFoundException exception = assertThrows(
                 ContactNotFoundException.class,
                 () -> contactService.deleteContact(0L)
@@ -233,29 +233,4 @@ public class ContactServiceTest extends AbstractServiceTest {
         // then
         assertEquals(Exceptions.CONTACT_LIST.NOT_FOUND, exception.getMessage());
     }
-
-    @Test
-    @DisplayName("Should not delete a contact when not authorized")
-    void shouldNotDeleteContactWhenNotAuthorized() {
-        // given
-        User loggedCustomer = new User(1L, "user@test.com", passwordEncoder.encode("password"));
-        setUpContext(loggedCustomer);
-
-        Contact givenCC = new Contact(
-                new User(5L, "user1@test.com", passwordEncoder.encode("password")),
-                new User(8L, "user2@test.com", passwordEncoder.encode("password"))
-        );
-        givenCC.setId(1L);
-
-        // when
-        when(contactRepository.findById(givenCC.getId())).thenReturn(Optional.of(givenCC));
-        ContactAuthorizationException exception = assertThrows(
-                ContactAuthorizationException.class,
-                () -> contactService.deleteContact(givenCC.getId())
-        );
-
-        // then
-        assertEquals(Exceptions.CONTACT_LIST.ACCESS_FORBIDDEN, exception.getMessage());
-    }
-
 }

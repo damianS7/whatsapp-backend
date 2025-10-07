@@ -148,7 +148,11 @@ public class GroupMemberIntegrationTest extends AbstractIntegrationTest {
         // when
         mockMvc
                 .perform(
-                        delete("/api/v1/groups/members/{id}", groupMember.getId())
+                        delete(
+                                "/api/v1//groups/{groupId}/members/{userId}",
+                                group.getId(),
+                                groupMember.getMember().getId()
+                        )
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())

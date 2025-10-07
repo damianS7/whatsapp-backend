@@ -142,7 +142,7 @@ public class GroupMemberServiceTest extends AbstractServiceTest {
         when(groupMemberRepository.findById(groupMember.getId())).thenReturn(Optional.of(groupMember));
         when(groupRepository.findById(groupMember.getGroup().getId())).thenReturn(Optional.of(group));
         doNothing().when(groupMemberRepository).deleteById(groupMember.getId());
-        groupMemberService.removeGroupMember(groupMember.getId());
+        groupMemberService.removeGroupMember(group.getId(), groupMember.getMember().getId());
 
         // then
         verify(groupMemberRepository, times(1)).deleteById(groupMember.getId());

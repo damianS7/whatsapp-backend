@@ -202,7 +202,7 @@ public class ContactIntegrationTest extends AbstractIntegrationTest {
         // when
         MvcResult result = mockMvc
                 .perform(
-                        delete("/api/v1/contacts/{id}", givenContact.getId())
+                        delete("/api/v1/contacts/{id}", givenContact.getContact().getId())
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().is(204))
@@ -233,38 +233,4 @@ public class ContactIntegrationTest extends AbstractIntegrationTest {
 
         // then
     }
-
-    @Test
-    @DisplayName("Should not delete contact when not your contact")
-    void shouldNotDeleteContactWhenNotYourContact() throws Exception {
-        // given
-        loginWithUser(user);
-
-        User userA = User.create()
-                         .setEmail("userA@demo.com")
-                         .setPassword(passwordEncoder.encode(RAW_PASSWORD));
-
-        userRepository.save(userA);
-
-        User userContact = User.create()
-                               .setEmail("user-contact@demo.com")
-                               .setPassword(passwordEncoder.encode(RAW_PASSWORD));
-        userRepository.save(userContact);
-
-        Contact givenContact = new Contact(userA, userContact);
-        contactRepository.save(givenContact);
-
-        // when
-        mockMvc
-                .perform(
-                        delete("/api/v1/contacts/{id}", givenContact.getId())
-                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
-                .andDo(print())
-                .andExpect(MockMvcResultMatchers.status().is(403))
-                .andReturn();
-
-        // then
-    }
-
-
 }

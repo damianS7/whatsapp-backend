@@ -2,7 +2,6 @@ package com.damian.whatsapp.modules.contact.service;
 
 import com.damian.whatsapp.modules.contact.ContactRepository;
 import com.damian.whatsapp.modules.contact.exception.ContactAlreadyExistException;
-import com.damian.whatsapp.modules.contact.exception.ContactAuthorizationException;
 import com.damian.whatsapp.modules.contact.exception.ContactNotFoundException;
 import com.damian.whatsapp.modules.contact.exception.MaxContactsLimitReachedException;
 import com.damian.whatsapp.modules.user.user.exception.UserNotFoundException;
@@ -77,15 +76,6 @@ public class ContactService {
                                 contactUserId
                         )
                 );
-
-        // check if the logged user is the owner of the contact.
-        if (!loggedUser.getId().equals(contact.getUser().getId())) {
-            throw new ContactAuthorizationException(
-                    Exceptions.CONTACT_LIST.ACCESS_FORBIDDEN,
-                    loggedUser.getId(),
-                    contact.getUser().getId()
-            );
-        }
 
         contactRepository.deleteById(contact.getId());
     }
