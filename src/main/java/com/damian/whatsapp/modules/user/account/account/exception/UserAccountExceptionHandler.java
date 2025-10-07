@@ -18,6 +18,18 @@ public class UserAccountExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(UserAccountExceptionHandler.class);
 
     // UserAccount exceptions
+    @ExceptionHandler(UserAccountNotFoundException.class) // 404
+    public ResponseEntity<ApiResponse<String>> handleUserAccountNotFound(
+            UserAccountNotFoundException ex
+    ) {
+        log.warn(
+                "user account: {} not found.",
+                ex.getAccountId()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(ApiResponse.error(ex.getMessage(), HttpStatus.NOT_FOUND));
+    }
+
     @ExceptionHandler(UserAccountEmailTakenException.class) // Handle conflict (409)
     public ResponseEntity<ApiResponse<String>> handleEmailAlreadyTaken(UserAccountEmailTakenException ex) {
         log.warn("email: {} is already taken.", ex.getEmail(), ex);
@@ -47,7 +59,7 @@ public class UserAccountExceptionHandler {
     // Token Exceptions
 
     @ExceptionHandler(UserAccountTokenNotFoundException.class) // 404
-    public ResponseEntity<ApiResponse<String>> handleAccountVerificationTokenNotFound(
+    public ResponseEntity<ApiResponse<String>> handleAccountTokenNotFound(
             UserAccountTokenNotFoundException ex
     ) {
         log.warn(
