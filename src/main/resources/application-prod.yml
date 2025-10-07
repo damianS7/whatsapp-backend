@@ -1,7 +1,7 @@
 app:
   frontend:
-    host: "photogram.local"
-    port: 8080
+    host: "whatsapp.local"
+    port: 8081
 spring:
   rabbitmq:
     host: ${RABBIT_HOST:rabbitmq}
